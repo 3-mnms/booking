@@ -28,12 +28,32 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.kafka:spring-kafka'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// security
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// h2
+	runtimeOnly 'com.h2database:h2'
+
+	// websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'redis.clients:jedis' // 삭제 가능
+
+	// mariadb
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// mongodb
+	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 tasks.named('test') {
