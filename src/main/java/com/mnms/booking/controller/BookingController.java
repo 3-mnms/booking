@@ -3,10 +3,13 @@ package com.mnms.booking.controller;
 import com.mnms.booking.dto.response.WaitingNumberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
@@ -18,6 +21,10 @@ import com.mnms.booking.service.WaitingService;
 public class BookingController {
 
     private final WaitingService waitingService;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
 
     /**
      * 예매하기 버튼 클릭 시 호출되는 API
@@ -66,4 +73,12 @@ public class BookingController {
         log.info("User {} subscribed to waiting queue updates.", userId);
         waitingService.getAndPublishWaitingNumber(userId);
     }
+
+//    @MessageMapping("/subscribe/waiting/{userId}")
+//    public void handleSubscribe(@DestinationVariable String userId, @Payload SomePayload payload) {
+//        // 처리 로직 ...
+//
+//        // 구독자에게 메시지 보내기
+//        messagingTemplate.convertAndSend("/topic/waiting/" + userId, "대기열 상태 업데이트 메시지");
+//    }
 }

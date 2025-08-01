@@ -1,44 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>WebSocket STOMP 테스트</title>
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-</head>
-<body>
-<h2>WebSocket STOMP 테스트</h2>
-<button onclick="connect()">서버 연결</button>
-<button onclick="subscribe()">대기열 구독</button>
-<pre id="log"></pre>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>WebSocket STOMP 테스트</title>-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>WebSocket STOMP 테스트</h2>-->
+<!--<button onclick="connect()">서버 연결</button>-->
+<!--<button onclick="subscribe()">대기열 구독</button>-->
+<!--<pre id="log"></pre>-->
 
-<script>
-  let stompClient = null;
-  const socket = new SockJS("http://localhost:8080/ws");
+<!--<script>-->
+<!--  let stompClient = null;-->
+<!--  const socket = new SockJS("http://localhost:8080/ws");-->
 
-  function connect() {
-      const socket = new SockJS("/ws"); // Spring에서 설정한 endpoint
-      stompClient = Stomp.over(socket);
-      stompClient.connect({}, function (frame) {
-          log("서버에 연결됨: " + frame.headers['server']);
-      });
-  }
+<!--  function connect() {-->
+<!--      const socket = new SockJS("/ws"); // Spring에서 설정한 endpoint-->
+<!--      stompClient = Stomp.over(socket);-->
+<!--      stompClient.connect({}, function (frame) {-->
+<!--          log("서버에 연결됨: " + frame.headers['server']);-->
+<!--      });-->
+<!--  }-->
 
-  function subscribe() {
-      const userId = "12345"; // 테스트용 사용자 ID
-      // 서버 → 클라이언트 메시지 수신용 경로 구독
-      stompClient.subscribe("/topic/waiting/" + userId, function (message) {
-          log("받은 메시지: " + message.body);
-      });
+<!--  function subscribe() {-->
+<!--      const userId = "12345"; // 테스트용 사용자 ID-->
+<!--      // 서버 → 클라이언트 메시지 수신용 경로 구독-->
+<!--      stompClient.subscribe("/topic/waiting/" + userId, function (message) {-->
+<!--          log("받은 메시지: " + message.body);-->
+<!--      });-->
 
-      // 클라이언트 → 서버로 구독 요청 보냄 (@MessageMapping 처리)
-      stompClient.send("/app/subscribe/waiting/" + userId, {}, JSON.stringify({ userId: userId }));
-      log("구독 요청 보냄: /app/subscribe/waiting/" + userId);
-  }
+<!--      // 클라이언트 → 서버로 구독 요청 보냄 (@MessageMapping 처리)-->
+<!--      stompClient.send("/app/subscribe/waiting/" + userId, {}, JSON.stringify({ userId: userId }));-->
+<!--      log("구독 요청 보냄: /app/subscribe/waiting/" + userId);-->
+<!--  }-->
 
-  function log(msg) {
-      document.getElementById("log").textContent += msg + "\n";
-  }
-</script>
-</body>
-</html>
+<!--  function log(msg) {-->
+<!--      document.getElementById("log").textContent += msg + "\n";-->
+<!--  }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

@@ -54,6 +54,9 @@ dependencies {
 
 	// mongodb
 	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	// kaptcha
+	implementation 'com.github.penggle:kaptcha:2.3.2'
 }
 
 tasks.named('test') {
