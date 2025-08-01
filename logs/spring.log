@@ -2286,3 +2286,862 @@ Caused by: java.net.ConnectException: Connection refused: getsockopt
 2025-08-01T20:33:00.226+09:00  INFO 26932 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2025-08-01T20:33:00.226+09:00  INFO 26932 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-08-01T20:33:00.226+09:00  INFO 26932 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-08-01T20:49:04.837+09:00  INFO 14168 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 14168 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T20:49:04.844+09:00  INFO 14168 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T20:49:06.905+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:49:06.907+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T20:49:07.033+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 0 JPA repository interfaces.
+2025-08-01T20:49:07.067+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:49:07.067+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T20:49:07.097+09:00  INFO 14168 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+2025-08-01T20:49:08.814+09:00  INFO 14168 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T20:49:08.838+09:00  INFO 14168 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T20:49:08.838+09:00  INFO 14168 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T20:49:09.013+09:00  INFO 14168 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T20:49:09.015+09:00  INFO 14168 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4091 ms
+2025-08-01T20:49:09.557+09:00  INFO 14168 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T20:49:09.700+09:00  INFO 14168 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T20:49:09.752+09:00  INFO 14168 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T20:49:10.404+09:00  INFO 14168 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T20:49:10.461+09:00  INFO 14168 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T20:49:10.669+09:00  INFO 14168 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T20:49:10.669+09:00  INFO 14168 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T20:49:10.704+09:00  WARN 14168 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T20:49:10.736+09:00  INFO 14168 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T20:49:11.363+09:00  INFO 14168 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T20:49:11.371+09:00  INFO 14168 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:49:12.626+09:00  WARN 14168 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'captchaController' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\controller\CaptchaController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'recaptchaService' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\service\RecaptchaService.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.web.client.RestTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2025-08-01T20:49:12.688+09:00  INFO 14168 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:49:12.704+09:00  INFO 14168 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T20:49:12.715+09:00  INFO 14168 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T20:49:12.721+09:00  INFO 14168 --- [booking] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-08-01T20:49:12.754+09:00  INFO 14168 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T20:49:12.857+09:00 ERROR 14168 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.mnms.booking.service.RecaptchaService required a bean of type 'org.springframework.web.client.RestTemplate' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.web.client.RestTemplate' in your configuration.
+
+2025-08-01T20:52:04.097+09:00  INFO 26748 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 26748 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T20:52:04.107+09:00  INFO 26748 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T20:52:06.124+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:52:06.126+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T20:52:06.181+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 32 ms. Found 0 JPA repository interfaces.
+2025-08-01T20:52:06.222+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:52:06.222+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T20:52:06.247+09:00  INFO 26748 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2025-08-01T20:52:08.009+09:00  INFO 26748 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T20:52:08.042+09:00  INFO 26748 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T20:52:08.042+09:00  INFO 26748 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T20:52:08.201+09:00  INFO 26748 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T20:52:08.206+09:00  INFO 26748 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4000 ms
+2025-08-01T20:52:08.731+09:00  INFO 26748 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T20:52:08.892+09:00  INFO 26748 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T20:52:08.942+09:00  INFO 26748 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T20:52:09.535+09:00  INFO 26748 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T20:52:09.575+09:00  INFO 26748 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T20:52:09.822+09:00  INFO 26748 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T20:52:09.822+09:00  INFO 26748 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T20:52:09.864+09:00  WARN 26748 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T20:52:09.914+09:00  INFO 26748 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T20:52:10.463+09:00  INFO 26748 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T20:52:10.471+09:00  INFO 26748 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:52:11.417+09:00  WARN 26748 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'captchaController' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\controller\CaptchaController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'recaptchaService' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\service\RecaptchaService.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.web.client.RestTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2025-08-01T20:52:11.473+09:00  INFO 26748 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:52:11.481+09:00  INFO 26748 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T20:52:11.481+09:00  INFO 26748 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T20:52:11.497+09:00  INFO 26748 --- [booking] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-08-01T20:52:11.533+09:00  INFO 26748 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T20:52:11.651+09:00 ERROR 26748 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.mnms.booking.service.RecaptchaService required a bean of type 'org.springframework.web.client.RestTemplate' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.web.client.RestTemplate' in your configuration.
+
+2025-08-01T20:53:53.629+09:00  INFO 14084 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.2 with PID 14084 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T20:53:53.636+09:00  INFO 14084 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T20:53:54.881+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:53:54.889+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T20:53:54.940+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 0 JPA repository interfaces.
+2025-08-01T20:53:54.963+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:53:54.963+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T20:53:54.988+09:00  INFO 14084 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-08-01T20:53:56.135+09:00  INFO 14084 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T20:53:56.160+09:00  INFO 14084 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T20:53:56.160+09:00  INFO 14084 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T20:53:56.258+09:00  INFO 14084 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T20:53:56.260+09:00  INFO 14084 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2530 ms
+2025-08-01T20:53:56.507+09:00  INFO 14084 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T20:53:56.599+09:00  INFO 14084 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T20:53:56.656+09:00  INFO 14084 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T20:53:57.186+09:00  INFO 14084 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T20:53:57.235+09:00  INFO 14084 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T20:53:57.501+09:00  INFO 14084 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T20:53:57.508+09:00  INFO 14084 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T20:53:57.565+09:00  WARN 14084 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T20:53:57.615+09:00  INFO 14084 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T20:53:58.242+09:00  INFO 14084 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T20:53:58.250+09:00  INFO 14084 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:53:59.116+09:00  WARN 14084 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'captchaController' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\controller\CaptchaController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'recaptchaService' defined in file [C:\sk\final_project\booking\booking\build\classes\java\main\com\mnms\booking\service\RecaptchaService.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.web.client.RestTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2025-08-01T20:53:59.150+09:00  INFO 14084 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:53:59.166+09:00  INFO 14084 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T20:53:59.175+09:00  INFO 14084 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T20:53:59.175+09:00  INFO 14084 --- [booking] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-08-01T20:53:59.206+09:00  INFO 14084 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T20:53:59.257+09:00 ERROR 14084 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.mnms.booking.service.RecaptchaService required a bean of type 'org.springframework.web.client.RestTemplate' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.web.client.RestTemplate' in your configuration.
+
+2025-08-01T20:56:03.159+09:00  INFO 14632 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 14632 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T20:56:03.167+09:00  INFO 14632 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T20:56:05.333+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:56:05.333+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T20:56:05.381+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 JPA repository interfaces.
+2025-08-01T20:56:05.416+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T20:56:05.416+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T20:56:05.439+09:00  INFO 14632 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-08-01T20:56:07.241+09:00  INFO 14632 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T20:56:07.266+09:00  INFO 14632 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T20:56:07.266+09:00  INFO 14632 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T20:56:07.416+09:00  INFO 14632 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T20:56:07.416+09:00  INFO 14632 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4151 ms
+2025-08-01T20:56:07.991+09:00  INFO 14632 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T20:56:08.099+09:00  INFO 14632 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T20:56:08.167+09:00  INFO 14632 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T20:56:08.774+09:00  INFO 14632 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T20:56:08.816+09:00  INFO 14632 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T20:56:09.118+09:00  INFO 14632 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T20:56:09.126+09:00  INFO 14632 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T20:56:09.192+09:00  WARN 14632 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T20:56:09.275+09:00  INFO 14632 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T20:56:09.943+09:00  INFO 14632 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T20:56:09.961+09:00  INFO 14632 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T20:56:11.708+09:00  WARN 14632 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T20:56:12.103+09:00  INFO 14632 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T20:56:13.546+09:00  INFO 14632 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T20:56:14.098+09:00  INFO 14632 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T20:56:14.103+09:00  INFO 14632 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@224e7aa5]]
+2025-08-01T20:56:14.104+09:00  INFO 14632 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T20:56:14.143+09:00  INFO 14632 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T20:56:15.237+09:00  INFO 14632 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.529 seconds (process running for 14.257)
+2025-08-01T20:57:14.106+09:00  INFO 14632 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T20:57:44.549+09:00  INFO 14632 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T20:57:44.549+09:00  INFO 14632 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T20:57:44.552+09:00  INFO 14632 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-08-01T21:01:16.407+09:00  INFO 18000 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 18000 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:01:16.416+09:00  INFO 18000 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:01:18.249+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:01:18.251+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:01:18.318+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:01:18.355+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:01:18.358+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:01:18.391+09:00  INFO 18000 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:01:20.248+09:00  INFO 18000 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:01:20.273+09:00  INFO 18000 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:01:20.273+09:00  INFO 18000 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:01:20.378+09:00  INFO 18000 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:01:20.379+09:00  INFO 18000 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3848 ms
+2025-08-01T21:01:20.737+09:00  INFO 18000 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:01:20.829+09:00  INFO 18000 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:01:20.869+09:00  INFO 18000 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:01:21.401+09:00  INFO 18000 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:01:21.451+09:00  INFO 18000 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:01:21.724+09:00  INFO 18000 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:01:21.732+09:00  INFO 18000 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:01:21.765+09:00  WARN 18000 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:01:21.807+09:00  INFO 18000 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:01:22.436+09:00  INFO 18000 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:01:22.443+09:00  INFO 18000 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:01:23.937+09:00  WARN 18000 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:01:24.361+09:00  INFO 18000 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:01:25.500+09:00  INFO 18000 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:01:25.843+09:00  INFO 18000 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:01:25.847+09:00  INFO 18000 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f69462f]]
+2025-08-01T21:01:25.848+09:00  INFO 18000 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:01:25.880+09:00  INFO 18000 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:01:27.032+09:00  INFO 18000 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 12.664 seconds (process running for 13.374)
+2025-08-01T21:01:34.575+09:00  INFO 18000 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:01:34.580+09:00  INFO 18000 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:01:34.584+09:00  INFO 18000 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-08-01T21:02:25.854+09:00  INFO 18000 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:03:15.517+09:00  INFO 11340 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 11340 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:03:15.520+09:00  INFO 11340 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:03:17.001+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:03:17.012+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:03:17.058+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:03:17.083+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:03:17.091+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:03:17.115+09:00  INFO 11340 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:03:18.788+09:00  INFO 11340 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:03:18.816+09:00  INFO 11340 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:03:18.816+09:00  INFO 11340 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:03:18.961+09:00  INFO 11340 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:03:18.968+09:00  INFO 11340 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3369 ms
+2025-08-01T21:03:19.530+09:00  INFO 11340 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:03:19.689+09:00  INFO 11340 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:03:19.741+09:00  INFO 11340 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:03:20.314+09:00  INFO 11340 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:03:20.389+09:00  INFO 11340 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:03:20.701+09:00  INFO 11340 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:03:20.710+09:00  INFO 11340 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:03:20.743+09:00  WARN 11340 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:03:20.776+09:00  INFO 11340 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:03:21.362+09:00  INFO 11340 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:03:21.372+09:00  INFO 11340 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:03:23.024+09:00  WARN 11340 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:03:23.467+09:00  INFO 11340 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:03:25.009+09:00  INFO 11340 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:03:25.626+09:00  INFO 11340 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:03:25.633+09:00  INFO 11340 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@67cd193d]]
+2025-08-01T21:03:25.634+09:00  INFO 11340 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:03:25.700+09:00  INFO 11340 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:03:26.998+09:00  INFO 11340 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.018 seconds (process running for 13.862)
+2025-08-01T21:03:40.511+09:00  INFO 11340 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:03:40.511+09:00  INFO 11340 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:03:40.515+09:00  INFO 11340 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-08-01T21:04:25.608+09:00  INFO 11340 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:05:18.692+09:00  INFO 1612 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 1612 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:05:18.699+09:00  INFO 1612 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:05:20.970+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:05:20.974+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:05:21.019+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:05:21.054+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:05:21.061+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:05:21.087+09:00  INFO 1612 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:05:22.807+09:00  INFO 1612 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:05:22.831+09:00  INFO 1612 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:05:22.831+09:00  INFO 1612 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:05:22.958+09:00  INFO 1612 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:05:22.958+09:00  INFO 1612 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4115 ms
+2025-08-01T21:05:23.503+09:00  INFO 1612 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:05:23.662+09:00  INFO 1612 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:05:23.705+09:00  INFO 1612 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:05:24.560+09:00  INFO 1612 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:05:24.618+09:00  INFO 1612 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:05:24.891+09:00  INFO 1612 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:05:24.895+09:00  INFO 1612 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:05:24.937+09:00  WARN 1612 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:05:24.984+09:00  INFO 1612 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:05:25.672+09:00  INFO 1612 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:05:25.681+09:00  INFO 1612 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:05:27.631+09:00  WARN 1612 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:05:27.998+09:00  INFO 1612 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:05:29.215+09:00  INFO 1612 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:05:29.502+09:00  INFO 1612 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:05:29.510+09:00  INFO 1612 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@f09c282]]
+2025-08-01T21:05:29.510+09:00  INFO 1612 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:05:29.564+09:00  INFO 1612 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:05:31.011+09:00  INFO 1612 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.734 seconds (process running for 15.007)
+2025-08-01T21:05:34.741+09:00  INFO 1612 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:05:34.742+09:00  INFO 1612 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:05:34.745+09:00  INFO 1612 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-08-01T21:06:29.506+09:00  INFO 1612 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:07:46.314+09:00  INFO 11732 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 11732 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:07:46.314+09:00  INFO 11732 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:07:47.907+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:07:47.909+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:07:47.959+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:07:47.992+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:07:48.000+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:07:48.026+09:00  INFO 11732 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:07:49.603+09:00  INFO 11732 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:07:49.625+09:00  INFO 11732 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:07:49.625+09:00  INFO 11732 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:07:49.806+09:00  INFO 11732 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:07:49.806+09:00  INFO 11732 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3392 ms
+2025-08-01T21:07:50.408+09:00  INFO 11732 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:07:50.515+09:00  INFO 11732 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:07:50.574+09:00  INFO 11732 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:07:51.617+09:00  INFO 11732 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:07:51.667+09:00  INFO 11732 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:07:52.004+09:00  INFO 11732 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:07:52.012+09:00  INFO 11732 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:07:52.070+09:00  WARN 11732 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:07:52.112+09:00  INFO 11732 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:07:52.771+09:00  INFO 11732 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:07:52.784+09:00  INFO 11732 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:07:54.291+09:00  WARN 11732 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:07:54.692+09:00  INFO 11732 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:07:56.227+09:00  INFO 11732 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:07:56.552+09:00  INFO 11732 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:07:56.561+09:00  INFO 11732 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5687ade6]]
+2025-08-01T21:07:56.561+09:00  INFO 11732 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:07:56.604+09:00  INFO 11732 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:07:57.909+09:00  INFO 11732 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 12.788 seconds (process running for 13.516)
+2025-08-01T21:08:12.284+09:00  INFO 11732 --- [booking] [http-nio-0.0.0.0-8080-exec-6] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:08:12.284+09:00  INFO 11732 --- [booking] [http-nio-0.0.0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:08:12.284+09:00  INFO 11732 --- [booking] [http-nio-0.0.0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-08-01T21:08:56.562+09:00  INFO 11732 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:11:00.590+09:00  INFO 18796 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 18796 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:11:00.597+09:00  INFO 18796 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:11:02.554+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:11:02.558+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:11:02.599+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:11:02.625+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:11:02.625+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:11:02.650+09:00  INFO 18796 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:11:04.138+09:00  INFO 18796 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:11:04.158+09:00  INFO 18796 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:11:04.162+09:00  INFO 18796 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:11:04.308+09:00  INFO 18796 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:11:04.308+09:00  INFO 18796 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3607 ms
+2025-08-01T21:11:05.162+09:00  INFO 18796 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:11:05.286+09:00  INFO 18796 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:11:05.346+09:00  INFO 18796 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:11:06.145+09:00  INFO 18796 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:11:06.215+09:00  INFO 18796 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:11:06.458+09:00  INFO 18796 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:11:06.459+09:00  INFO 18796 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:11:06.516+09:00  WARN 18796 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:11:06.566+09:00  INFO 18796 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:11:07.197+09:00  INFO 18796 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:11:07.204+09:00  INFO 18796 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:11:08.879+09:00  WARN 18796 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:11:09.479+09:00  INFO 18796 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:11:11.057+09:00  INFO 18796 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:11:11.762+09:00  INFO 18796 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:11:11.762+09:00  INFO 18796 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7156f8cf]]
+2025-08-01T21:11:11.768+09:00  INFO 18796 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:11:11.808+09:00  INFO 18796 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:11:12.978+09:00  INFO 18796 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.484 seconds (process running for 14.061)
+2025-08-01T21:11:19.177+09:00  INFO 18796 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:11:19.177+09:00  INFO 18796 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:11:19.183+09:00  INFO 18796 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2025-08-01T21:12:11.748+09:00  INFO 18796 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:28:48.462+09:00  INFO 21320 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 21320 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:28:48.470+09:00  INFO 21320 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:28:50.260+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:28:50.271+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:28:50.334+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:28:50.358+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:28:50.358+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:28:50.375+09:00  INFO 21320 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:28:51.961+09:00  INFO 21320 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:28:51.977+09:00  INFO 21320 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:28:51.986+09:00  INFO 21320 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:28:52.134+09:00  INFO 21320 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:28:52.141+09:00  INFO 21320 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3571 ms
+2025-08-01T21:28:52.708+09:00  INFO 21320 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:28:52.839+09:00  INFO 21320 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:28:52.889+09:00  INFO 21320 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:28:53.493+09:00  INFO 21320 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:28:53.536+09:00  INFO 21320 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:28:53.767+09:00  INFO 21320 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:28:53.775+09:00  INFO 21320 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:28:53.800+09:00  WARN 21320 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:28:53.832+09:00  INFO 21320 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:28:54.342+09:00  INFO 21320 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:28:54.351+09:00  INFO 21320 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:28:56.010+09:00  WARN 21320 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:28:56.435+09:00  INFO 21320 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:28:59.313+09:00  INFO 21320 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:29:01.194+09:00  INFO 21320 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:29:01.199+09:00  INFO 21320 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@22cf1808]]
+2025-08-01T21:29:01.202+09:00  INFO 21320 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:29:01.240+09:00  INFO 21320 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:29:02.557+09:00  INFO 21320 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 15.228 seconds (process running for 16.055)
+2025-08-01T21:29:45.719+09:00  INFO 21320 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:29:45.728+09:00  INFO 21320 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:29:45.728+09:00  INFO 21320 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-08-01T21:29:46.047+09:00  INFO 21320 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.KaptchaService    : Generated Kaptcha Text: ba3yg
+2025-08-01T21:30:01.180+09:00  INFO 21320 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:36:43.332+09:00  INFO 26768 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 26768 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:36:43.338+09:00  INFO 26768 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:36:45.499+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:36:45.503+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:36:45.548+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:36:45.579+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:36:45.579+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:36:45.613+09:00  INFO 26768 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:36:47.283+09:00  INFO 26768 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:36:47.306+09:00  INFO 26768 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:36:47.306+09:00  INFO 26768 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:36:47.446+09:00  INFO 26768 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:36:47.454+09:00  INFO 26768 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4026 ms
+2025-08-01T21:36:47.983+09:00  INFO 26768 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:36:48.122+09:00  INFO 26768 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:36:48.183+09:00  INFO 26768 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:36:48.733+09:00  INFO 26768 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:36:48.792+09:00  INFO 26768 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:36:49.054+09:00  INFO 26768 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:36:49.054+09:00  INFO 26768 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:36:49.096+09:00  WARN 26768 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:36:49.136+09:00  INFO 26768 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:36:49.665+09:00  INFO 26768 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:36:49.673+09:00  INFO 26768 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:36:51.541+09:00  WARN 26768 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:36:52.014+09:00  INFO 26768 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:36:53.560+09:00  INFO 26768 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:36:53.872+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:36:53.872+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@42fdf45e]]
+2025-08-01T21:36:53.872+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:36:53.897+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-01T21:36:53.897+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@42fdf45e]]
+2025-08-01T21:36:53.897+09:00  INFO 26768 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-01T21:36:53.906+09:00  WARN 26768 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-01T21:36:53.931+09:00  INFO 26768 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:36:53.941+09:00  INFO 26768 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T21:36:53.947+09:00  INFO 26768 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T21:36:53.970+09:00  INFO 26768 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T21:36:54.003+09:00 ERROR 26768 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-01T21:37:27.592+09:00  INFO 552 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.2 with PID 552 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:37:27.594+09:00  INFO 552 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:37:29.004+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:37:29.012+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:37:29.062+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:37:29.110+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:37:29.112+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:37:29.140+09:00  INFO 552 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:37:30.247+09:00  INFO 552 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:37:30.272+09:00  INFO 552 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:37:30.272+09:00  INFO 552 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:37:30.389+09:00  INFO 552 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:37:30.390+09:00  INFO 552 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2713 ms
+2025-08-01T21:37:30.586+09:00  INFO 552 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:37:30.655+09:00  INFO 552 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:37:30.704+09:00  INFO 552 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:37:31.083+09:00  INFO 552 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:37:31.120+09:00  INFO 552 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:37:31.370+09:00  INFO 552 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:37:31.370+09:00  INFO 552 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:37:31.411+09:00  WARN 552 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:37:31.461+09:00  INFO 552 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:37:31.971+09:00  INFO 552 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:37:31.987+09:00  INFO 552 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:37:32.712+09:00  WARN 552 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:37:32.845+09:00  INFO 552 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:37:33.336+09:00  INFO 552 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:37:33.606+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:37:33.613+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@ad6448e]]
+2025-08-01T21:37:33.614+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:37:33.622+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-01T21:37:33.622+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@ad6448e]]
+2025-08-01T21:37:33.622+09:00  INFO 552 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-01T21:37:33.640+09:00  WARN 552 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-01T21:37:33.658+09:00  INFO 552 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:37:33.667+09:00  INFO 552 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T21:37:33.671+09:00  INFO 552 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T21:37:33.694+09:00  INFO 552 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T21:37:33.716+09:00 ERROR 552 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-01T21:39:48.330+09:00  INFO 14820 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.2 with PID 14820 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:39:48.330+09:00  INFO 14820 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:39:49.669+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:39:49.669+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:39:49.721+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:39:49.746+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:39:49.755+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:39:49.777+09:00  INFO 14820 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:39:51.121+09:00  INFO 14820 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:39:51.146+09:00  INFO 14820 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:39:51.146+09:00  INFO 14820 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:39:51.250+09:00  INFO 14820 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:39:51.250+09:00  INFO 14820 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2807 ms
+2025-08-01T21:39:51.504+09:00  INFO 14820 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:39:51.599+09:00  INFO 14820 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:39:51.661+09:00  INFO 14820 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:39:52.054+09:00  INFO 14820 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:39:52.112+09:00  INFO 14820 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:39:52.372+09:00  INFO 14820 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:39:52.379+09:00  INFO 14820 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:39:52.414+09:00  WARN 14820 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:39:52.446+09:00  INFO 14820 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:39:53.012+09:00  INFO 14820 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:39:53.020+09:00  INFO 14820 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:39:53.834+09:00  WARN 14820 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:39:54.027+09:00  INFO 14820 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:39:54.544+09:00  INFO 14820 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:39:54.805+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:39:54.807+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@43c3354]]
+2025-08-01T21:39:54.810+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:39:54.828+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-01T21:39:54.828+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@43c3354]]
+2025-08-01T21:39:54.828+09:00  INFO 14820 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-01T21:39:54.851+09:00  WARN 14820 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-01T21:39:54.878+09:00  INFO 14820 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:39:54.878+09:00  INFO 14820 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T21:39:54.888+09:00  INFO 14820 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T21:39:54.923+09:00  INFO 14820 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T21:39:54.989+09:00 ERROR 14820 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-01T21:42:13.606+09:00  INFO 29180 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.2 with PID 29180 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:42:13.607+09:00  INFO 29180 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:42:15.019+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:42:15.021+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:42:15.055+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:42:15.078+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:42:15.078+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:42:15.090+09:00  INFO 29180 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:42:16.294+09:00  INFO 29180 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:42:16.310+09:00  INFO 29180 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:42:16.310+09:00  INFO 29180 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:42:16.448+09:00  INFO 29180 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:42:16.450+09:00  INFO 29180 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2721 ms
+2025-08-01T21:42:16.710+09:00  INFO 29180 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:42:16.804+09:00  INFO 29180 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:42:16.872+09:00  INFO 29180 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:42:17.304+09:00  INFO 29180 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:42:17.344+09:00  INFO 29180 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:42:17.661+09:00  INFO 29180 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:42:17.664+09:00  INFO 29180 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:42:17.704+09:00  WARN 29180 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:42:17.748+09:00  INFO 29180 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:42:18.257+09:00  INFO 29180 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:42:18.266+09:00  INFO 29180 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:42:19.045+09:00  WARN 29180 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:42:19.204+09:00  INFO 29180 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:42:19.731+09:00  INFO 29180 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:42:19.969+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:42:19.969+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@53fd59d4]]
+2025-08-01T21:42:19.969+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:42:19.985+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-01T21:42:19.985+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@53fd59d4]]
+2025-08-01T21:42:19.985+09:00  INFO 29180 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-01T21:42:19.993+09:00  WARN 29180 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-01T21:42:20.013+09:00  INFO 29180 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:42:20.013+09:00  INFO 29180 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T21:42:20.022+09:00  INFO 29180 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T21:42:20.044+09:00  INFO 29180 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T21:42:20.079+09:00 ERROR 29180 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-01T21:43:18.573+09:00  INFO 26364 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 26364 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:43:18.579+09:00  INFO 26364 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:43:20.681+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:43:20.681+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:43:20.732+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:43:20.766+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:43:20.770+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:43:20.796+09:00  INFO 26364 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:43:22.548+09:00  INFO 26364 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:43:22.574+09:00  INFO 26364 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:43:22.582+09:00  INFO 26364 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:43:22.771+09:00  INFO 26364 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:43:22.771+09:00  INFO 26364 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4019 ms
+2025-08-01T21:43:23.468+09:00  INFO 26364 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:43:23.644+09:00  INFO 26364 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:43:23.705+09:00  INFO 26364 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:43:24.403+09:00  INFO 26364 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:43:24.452+09:00  INFO 26364 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:43:24.774+09:00  INFO 26364 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:43:24.777+09:00  INFO 26364 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:43:24.832+09:00  WARN 26364 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:43:24.883+09:00  INFO 26364 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:43:25.474+09:00  INFO 26364 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:43:25.481+09:00  INFO 26364 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:43:26.852+09:00  WARN 26364 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:43:27.320+09:00  INFO 26364 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:43:28.983+09:00  INFO 26364 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:43:29.421+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:43:29.429+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7568134c]]
+2025-08-01T21:43:29.429+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:43:29.454+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-01T21:43:29.456+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7568134c]]
+2025-08-01T21:43:29.456+09:00  INFO 26364 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-01T21:43:29.479+09:00  WARN 26364 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-01T21:43:29.556+09:00  INFO 26364 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:43:29.570+09:00  INFO 26364 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T21:43:29.578+09:00  INFO 26364 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-01T21:43:29.628+09:00  INFO 26364 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-01T21:43:29.759+09:00 ERROR 26364 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-01T21:44:11.894+09:00  INFO 4524 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 4524 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:44:11.902+09:00  INFO 4524 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:44:13.673+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:44:13.674+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:44:13.721+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:44:13.746+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:44:13.746+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:44:13.772+09:00  INFO 4524 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:44:15.871+09:00  INFO 4524 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:44:15.895+09:00  INFO 4524 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:44:15.895+09:00  INFO 4524 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:44:16.095+09:00  INFO 4524 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:44:16.096+09:00  INFO 4524 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4124 ms
+2025-08-01T21:44:16.652+09:00  INFO 4524 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:44:16.764+09:00  INFO 4524 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:44:16.808+09:00  INFO 4524 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:44:17.472+09:00  INFO 4524 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:44:17.522+09:00  INFO 4524 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:44:17.816+09:00  INFO 4524 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:44:17.824+09:00  INFO 4524 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:44:17.849+09:00  WARN 4524 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:44:17.873+09:00  INFO 4524 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:44:18.410+09:00  INFO 4524 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:44:18.418+09:00  INFO 4524 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:44:20.135+09:00  WARN 4524 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:44:20.504+09:00  INFO 4524 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:44:22.078+09:00  INFO 4524 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:44:22.696+09:00  INFO 4524 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:44:22.703+09:00  INFO 4524 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@507fecf3]]
+2025-08-01T21:44:22.705+09:00  INFO 4524 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:44:22.748+09:00  INFO 4524 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:44:24.059+09:00  INFO 4524 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.394 seconds (process running for 14.261)
+2025-08-01T21:44:39.530+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:44:39.530+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:44:39.530+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-08-01T21:44:39.716+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.KaptchaService    : Generated Kaptcha Text: w5eme
+2025-08-01T21:45:16.018+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-7] c.mnms.booking.service.KaptchaService    : Generated Kaptcha Text: g8nne
+2025-08-01T21:45:22.699+09:00  INFO 4524 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-01T21:45:36.586+09:00  INFO 4524 --- [booking] [http-nio-0.0.0.0-8080-exec-1] c.mnms.booking.service.KaptchaService    : Generated Kaptcha Text: 8pbym
+2025-08-01T21:48:11.250+09:00  INFO 3932 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 3932 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-01T21:48:11.251+09:00  INFO 3932 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-01T21:48:13.420+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:48:13.423+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T21:48:13.472+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 0 JPA repository interfaces.
+2025-08-01T21:48:13.505+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-01T21:48:13.505+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-01T21:48:13.522+09:00  INFO 3932 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-08-01T21:48:14.987+09:00  INFO 3932 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-01T21:48:15.011+09:00  INFO 3932 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T21:48:15.011+09:00  INFO 3932 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T21:48:15.142+09:00  INFO 3932 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-01T21:48:15.142+09:00  INFO 3932 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3804 ms
+2025-08-01T21:48:15.826+09:00  INFO 3932 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T21:48:16.061+09:00  INFO 3932 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T21:48:16.125+09:00  INFO 3932 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T21:48:17.080+09:00  INFO 3932 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T21:48:17.137+09:00  INFO 3932 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T21:48:17.459+09:00  INFO 3932 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-01T21:48:17.468+09:00  INFO 3932 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T21:48:17.509+09:00  WARN 3932 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T21:48:17.554+09:00  INFO 3932 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T21:48:18.084+09:00  INFO 3932 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-01T21:48:18.092+09:00  INFO 3932 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T21:48:20.116+09:00  WARN 3932 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T21:48:20.488+09:00  INFO 3932 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-01T21:48:22.128+09:00  INFO 3932 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-01T21:48:22.524+09:00  INFO 3932 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-01T21:48:22.528+09:00  INFO 3932 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7568134c]]
+2025-08-01T21:48:22.528+09:00  INFO 3932 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-01T21:48:22.567+09:00  INFO 3932 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-01T21:48:23.753+09:00  INFO 3932 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 13.445 seconds (process running for 14.07)
+2025-08-01T21:48:31.454+09:00  INFO 3932 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T21:48:31.462+09:00  INFO 3932 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T21:48:31.464+09:00  INFO 3932 --- [booking] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-08-01T21:48:31.779+09:00  INFO 3932 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.KaptchaService    : Generated Kaptcha Text: 8dp3d
+2025-08-01T21:49:22.529+09:00  INFO 3932 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
