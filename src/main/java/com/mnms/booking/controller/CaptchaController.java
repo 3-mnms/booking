@@ -4,9 +4,10 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,7 +33,7 @@ public class CaptchaController {
 
         // 문자 생성
         String captchaText = captchaProducer.createText();
-        request.getSession().setAttribute("captcha", captchaText);
+        request.getSession().setAttribute("captchaCode", captchaText);
         System.out.println("captchaText : " + captchaText);
 
         // 이미지 생성
@@ -41,5 +42,17 @@ public class CaptchaController {
         ImageIO.write(image, "jpg", out);
         out.flush();
         out.close();
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyCaptcha(@RequestParam("captcha") String captcha, HttpSession session) {
+        String sessionCaptcha = (String) session.getAttribute("captchaCode");
+
+        if (sessionCaptcha != null && sessionCaptcha.equalsIgnoreCase(captcha)) {
+            session.removeAttribute("captchaCode"); // 검증 후 바로 제거
+            return ResponseEntity.ok("인증 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("보안문자 불일치");
+        }
     }
 }
