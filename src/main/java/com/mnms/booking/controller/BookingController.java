@@ -28,7 +28,7 @@ public class BookingController {
 
     /**
      * 예매하기 버튼 클릭 시 호출되는 API
-     * userId는 실제 로그인된 사용자 ID를 사용해야 합니다. (수정 예정)
+     * userId는 수정할 예정 (추후)
      */
     @GetMapping("/enter")
     @ResponseBody // JSON 응답을 위해 추가
@@ -46,7 +46,8 @@ public class BookingController {
 
     /**
      * 대기열에 있는 사용자가 예매 페이지로 진입 완료 후 호출
-     * (이 사용자는 대기열에서 제거되어야 함)
+     * (이 사용자는 대기열에서 제거됨)
+     * userId는 수정할 예정 (추후)
      */
     @GetMapping("/release/{userId}")
     public ResponseEntity<String> releaseUser(@PathVariable("userId") String userId) {
@@ -67,18 +68,11 @@ public class BookingController {
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
      * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
+     * userId는 수정할 예정 (추후)
      */
     @MessageMapping("/subscribe/waiting/{userId}")
     public void subscribeWaitingQueue(@DestinationVariable("userId") String userId) {
         log.info("User {} subscribed to waiting queue updates.", userId);
         waitingService.getAndPublishWaitingNumber(userId);
     }
-
-//    @MessageMapping("/subscribe/waiting/{userId}")
-//    public void handleSubscribe(@DestinationVariable String userId, @Payload SomePayload payload) {
-//        // 처리 로직 ...
-//
-//        // 구독자에게 메시지 보내기
-//        messagingTemplate.convertAndSend("/topic/waiting/" + userId, "대기열 상태 업데이트 메시지");
-//    }
 }

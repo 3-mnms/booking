@@ -10,7 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -34,7 +39,7 @@ public class WaitingService {
 
     // 예매 페이지 수용인원
     private static final long PERFORMANCE_CAPACITY = 2; // 공연 수용 인원
-    private static final double IMMEDIATE_ENTRY_RATIO = 1; // 즉시 입장 비율 (1.5배)
+    private static final double IMMEDIATE_ENTRY_RATIO = 1; // 기준 : 즉시 입장 비율 (1.5배), 테스트 (1배)
     private static final long IMMEDIATE_ENTRY_COUNT = (long) (PERFORMANCE_CAPACITY * IMMEDIATE_ENTRY_RATIO);
 
 
@@ -80,6 +85,31 @@ public class WaitingService {
     }
 
     /**
+     * 대기열에 있는 사용자에게 주기적으로 대기 번호 발행
+     * 5초마다 실행
+     */
+    @Scheduled(fixedDelay = 5000)
+    public void publishAllWaitingNumbers() {
+        List<String> waitingUsers = getWaitingUsers();
+        for (String userId : waitingUsers) {
+            getAndPublishWaitingNumber(userId);
+        }
+        log.info("주기적 대기번호 발행 완료. 대상자 수: {}", waitingUsers.size());
+    }
+
+    /**
+     * 대기열에 있는 사용자 리스트 반환하기
+     */
+    public List<String> getWaitingUsers() {
+        Set<String> userSet = zSetOperations.range(WAITING_QUEUE_KEY, 0, -1);
+        if (userSet == null) {
+            return Collections.emptyList();
+        }
+        return new ArrayList<>(userSet);
+    }
+
+
+    /**
      * 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
      * @param userId 사용자 ID
      * @return 대기 순번
@@ -89,7 +119,6 @@ public class WaitingService {
         Long rank = zSetOperations.rank(WAITING_QUEUE_KEY, userId);
 
         if (rank != null) {
-            // Redis rank는 0부터 시작하므로 +1
             long waitingNumber = rank + 1;
             log.info("User {}'s waiting number: {}", userId, waitingNumber);
 
