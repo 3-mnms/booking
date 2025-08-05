@@ -40,7 +40,6 @@ public class BookingController {
             return ResponseEntity.ok(new WaitingNumberDto(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
             // 대기열에 진입한 경우
-            waitingService.getAndPublishWaitingNumber(userId);
             return ResponseEntity.ok(new WaitingNumberDto(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }

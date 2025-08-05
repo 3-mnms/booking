@@ -1,22 +1,25 @@
 package com.mnms.booking.service;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.response.WaitingNumberDto;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 
 @Service
 @Slf4j
@@ -42,10 +45,18 @@ public class WaitingService {
     private static final double IMMEDIATE_ENTRY_RATIO = 1; // 기준 : 즉시 입장 비율 (1.5배), 테스트 (1배)
     private static final long IMMEDIATE_ENTRY_COUNT = (long) (PERFORMANCE_CAPACITY * IMMEDIATE_ENTRY_RATIO);
 
+    // scheduled
+    private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    private ScheduledFuture<?> scheduledTask;
+
 
     @PostConstruct
     public void init() {
         zSetOperations = redisTemplate.opsForZSet();
+        List<String> waitingUsers = getWaitingUsers();
+        if (!waitingUsers.isEmpty()) {
+            startScheduler();
+        }
     }
 
     public WaitingService(
@@ -55,6 +66,9 @@ public class WaitingService {
         this.redisTemplate = redisTemplate;
         this.stringRedisTemplate = stringRedisTemplate;
         this.objectMapper = objectMapper;
+
+        // scheduler 초기화
+        scheduler.initialize();
     }
 
     /**
@@ -80,32 +94,53 @@ public class WaitingService {
             zSetOperations.add(WAITING_QUEUE_KEY, userId, timestamp);
 
             log.info("User {} added to waiting queue with timestamp {}.", userId, timestamp);
+
+            // 조건부 스케줄러 시작
+            startScheduler();
+
             return getAndPublishWaitingNumber(userId);
         }
     }
 
     /**
-     * 대기열에 있는 사용자에게 주기적으로 대기 번호 발행
-     * 5초마다 실행
+     * 스케줄러 시작 (중복 시작 방지)
      */
-    @Scheduled(fixedDelay = 5000)
-    public void publishAllWaitingNumbers() {
-        List<String> waitingUsers = getWaitingUsers();
-        for (String userId : waitingUsers) {
-            getAndPublishWaitingNumber(userId);
+    public synchronized void startScheduler() {
+        if (scheduledTask == null || scheduledTask.isCancelled() || scheduledTask.isDone()) {
+            log.info("대기열 감시 스케줄러 시작됨.");
+            scheduledTask = scheduler.scheduleWithFixedDelay(this::runSchedulerLogic, Duration.ofSeconds(5));
         }
-        log.info("주기적 대기번호 발행 완료. 대상자 수: {}", waitingUsers.size());
     }
 
     /**
-     * 대기열에 있는 사용자 리스트 반환하기
+     * 스케줄러 중지
      */
+    public synchronized void stopScheduler() {
+        if (scheduledTask != null && !scheduledTask.isCancelled()) {
+            log.info("대기열이 비어 스케줄러 중지됨.");
+            scheduledTask.cancel(false);
+        }
+    }
+
+    /**
+     * 주기적으로 대기열 순번 발행
+     */
+    public void runSchedulerLogic() {
+        List<String> waitingUsers = getWaitingUsers();
+        if (waitingUsers.isEmpty()) {
+            stopScheduler(); // 비었으면 중지
+            return;
+        }
+
+        for (String userId : waitingUsers) {
+            getAndPublishWaitingNumber(userId);
+        }
+        log.info("대기열 사용자 {}명에게 대기번호 발행 완료.", waitingUsers.size());
+    }
+
     public List<String> getWaitingUsers() {
         Set<String> userSet = zSetOperations.range(WAITING_QUEUE_KEY, 0, -1);
-        if (userSet == null) {
-            return Collections.emptyList();
-        }
-        return new ArrayList<>(userSet);
+        return (userSet == null) ? Collections.emptyList() : new ArrayList<>(userSet);
     }
 
 
@@ -120,7 +155,7 @@ public class WaitingService {
 
         if (rank != null) {
             long waitingNumber = rank + 1;
-            log.info("User {}'s waiting number: {}", userId, waitingNumber);
+            //log.info("User {}'s waiting number: {}", userId, waitingNumber);
 
             // Redis Pub/Sub 채널로 메시지 발행
             publishWaitingNumber(userId, waitingNumber);
@@ -138,15 +173,14 @@ public class WaitingService {
     private void publishWaitingNumber(String userId, long waitingNumber) {
         try {
             // immediateEntry는 false (이 메서드는 대기 순번 알림용), message는 null
-            WaitingNumberDto dto = new WaitingNumberDto(userId, waitingNumber, false, null); // <-- 이 부분 수정
-            String message = objectMapper.writeValueAsString(dto); // DTO를 JSON 문자열로 변환
-            stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message); // Redis 채널로 발행
-            log.info("Published message to Redis channel '{}': {}", NOTIFICATION_CHANNEL, message);
+            WaitingNumberDto dto = new WaitingNumberDto(userId, waitingNumber, false, null);
+            String message = objectMapper.writeValueAsString(dto);
+            // Redis 채널로 발행
+            stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message);
         } catch (JsonProcessingException e) {
             log.error("Error converting DTO to JSON: {}", e.getMessage());
         }
     }
-
 
     /**
      * 대기열에서 다음 사용자 진입 처리
@@ -223,5 +257,10 @@ public class WaitingService {
             log.warn("Attempted to remove user {} from queue, but user was not found or removal failed. Removed count: {}", userId, removedCount);
             return false;
         }
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        scheduler.shutdown();
     }
 }
