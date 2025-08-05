@@ -66,6 +66,27 @@ public class BookingController {
     }
 
     /**
+     * 대기열에 있는 사용자가 대기열을 나간다 (예매 입장 아님)
+     * (이 사용자는 대기열에서 제거됨)
+     * userId는 수정할 예정 (추후)
+     */
+    @GetMapping("/exit/{userId}")
+    public ResponseEntity<String> exitWaitingUser(@PathVariable("userId") String userId) {
+        try {
+            boolean removed = waitingService.removeUserFromQueue(userId);
+            if (removed) {
+                return ResponseEntity.ok("대기하던 사용자가 대기열을 나갔습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("해당 사용자는 대기열 목록에 없습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류로 인해 사용자를 처리하지 못했습니다.");
+        }
+    }
+
+    /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
      * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
      * userId는 수정할 예정 (추후)
