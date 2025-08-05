@@ -152,7 +152,6 @@ public class WaitingService {
      * 대기열에서 다음 사용자 진입 처리
      * (예매 완료 또는 타임아웃 등으로 인해 예매 페이지에서 나간 경우 호출)
      */
-
     public boolean userExitBookingPage(String userId){
         // 예매 완료된 Set에서 제거
         Long removed = redisTemplate.opsForSet().remove(BOOKING_USERS_SET_KEY, userId);

@@ -9,6 +9,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 
 @Configuration
@@ -37,8 +38,8 @@ public class RedisConfig {
     // Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
     // String, String 형태로 메시지를 발행할 것이므로 StringRedisTemplate을 사용
     @Bean
-    public org.springframework.data.redis.core.StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
-        return new org.springframework.data.redis.core.StringRedisTemplate(connectionFactory);
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
     }
 
     // ZSet, Hash 등 일반적인 Redis 데이터 구조 관리에 사용될 RedisTemplate 설정 추가
@@ -49,7 +50,7 @@ public class RedisConfig {
 
         // Key 직렬화 설정: StringRedisSerializer 사용 (필수)
         template.setKeySerializer(new StringRedisSerializer());
-        // Value 직렬화 설정: StringRedisSerializer 사용 (필수)
+        // Value 직렬화 설정
         template.setValueSerializer(new StringRedisSerializer());
 
         // Hash Key/Value 직렬화 설정 (ZSet에서는 직접 사용되지 않지만, 다른 Redis 자료구조 사용 시 일관성을 위해 설정)
