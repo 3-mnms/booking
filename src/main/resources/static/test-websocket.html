@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket STOMP 테스트</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h2>WebSocket STOMP 테스트</h2>
+
+<div>
+  <label>userId: <input type="text" id="userIdInput" /></label>
+  <button onclick="connect()">서버 연결</button>
+  <button onclick="subscribe()">해당 userId 구독</button>
+</div>
+
+<pre id="log"></pre>
+
+<script>
+  let stompClient = null;
+  let subscribedUserIds = new Set(); // 중복 구독 방지
+
+  function connect() {
+      const socket = new SockJS("/ws"); // Spring WebSocket endpoint
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+          log("서버에 연결됨: " + frame.headers['server']);
+      });
+  }
+
+  function subscribe() {
+      const userId = document.getElementById("userIdInput").value.trim();
+
+      if (!userId) {
+          log("userId를 입력하세요.");
+          return;
+      }
+
+      if (subscribedUserIds.has(userId)) {
+          log("이미 구독 중인 userId입니다: " + userId);
+          return;
+      }
+
+      // WebSocket 수신 구독
+      stompClient.subscribe("/topic/waiting/" + userId, function (message) {
+          log(`[${userId}] 받은 메시지: ` + message.body);
+      });
+
+      // 서버에 구독 요청 알림 전송
+      stompClient.send("/app/subscribe/waiting/" + userId, {}, JSON.stringify({ userId: userId }));
+      log("구독 요청 보냄: /app/subscribe/waiting/" + userId);
+
+      subscribedUserIds.add(userId);
+  }
+
+  function log(msg) {
+      document.getElementById("log").textContent += msg + "\n";
+  }
+</script>
+</body>
+</html>

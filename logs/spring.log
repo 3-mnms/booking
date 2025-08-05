@@ -1,0 +1,471 @@
+2025-08-04T15:11:10.730+09:00  INFO 6532 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 6532 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-04T15:11:10.752+09:00  INFO 6532 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-04T15:11:13.746+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T15:11:13.751+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-04T15:11:13.832+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 44 ms. Found 0 JPA repository interfaces.
+2025-08-04T15:11:13.886+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T15:11:13.890+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-04T15:11:13.932+09:00  INFO 6532 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-08-04T15:11:16.427+09:00  INFO 6532 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-04T15:11:16.474+09:00  INFO 6532 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-04T15:11:16.475+09:00  INFO 6532 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-04T15:11:16.663+09:00  INFO 6532 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-04T15:11:16.664+09:00  INFO 6532 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5757 ms
+2025-08-04T15:11:17.553+09:00  INFO 6532 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-04T15:11:17.850+09:00  INFO 6532 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-04T15:11:18.148+09:00  INFO 6532 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-04T15:11:19.379+09:00  INFO 6532 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-04T15:11:19.478+09:00  INFO 6532 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-04T15:11:20.067+09:00  INFO 6532 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-04T15:11:20.071+09:00  INFO 6532 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-04T15:11:20.154+09:00  WARN 6532 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-04T15:11:20.221+09:00  INFO 6532 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-04T15:11:21.241+09:00  INFO 6532 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-04T15:11:21.257+09:00  INFO 6532 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T15:11:23.159+09:00  WARN 6532 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-04T15:11:23.588+09:00  INFO 6532 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-04T15:11:25.172+09:00  INFO 6532 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-04T15:11:25.727+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-04T15:11:25.730+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1016b44e]]
+2025-08-04T15:11:25.731+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-04T15:11:25.748+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-08-04T15:11:25.748+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1016b44e]]
+2025-08-04T15:11:25.748+09:00  INFO 6532 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-08-04T15:11:25.760+09:00  WARN 6532 --- [booking] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-08-04T15:11:25.780+09:00  INFO 6532 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T15:11:25.785+09:00  INFO 6532 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-04T15:11:25.789+09:00  INFO 6532 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-04T15:11:25.805+09:00  INFO 6532 --- [booking] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-08-04T15:11:25.829+09:00 ERROR 6532 --- [booking] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-08-04T15:12:30.451+09:00  INFO 28936 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 28936 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-04T15:12:30.457+09:00  INFO 28936 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-04T15:12:32.070+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T15:12:32.072+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-04T15:12:32.141+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 0 JPA repository interfaces.
+2025-08-04T15:12:32.161+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T15:12:32.162+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-04T15:12:32.181+09:00  INFO 28936 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-08-04T15:12:33.502+09:00  INFO 28936 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-04T15:12:33.521+09:00  INFO 28936 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-04T15:12:33.522+09:00  INFO 28936 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-04T15:12:33.641+09:00  INFO 28936 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-04T15:12:33.642+09:00  INFO 28936 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3108 ms
+2025-08-04T15:12:34.188+09:00  INFO 28936 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-04T15:12:34.346+09:00  INFO 28936 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-04T15:12:34.377+09:00  INFO 28936 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-04T15:12:34.978+09:00  INFO 28936 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-04T15:12:35.013+09:00  INFO 28936 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-04T15:12:35.201+09:00  INFO 28936 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-04T15:12:35.203+09:00  INFO 28936 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-04T15:12:35.225+09:00  WARN 28936 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-04T15:12:35.248+09:00  INFO 28936 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-04T15:12:35.604+09:00  INFO 28936 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-04T15:12:35.609+09:00  INFO 28936 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T15:12:36.830+09:00  WARN 28936 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-04T15:12:37.123+09:00  INFO 28936 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-04T15:12:38.343+09:00  INFO 28936 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-04T15:12:39.196+09:00  INFO 28936 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-04T15:12:39.202+09:00  INFO 28936 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@507fecf3]]
+2025-08-04T15:12:39.205+09:00  INFO 28936 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-04T15:12:39.358+09:00  INFO 28936 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-04T15:12:40.522+09:00  INFO 28936 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 10.986 seconds (process running for 11.539)
+2025-08-04T15:13:39.179+09:00  INFO 28936 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-08-04T15:48:07.528+09:00  WARN 28936 --- [booking] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=30m32s140ms607µs).
+2025-08-04T16:57:27.085+09:00  WARN 28936 --- [booking] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h1m49s478ms585µs600ns).
+2025-08-04T17:15:35.155+09:00  INFO 28936 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2025-08-04T17:44:45.964+09:00  INFO 28936 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04T17:44:45.964+09:00  INFO 28936 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-04T17:44:45.972+09:00  INFO 28936 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2025-08-04T17:45:35.165+09:00  INFO 28936 --- [booking] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2025-08-04T17:55:57.557+09:00  INFO 30600 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 30600 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-04T17:55:57.560+09:00  INFO 30600 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-04T17:55:59.377+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T17:55:59.383+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-04T17:55:59.441+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 0 JPA repository interfaces.
+2025-08-04T17:55:59.473+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T17:55:59.473+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-04T17:55:59.498+09:00  INFO 30600 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2025-08-04T17:56:01.383+09:00  INFO 30600 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-04T17:56:01.410+09:00  INFO 30600 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-04T17:56:01.410+09:00  INFO 30600 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-04T17:56:01.531+09:00  INFO 30600 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-04T17:56:01.532+09:00  INFO 30600 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3889 ms
+2025-08-04T17:56:02.035+09:00  INFO 30600 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-04T17:56:02.157+09:00  INFO 30600 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-04T17:56:02.206+09:00  INFO 30600 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-04T17:56:02.928+09:00  INFO 30600 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-04T17:56:02.973+09:00  INFO 30600 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-04T17:56:03.194+09:00  INFO 30600 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-04T17:56:03.197+09:00  INFO 30600 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-04T17:56:03.227+09:00  WARN 30600 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-04T17:56:03.275+09:00  INFO 30600 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-04T17:56:03.838+09:00  INFO 30600 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-04T17:56:03.846+09:00  INFO 30600 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T17:56:05.122+09:00  WARN 30600 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-04T17:56:05.439+09:00  INFO 30600 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-04T17:56:06.826+09:00  INFO 30600 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-04T17:56:07.160+09:00  INFO 30600 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-04T17:56:07.169+09:00  INFO 30600 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2e2c9e24]]
+2025-08-04T17:56:07.171+09:00  INFO 30600 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-04T17:56:07.223+09:00  INFO 30600 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-04T17:56:08.260+09:00  INFO 30600 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 11.967 seconds (process running for 12.707)
+2025-08-04T17:56:17.817+09:00  INFO 30600 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04T17:56:17.817+09:00  INFO 30600 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-04T17:56:17.826+09:00  INFO 30600 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2025-08-04T17:56:44.349+09:00  INFO 30600 --- [booking] [clientInboundChannel-7] c.m.b.controller.BookingController       : User 12345 subscribed to waiting queue updates.
+2025-08-04T17:57:07.171+09:00  INFO 30600 --- [booking] [MessageBroker-9] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 9, active threads = 0, queued tasks = 0, completed tasks = 9], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 3, completed tasks = 12]
+2025-08-04T18:02:57.973+09:00  INFO 30600 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"12345","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:02:58.022+09:00  INFO 30600 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user 12345: 1
+2025-08-04T18:22:01.546+09:00  INFO 30600 --- [booking] [clientInboundChannel-13] c.m.b.controller.BookingController       : User 12345 subscribed to waiting queue updates.
+2025-08-04T18:24:16.634+09:00  WARN 30600 --- [booking] [http-nio-0.0.0.0-8080-exec-4] c.mnms.booking.service.WaitingService    : User user2 was not found in booking user set on exit.
+2025-08-04T18:24:21.992+09:00  WARN 30600 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : User 12345 was not found in booking user set on exit.
+2025-08-04T18:24:49.167+09:00  INFO 30600 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"12345","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:24:49.169+09:00  INFO 30600 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user 12345: 1
+2025-08-04T18:26:17.892+09:00  INFO 15184 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 15184 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-04T18:26:17.902+09:00  INFO 15184 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-04T18:26:20.128+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T18:26:20.134+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-04T18:26:20.194+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 0 JPA repository interfaces.
+2025-08-04T18:26:20.233+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T18:26:20.233+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-04T18:26:20.260+09:00  INFO 15184 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2025-08-04T18:26:22.179+09:00  INFO 15184 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-04T18:26:22.200+09:00  INFO 15184 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-04T18:26:22.200+09:00  INFO 15184 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-04T18:26:22.334+09:00  INFO 15184 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-04T18:26:22.335+09:00  INFO 15184 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4304 ms
+2025-08-04T18:26:22.933+09:00  INFO 15184 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-04T18:26:23.068+09:00  INFO 15184 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-04T18:26:23.113+09:00  INFO 15184 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-04T18:26:24.354+09:00  INFO 15184 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-04T18:26:24.483+09:00  INFO 15184 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-04T18:26:24.955+09:00  INFO 15184 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-04T18:26:24.962+09:00  INFO 15184 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-04T18:26:25.022+09:00  WARN 15184 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-04T18:26:25.080+09:00  INFO 15184 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-04T18:26:26.030+09:00  INFO 15184 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-04T18:26:26.047+09:00  INFO 15184 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T18:26:30.124+09:00  WARN 15184 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-04T18:26:30.802+09:00  INFO 15184 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-04T18:26:33.989+09:00  INFO 15184 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-04T18:26:34.726+09:00  INFO 15184 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-04T18:26:34.734+09:00  INFO 15184 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4a249610]]
+2025-08-04T18:26:34.734+09:00  INFO 15184 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-04T18:26:34.824+09:00  INFO 15184 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-04T18:26:36.925+09:00  INFO 15184 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 20.206 seconds (process running for 21.271)
+2025-08-04T18:26:52.356+09:00  INFO 15184 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04T18:26:52.356+09:00  INFO 15184 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-04T18:26:52.361+09:00  INFO 15184 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-08-04T18:27:03.678+09:00  INFO 15184 --- [booking] [clientInboundChannel-7] c.m.b.controller.BookingController       : User user1 subscribed to waiting queue updates.
+2025-08-04T18:27:13.126+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"12345","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:27:13.175+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user 12345: 1
+2025-08-04T18:27:25.437+09:00  INFO 15184 --- [booking] [clientInboundChannel-16] c.m.b.controller.BookingController       : User user2 subscribed to waiting queue updates.
+2025-08-04T18:27:29.715+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"12345","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:27:29.717+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user 12345: 1
+2025-08-04T18:27:34.716+09:00  INFO 15184 --- [booking] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(2)-CONNECTED(2)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 18, active threads = 0, queued tasks = 0, completed tasks = 18], outboundChannel[pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2], sockJsScheduler[pool size = 15, active threads = 1, queued tasks = 3, completed tasks = 9]
+2025-08-04T18:27:55.833+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-3] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user1","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:27:55.836+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-3] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user1: 1
+2025-08-04T18:28:01.569+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-4] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:28:01.570+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-4] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:29:10.120+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-5] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:29:10.122+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-5] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:29:22.224+09:00  INFO 15184 --- [booking] [clientInboundChannel-31] c.m.b.controller.BookingController       : User user1 subscribed to waiting queue updates.
+2025-08-04T18:29:29.683+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-6] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user1","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:29:29.684+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-6] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user1: 1
+2025-08-04T18:29:36.448+09:00  INFO 15184 --- [booking] [clientInboundChannel-40] c.m.b.controller.BookingController       : User user2 subscribed to waiting queue updates.
+2025-08-04T18:29:39.730+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-7] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user1","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:29:39.732+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-7] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user1: 1
+2025-08-04T18:29:50.762+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-8] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":"조금만 기다려주세요"}
+2025-08-04T18:29:50.763+09:00  INFO 15184 --- [booking] [redisMessageListenerContainer-8] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:47:23.032+09:00  INFO 11952 --- [booking] [main] com.mnms.booking.BookingApplication      : Starting BookingApplication using Java 17.0.14 with PID 11952 (C:\sk\final_project\booking\booking\build\classes\java\main started by yondu in C:\sk\final_project\booking\booking)
+2025-08-04T18:47:23.032+09:00  INFO 11952 --- [booking] [main] com.mnms.booking.BookingApplication      : The following 1 profile is active: "test"
+2025-08-04T18:47:24.651+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T18:47:24.652+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-04T18:47:24.725+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 37 ms. Found 0 JPA repository interfaces.
+2025-08-04T18:47:24.751+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-04T18:47:24.758+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-04T18:47:24.782+09:00  INFO 11952 --- [booking] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-08-04T18:47:26.327+09:00  INFO 11952 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-04T18:47:26.343+09:00  INFO 11952 --- [booking] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-04T18:47:26.343+09:00  INFO 11952 --- [booking] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-04T18:47:26.450+09:00  INFO 11952 --- [booking] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-04T18:47:26.451+09:00  INFO 11952 --- [booking] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3297 ms
+2025-08-04T18:47:27.044+09:00  INFO 11952 --- [booking] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-04T18:47:27.181+09:00  INFO 11952 --- [booking] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-04T18:47:27.220+09:00  INFO 11952 --- [booking] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-04T18:47:27.700+09:00  INFO 11952 --- [booking] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-04T18:47:27.729+09:00  INFO 11952 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-04T18:47:27.887+09:00  INFO 11952 --- [booking] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-04T18:47:27.888+09:00  INFO 11952 --- [booking] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-04T18:47:27.909+09:00  WARN 11952 --- [booking] [main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-04T18:47:27.930+09:00  INFO 11952 --- [booking] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-04T18:47:28.300+09:00  INFO 11952 --- [booking] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-04T18:47:28.305+09:00  INFO 11952 --- [booking] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-04T18:47:29.320+09:00  WARN 11952 --- [booking] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-04T18:47:29.564+09:00  INFO 11952 --- [booking] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-08-04T18:47:30.713+09:00  INFO 11952 --- [booking] [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-04T18:47:31.331+09:00  INFO 11952 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-08-04T18:47:31.336+09:00  INFO 11952 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3d8b9dee]]
+2025-08-04T18:47:31.339+09:00  INFO 11952 --- [booking] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-08-04T18:47:31.414+09:00  INFO 11952 --- [booking] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-04T18:47:32.156+09:00  INFO 11952 --- [booking] [main] com.mnms.booking.BookingApplication      : Started BookingApplication in 10.681 seconds (process running for 11.263)
+2025-08-04T18:47:32.174+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:47:37.197+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:47:42.208+09:00  INFO 11952 --- [booking] [MessageBroker-3] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:47:47.222+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:47:52.238+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:47:57.259+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:02.275+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:07.291+09:00  INFO 11952 --- [booking] [MessageBroker-3] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:12.311+09:00  INFO 11952 --- [booking] [MessageBroker-7] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:17.327+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:17.409+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04T18:48:17.409+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-04T18:48:17.410+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-08-04T18:48:22.344+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:23.013+09:00  INFO 11952 --- [booking] [clientInboundChannel-7] c.m.b.controller.BookingController       : User user1 subscribed to waiting queue updates.
+2025-08-04T18:48:27.356+09:00  INFO 11952 --- [booking] [MessageBroker-3] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:31.311+09:00  INFO 11952 --- [booking] [MessageBroker-8] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 9, active threads = 0, queued tasks = 0, completed tasks = 9], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 3, completed tasks = 14]
+2025-08-04T18:48:32.372+09:00  INFO 11952 --- [booking] [MessageBroker-7] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:37.381+09:00  INFO 11952 --- [booking] [MessageBroker-11] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:38.771+09:00  INFO 11952 --- [booking] [clientInboundChannel-16] c.m.b.controller.BookingController       : User user2 subscribed to waiting queue updates.
+2025-08-04T18:48:41.785+09:00  INFO 11952 --- [booking] [clientInboundChannel-25] c.m.b.controller.BookingController       : User user3 subscribed to waiting queue updates.
+2025-08-04T18:48:42.404+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:47.417+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:52.432+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:57.446+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:48:58.385+09:00  INFO 11952 --- [booking] [clientInboundChannel-3] c.m.b.controller.BookingController       : User user4 subscribed to waiting queue updates.
+2025-08-04T18:49:02.454+09:00  INFO 11952 --- [booking] [MessageBroker-4] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:49:07.475+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:49:12.489+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:49:14.080+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-10] c.mnms.booking.service.WaitingService    : User user1 can enter booking page immediately (0 < 2).
+2025-08-04T18:49:17.507+09:00  INFO 11952 --- [booking] [MessageBroker-14] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:49:22.530+09:00  INFO 11952 --- [booking] [MessageBroker-16] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:49:23.027+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] c.mnms.booking.service.WaitingService    : User user2 can enter booking page immediately (1 < 2).
+2025-08-04T18:49:25.099+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : User user3 added to waiting queue with timestamp 1754300965068.
+2025-08-04T18:49:25.104+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:25.147+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:25.148+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:25.215+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-1] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:27.550+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:27.553+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:27.553+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:27.554+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:27.555+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-2] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:32.570+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:32.575+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:32.576+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:32.576+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-3] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:32.578+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-3] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:37.600+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:37.604+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:37.605+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:37.606+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-4] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:37.608+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-4] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:42.624+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:42.629+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:42.629+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:42.630+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-5] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:42.632+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-5] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:47.656+09:00  INFO 11952 --- [booking] [MessageBroker-13] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:47.658+09:00  INFO 11952 --- [booking] [MessageBroker-13] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:47.659+09:00  INFO 11952 --- [booking] [MessageBroker-13] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:47.660+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-6] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:47.662+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-6] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:52.679+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:52.686+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:52.687+09:00  INFO 11952 --- [booking] [MessageBroker-1] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:49:52.688+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-7] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:52.689+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-7] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:56.216+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-3] c.mnms.booking.service.WaitingService    : User user4 added to waiting queue with timestamp 1754300996211.
+2025-08-04T18:49:56.220+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-3] c.mnms.booking.service.WaitingService    : User user4's waiting number: 2
+2025-08-04T18:49:56.226+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-8] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:49:56.226+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-3] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:49:56.229+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-8] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 2
+2025-08-04T18:49:57.711+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:49:57.719+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:57.721+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-9] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:49:57.723+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-9] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:49:57.724+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : User user4's waiting number: 2
+2025-08-04T18:49:57.730+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:49:57.730+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 2
+2025-08-04T18:49:57.731+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-10] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:49:57.734+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-10] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 2
+2025-08-04T18:50:02.748+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:50:02.752+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:02.753+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-11] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:02.755+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : User user4's waiting number: 2
+2025-08-04T18:50:02.755+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-11] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:50:02.760+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:50:02.761+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 2
+2025-08-04T18:50:02.762+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-12] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:50:02.763+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-12] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 2
+2025-08-04T18:50:07.771+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : User user3's waiting number: 1
+2025-08-04T18:50:07.776+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:07.777+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-13] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user3","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:07.780+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-13] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user3: 1
+2025-08-04T18:50:07.781+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : User user4's waiting number: 2
+2025-08-04T18:50:07.789+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:50:07.791+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 2
+2025-08-04T18:50:07.791+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-14] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":2,"immediateEntry":false,"message":null}
+2025-08-04T18:50:07.795+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-14] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 2
+2025-08-04T18:50:11.253+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-5] c.mnms.booking.service.WaitingService    : User user1 exited booking page and removed from booking user set.
+2025-08-04T18:50:11.261+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-5] c.mnms.booking.service.WaitingService    : User user3 removed from waiting queue.
+2025-08-04T18:50:11.264+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-5] c.mnms.booking.service.WaitingService    : User user3 added to booking user set.
+2025-08-04T18:50:11.270+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-5] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:11.274+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-5] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:11.275+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-15] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:11.276+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-15] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:12.804+09:00  INFO 11952 --- [booking] [MessageBroker-11] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:12.808+09:00  INFO 11952 --- [booking] [MessageBroker-11] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:12.809+09:00  INFO 11952 --- [booking] [MessageBroker-11] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:12.809+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-16] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:12.813+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-16] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:17.829+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:17.831+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:17.832+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:17.832+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-17] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:17.833+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-17] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:22.848+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:22.850+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:22.851+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:22.851+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-18] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:22.852+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-18] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:27.873+09:00  INFO 11952 --- [booking] [MessageBroker-6] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:27.877+09:00  INFO 11952 --- [booking] [MessageBroker-6] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:27.878+09:00  INFO 11952 --- [booking] [MessageBroker-6] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:27.878+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-19] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:27.879+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-19] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:29.785+09:00  INFO 11952 --- [booking] [clientInboundChannel-39] c.m.b.controller.BookingController       : User user5 subscribed to waiting queue updates.
+2025-08-04T18:50:32.894+09:00  INFO 11952 --- [booking] [MessageBroker-4] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:32.897+09:00  INFO 11952 --- [booking] [MessageBroker-4] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:32.898+09:00  INFO 11952 --- [booking] [MessageBroker-4] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:32.898+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-20] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:32.899+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-20] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:37.910+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:37.913+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:37.914+09:00  INFO 11952 --- [booking] [MessageBroker-8] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:37.914+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-21] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:37.915+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-21] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:42.935+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:42.938+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:42.938+09:00  INFO 11952 --- [booking] [MessageBroker-5] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:42.940+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-22] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:42.941+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-22] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:47.948+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:47.953+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:47.953+09:00  INFO 11952 --- [booking] [MessageBroker-12] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:47.955+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-23] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:47.956+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-23] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:52.972+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:52.975+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:52.976+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:52.976+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-24] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:52.977+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-24] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:50:54.788+09:00  WARN 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-10] c.mnms.booking.service.WaitingService    : User user4 was not found in booking user set on exit.
+2025-08-04T18:50:57.990+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : User user4's waiting number: 1
+2025-08-04T18:50:57.997+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:57.997+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:50:57.997+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-25] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user4","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:50:57.999+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-25] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user4: 1
+2025-08-04T18:51:00.257+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] c.mnms.booking.service.WaitingService    : User user3 exited booking page and removed from booking user set.
+2025-08-04T18:51:00.274+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] c.mnms.booking.service.WaitingService    : User user4 removed from waiting queue.
+2025-08-04T18:51:00.278+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-1] c.mnms.booking.service.WaitingService    : User user4 added to booking user set.
+2025-08-04T18:51:03.010+09:00  INFO 11952 --- [booking] [MessageBroker-4] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:51:08.025+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:51:13.042+09:00  INFO 11952 --- [booking] [MessageBroker-11] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:51:14.711+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : User user5 added to waiting queue with timestamp 1754301074709.
+2025-08-04T18:51:14.714+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:14.717+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-2] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:14.718+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-26] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:14.719+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-26] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:18.062+09:00  INFO 11952 --- [booking] [MessageBroker-14] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:18.067+09:00  INFO 11952 --- [booking] [MessageBroker-14] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:18.067+09:00  INFO 11952 --- [booking] [MessageBroker-14] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:18.067+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-27] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:18.069+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-27] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:23.079+09:00  INFO 11952 --- [booking] [MessageBroker-16] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:23.081+09:00  INFO 11952 --- [booking] [MessageBroker-16] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:23.082+09:00  INFO 11952 --- [booking] [MessageBroker-16] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:23.082+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-28] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:23.083+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-28] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:28.091+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:28.094+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:28.094+09:00  INFO 11952 --- [booking] [MessageBroker-9] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:28.095+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-29] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:28.096+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-29] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:33.120+09:00  INFO 11952 --- [booking] [MessageBroker-7] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:33.126+09:00  INFO 11952 --- [booking] [MessageBroker-7] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:33.127+09:00  INFO 11952 --- [booking] [MessageBroker-7] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:33.127+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-30] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:33.128+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-30] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:38.138+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:38.140+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:38.140+09:00  INFO 11952 --- [booking] [MessageBroker-10] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:38.141+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-31] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:38.142+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-31] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:43.154+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:43.157+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:43.157+09:00  INFO 11952 --- [booking] [MessageBroker-2] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:43.157+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-32] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:43.158+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-32] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:48.172+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : User user5's waiting number: 1
+2025-08-04T18:51:48.174+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : Published message to Redis channel 'waiting_notification': {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:48.175+09:00  INFO 11952 --- [booking] [MessageBroker-15] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 1
+2025-08-04T18:51:48.175+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-33] c.m.b.service.RedisMessageSubscriber     : Received message from Redis channel: {"userId":"user5","waitingNumber":1,"immediateEntry":false,"message":null}
+2025-08-04T18:51:48.176+09:00  INFO 11952 --- [booking] [redisMessageListenerContainer-33] c.m.b.service.RedisMessageSubscriber     : Sent WebSocket message to user user5: 1
+2025-08-04T18:51:50.689+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-4] c.mnms.booking.service.WaitingService    : User user4 exited booking page and removed from booking user set.
+2025-08-04T18:51:50.701+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-4] c.mnms.booking.service.WaitingService    : User user5 removed from waiting queue.
+2025-08-04T18:51:50.706+09:00  INFO 11952 --- [booking] [http-nio-0.0.0.0-8080-exec-4] c.mnms.booking.service.WaitingService    : User user5 added to booking user set.
+2025-08-04T18:51:53.191+09:00  INFO 11952 --- [booking] [MessageBroker-16] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
+2025-08-04T18:51:58.204+09:00  INFO 11952 --- [booking] [MessageBroker-3] c.mnms.booking.service.WaitingService    : 주기적 대기번호 발행 완료. 대상자 수: 0
