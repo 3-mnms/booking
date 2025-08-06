@@ -2,7 +2,7 @@ package com.mnms.booking.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mnms.booking.dto.response.WaitingNumberDto;
+import com.mnms.booking.dto.response.WaitingNumberDTO;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -173,7 +172,7 @@ public class WaitingService {
     private void publishWaitingNumber(String userId, long waitingNumber) {
         try {
             // immediateEntry는 false (이 메서드는 대기 순번 알림용), message는 null
-            WaitingNumberDto dto = new WaitingNumberDto(userId, waitingNumber, false, null);
+            WaitingNumberDTO dto = new WaitingNumberDTO(userId, waitingNumber, false, null);
             String message = objectMapper.writeValueAsString(dto);
             // Redis 채널로 발행
             stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message);

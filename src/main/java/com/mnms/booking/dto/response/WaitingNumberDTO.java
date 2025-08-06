@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WaitingNumberDto {
+public class WaitingNumberDTO {
     private String userId;
     private long waitingNumber; // 대기 순번
     // 선택
