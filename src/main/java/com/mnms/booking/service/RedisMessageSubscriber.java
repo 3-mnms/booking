@@ -1,6 +1,6 @@
 package com.mnms.booking.service;
 
-import com.mnms.booking.dto.response.WaitingNumberDto;
+import com.mnms.booking.dto.response.WaitingNumberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class RedisMessageSubscriber implements MessageListener {
             log.info("Received message from Redis channel: {}", receivedMessage);
 
             // 받은 JSON 문자열을 WaitingNumberDto 객체로 변환
-            WaitingNumberDto dto = objectMapper.readValue(receivedMessage, WaitingNumberDto.class);
+            WaitingNumberDTO dto = objectMapper.readValue(receivedMessage, WaitingNumberDTO.class);
 
             // WebSocket을 통해 해당 사용자 토픽으로 메시지 전송
             messagingTemplate.convertAndSend("/topic/waiting/" + dto.getUserId(), dto);

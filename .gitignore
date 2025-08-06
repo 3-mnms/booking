@@ -36,3 +36,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# 로그 파일
+logs/
+*.log
+*.gz
+
+# 힙 덤프 파일
+*.hprof

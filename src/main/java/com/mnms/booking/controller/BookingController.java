@@ -1,6 +1,6 @@
 package com.mnms.booking.controller;
 
-import com.mnms.booking.dto.response.WaitingNumberDto;
+import com.mnms.booking.dto.response.WaitingNumberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,15 +31,15 @@ public class BookingController {
      */
     @GetMapping("/enter")
     @ResponseBody // JSON 응답을 위해 추가
-    public ResponseEntity<WaitingNumberDto> enterBookingPage(@RequestParam("userId") String userId) {
+    public ResponseEntity<WaitingNumberDTO> enterBookingPage(@RequestParam("userId") String userId) {
         long waitingNumber = waitingService.enterWaitingQueue(userId);
 
         if (waitingNumber == 0) {
             // 즉시 입장 가능한 경우
-            return ResponseEntity.ok(new WaitingNumberDto(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
+            return ResponseEntity.ok(new WaitingNumberDTO(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
             // 대기열에 진입한 경우
-            return ResponseEntity.ok(new WaitingNumberDto(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
+            return ResponseEntity.ok(new WaitingNumberDTO(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
 

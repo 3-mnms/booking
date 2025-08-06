@@ -57,6 +57,14 @@ dependencies {
 
 	// kaptcha
 	implementation 'com.github.penggle:kaptcha:2.3.2'
+
+	// Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// JSON 직렬화용
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'org.springframework.boot:spring-boot-starter-json'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 tasks.named('test') {
