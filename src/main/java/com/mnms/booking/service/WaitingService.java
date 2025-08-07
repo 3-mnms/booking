@@ -2,7 +2,7 @@ package com.mnms.booking.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mnms.booking.dto.response.WaitingNumberDTO;
+import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -172,7 +172,7 @@ public class WaitingService {
     private void publishWaitingNumber(String userId, long waitingNumber) {
         try {
             // immediateEntry는 false (이 메서드는 대기 순번 알림용), message는 null
-            WaitingNumberDTO dto = new WaitingNumberDTO(userId, waitingNumber, false, null);
+            WaitingNumberResponseDTO dto = new WaitingNumberResponseDTO(userId, waitingNumber, false, null);
             String message = objectMapper.writeValueAsString(dto);
             // Redis 채널로 발행
             stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message);

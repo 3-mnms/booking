@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data // Lombok 사용 시
 @Builder
-public class KaptchaDTO {
+public class KaptchaResponseDTO {
     private boolean success;
     private String message;
 }

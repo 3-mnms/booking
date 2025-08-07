@@ -1,6 +1,6 @@
 package com.mnms.booking.config;
 
-import com.mnms.booking.dto.response.WaitingNumberDTO;
+import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, WaitingNumberDTO> bookingEventKafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory(WaitingNumberDTO.class));
+    public KafkaTemplate<String, WaitingNumberResponseDTO> bookingEventKafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory(WaitingNumberResponseDTO.class));
     }
 }
