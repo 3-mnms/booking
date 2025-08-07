@@ -3,7 +3,7 @@ package com.mnms.booking.dto.response;
 import lombok.Data;
 
 @Data
-public class FestivalDTO {
+public class FestivalResponseDTO {
 
     private String mt20id;
 

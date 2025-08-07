@@ -1,7 +1,7 @@
 package com.mnms.booking.service;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.mnms.booking.dto.response.KaptchaDTO;
+import com.mnms.booking.dto.response.KaptchaResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +45,13 @@ public class KaptchaService {
         return captchaProducer.createImage(captchaText);
     }
 
-    public KaptchaDTO verifyCaptchaResult(String userInputCaptcha, HttpSession session) {
+    public KaptchaResponseDTO verifyCaptchaResult(String userInputCaptcha, HttpSession session) {
         String sessionCaptcha = (String) session.getAttribute(CAPTCHA_SESSION_KEY);
 
         boolean isValid = sessionCaptcha != null && sessionCaptcha.equalsIgnoreCase(userInputCaptcha);
         if (isValid) {session.removeAttribute(CAPTCHA_SESSION_KEY);}
 
-        return KaptchaDTO.builder()
+        return KaptchaResponseDTO.builder()
                 .success(isValid)
                 .message(isValid ? "인증 성공" : "보안문자 불일치")
                 .build();

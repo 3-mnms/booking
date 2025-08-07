@@ -1,6 +1,6 @@
 package com.mnms.booking.controller;
 
-import com.mnms.booking.dto.response.KaptchaDTO;
+import com.mnms.booking.dto.response.KaptchaResponseDTO;
 import com.mnms.booking.service.KaptchaService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,11 +26,11 @@ public class KaptchaController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<KaptchaDTO> verifyCaptcha(
+    public ResponseEntity<KaptchaResponseDTO> verifyCaptcha(
             @RequestParam("captcha") String captcha,
             HttpSession session) {
 
-        KaptchaDTO result = kaptchaService.verifyCaptchaResult(captcha, session);
+        KaptchaResponseDTO result = kaptchaService.verifyCaptchaResult(captcha, session);
         return result.isSuccess()
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
