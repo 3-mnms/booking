@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class TicketRequestDTO {
 
-    private Long id;
-    private String userId;
+    //private Long id;
+    //private String userId;
     private Long festivalId;
     private TicketType deliveryMethod;
 

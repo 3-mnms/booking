@@ -27,7 +27,7 @@ public class BookingService {
     private final QrCodeService qrCodeService;
 
     @Transactional
-    public TicketResponseDTO reserveTicket(TicketRequestDTO request) {
+    public TicketResponseDTO reserveTicket(TicketRequestDTO request, Long userId) {
         // 페스티벌 정보 조회
         Festival festival = festivalRepository.findById(request.getFestivalId())
                 .orElseThrow(() -> new IllegalArgumentException("Festival not found"));
@@ -37,7 +37,7 @@ public class BookingService {
 
         // Qr정보 생성
         String qrCodeId = qrCodeService.generateQrCodeId();
-        QrResponseDTO qrResponse = QrResponseDTO.create(request.getUserId(), qrCodeId, festival);
+        QrResponseDTO qrResponse = QrResponseDTO.create(userId, qrCodeId, festival);
         QrCode qrCode = qrResponse.toEntity();
         qrCodeRepository.save(qrCode);
 
@@ -50,7 +50,7 @@ public class BookingService {
                 .deliveryDate(deliveryDate)
                 .festival(festival)
                 .qrCode(qrCode)
-                .userId(request.getUserId()) // 나중에 수정할 예정
+                .userId(userId)
                 .build();
         ticketRepository.save(ticket);
 

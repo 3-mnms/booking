@@ -15,7 +15,7 @@ public class TicketResponseDTO {
     private Boolean reservationStatus;
     private TicketType deliveryMethod;
     private LocalDateTime deliveryDate;
-    private String userId;
+    private Long userId;
     private LocalDateTime reservationDate;
     private QrResponseDTO qrCode;
     private Festival festival;

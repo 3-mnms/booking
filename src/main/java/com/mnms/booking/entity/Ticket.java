@@ -25,7 +25,7 @@ public class Ticket {
     private TicketType deliveryMethod; // 수령방법
 
     @Column(name = "user_id")
-    private String userId; // 예매자 id
+    private Long userId; // 예매자 id
 
     @Column(name = "reservation_date")
     private LocalDateTime reservationDate; // 예매 날짜

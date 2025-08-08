@@ -31,7 +31,7 @@ public class QrCode {
     private LocalDateTime usedAt;
 
     @Column(name = "user_id", nullable = false)
-    private String userId;
+    private Long userId;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Ticket ticket; // ticket_id

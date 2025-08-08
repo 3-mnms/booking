@@ -14,7 +14,7 @@ public class QrResponseDTO {
 
     private Long id;
     private String qrCodeId;
-    private String userId;
+    private Long userId;
     private LocalDateTime issuedAt;
     private LocalDateTime expiredAt;
     private Boolean used;
@@ -24,11 +24,11 @@ public class QrResponseDTO {
         return QrResponseDTO.builder()
                 .id(qrCode.getId())
                 .qrCodeId(qrCode.getQrCodeId())
-                .userId(qrCode.getUserId())
                 .issuedAt(qrCode.getIssuedAt())
                 .expiredAt(qrCode.getExpiredAt())
                 .used(qrCode.getUsed())
                 .usedAt(qrCode.getUsedAt())
+                .userId(qrCode.getUserId())
                 .build();
     }
 
@@ -36,18 +36,18 @@ public class QrResponseDTO {
         return QrCode.builder()
                 .id(this.id)
                 .qrCodeId(this.qrCodeId)
-                .userId(this.userId)
                 .issuedAt(this.issuedAt)
                 .expiredAt(this.expiredAt)
                 .used(this.used != null ? this.used : false) // 기본값 처리
                 .usedAt(this.usedAt)
+                .userId(this.userId)
                 .build();
     }
 
-    public static QrResponseDTO create(String userId, String qrCodeId,Festival festival) {
+    public static QrResponseDTO create(Long userId, String qrCodeId,Festival festival) {
         QrResponseDTO dto = new QrResponseDTO();
-        dto.setQrCodeId(qrCodeId);
         dto.setUserId(userId);
+        dto.setQrCodeId(qrCodeId);
         dto.setIssuedAt(LocalDateTime.now());
         dto.setExpiredAt(festival.getPrfpdto().minusMinutes(30));
         return dto;
