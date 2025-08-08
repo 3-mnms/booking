@@ -24,7 +24,6 @@ public class BookingController {
     @PostMapping("/reserve")
     public ResponseEntity<TicketResponseDTO> reserveTicket(@RequestBody TicketRequestDTO request, @AuthenticationPrincipal JwtPrincipal principal){
         TicketResponseDTO response = bookingService.reserveTicket(request, principal.userId());
-        log.info("id : " + principal.userId());
         return ResponseEntity.ok(response);
     }
 }

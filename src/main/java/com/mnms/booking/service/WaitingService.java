@@ -72,10 +72,10 @@ public class WaitingService {
 
     /**
      * 사용자 대기열 진입 처리
-     * @param userId 사용자 ID
+     * @param loginId 사용자 ID
      * @return 대기 순번 (즉시 입장 가능한 경우 0)
      */
-    public long enterWaitingQueue(String userId) {
+    public long enterWaitingQueue(String loginId) {
 
         // 현재 입장한 사용자 수
         Long currentUserCount = redisTemplate.opsForSet().size(BOOKING_USERS_SET_KEY);
@@ -83,21 +83,21 @@ public class WaitingService {
 
         // 입장한 사용자가 제한보다 작을 때
         if(currentUserCount < IMMEDIATE_ENTRY_COUNT){
-            log.info("User {} can enter booking page immediately ({} < {}).", userId, currentUserCount, IMMEDIATE_ENTRY_COUNT);
+            log.info("User {} can enter booking page immediately ({} < {}).", loginId, currentUserCount, IMMEDIATE_ENTRY_COUNT);
 
-            redisTemplate.opsForSet().add(BOOKING_USERS_SET_KEY, userId); // 사용자 등록
+            redisTemplate.opsForSet().add(BOOKING_USERS_SET_KEY, loginId); // 사용자 등록
             return 0L;
         } else{
             // 대기열로 보냄 (ZSet)
             long timestamp = System.currentTimeMillis();
-            zSetOperations.add(WAITING_QUEUE_KEY, userId, timestamp);
+            zSetOperations.add(WAITING_QUEUE_KEY, loginId, timestamp);
 
-            log.info("User {} added to waiting queue with timestamp {}.", userId, timestamp);
+            log.info("User {} added to waiting queue with timestamp {}.", loginId, timestamp);
 
             // 조건부 스케줄러 시작
             startScheduler();
 
-            return getAndPublishWaitingNumber(userId);
+            return getAndPublishWaitingNumber(loginId);
         }
     }
 
@@ -131,8 +131,8 @@ public class WaitingService {
             return;
         }
 
-        for (String userId : waitingUsers) {
-            getAndPublishWaitingNumber(userId);
+        for (String loginId : waitingUsers) {
+            getAndPublishWaitingNumber(loginId);
         }
         log.info("대기열 사용자 {}명에게 대기번호 발행 완료.", waitingUsers.size());
     }
@@ -145,19 +145,19 @@ public class WaitingService {
 
     /**
      * 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
-     * @param userId 사용자 ID
+     * @param loginId 사용자 ID
      * @return 대기 순번
      */
-    public long getAndPublishWaitingNumber(String userId) {
-        // 해당 userId의 대기열 순번을 조회
-        Long rank = zSetOperations.rank(WAITING_QUEUE_KEY, userId);
+    public long getAndPublishWaitingNumber(String loginId) {
+        // 해당 loginId의 대기열 순번을 조회
+        Long rank = zSetOperations.rank(WAITING_QUEUE_KEY, loginId);
 
         if (rank != null) {
             long waitingNumber = rank + 1;
-            //log.info("User {}'s waiting number: {}", userId, waitingNumber);
+            //log.info("User {}'s waiting number: {}", loginId, waitingNumber);
 
             // Redis Pub/Sub 채널로 메시지 발행
-            publishWaitingNumber(userId, waitingNumber);
+            publishWaitingNumber(loginId, waitingNumber);
 
             return waitingNumber;
         }
@@ -166,13 +166,13 @@ public class WaitingService {
 
     /**
      * Redis Pub/Sub 채널로 대기 순번 정보 발행
-     * @param userId 사용자 ID
+     * @param loginId 사용자 ID
      * @param waitingNumber 대기 순번
      */
-    private void publishWaitingNumber(String userId, long waitingNumber) {
+    private void publishWaitingNumber(String loginId, long waitingNumber) {
         try {
             // immediateEntry는 false (이 메서드는 대기 순번 알림용), message는 null
-            WaitingNumberResponseDTO dto = new WaitingNumberResponseDTO(userId, waitingNumber, false, null);
+            WaitingNumberResponseDTO dto = new WaitingNumberResponseDTO(loginId, waitingNumber, false, null);
             String message = objectMapper.writeValueAsString(dto);
             // Redis 채널로 발행
             stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message);
@@ -185,17 +185,17 @@ public class WaitingService {
      * 대기열에서 다음 사용자 진입 처리
      * (예매 완료 또는 타임아웃 등으로 인해 예매 페이지에서 나간 경우 호출)
      */
-    public boolean userExitBookingPage(String userId){
+    public boolean userExitBookingPage(String loginId){
         // 예매 완료된 Set에서 제거
-        Long removed = redisTemplate.opsForSet().remove(BOOKING_USERS_SET_KEY, userId);
+        Long removed = redisTemplate.opsForSet().remove(BOOKING_USERS_SET_KEY, loginId);
 
         if(removed != null && removed > 0){
-            log.info("User {} exited booking page and removed from booking user set.", userId);
+            log.info("User {} exited booking page and removed from booking user set.", loginId);
             // 대기열에서 다음 사용자 진입 처리
             releaseWaitingUser();
             return true;
         }else{
-            log.warn("User {} was not found in booking user set on exit.", userId);
+            log.warn("User {} was not found in booking user set on exit.", loginId);
             return false;
         }
     }
@@ -233,27 +233,27 @@ public class WaitingService {
         Set<String> allUsersInQueue = zSetOperations.range(WAITING_QUEUE_KEY, 0, -1);
 
         if (allUsersInQueue != null) {
-            for (String userId : allUsersInQueue) {
+            for (String loginId : allUsersInQueue) {
                 // 각 사용자에게 순번 알림을 Redis Pub/Sub으로 발행
-                getAndPublishWaitingNumber(userId);
+                getAndPublishWaitingNumber(loginId);
             }
         }
     }
 
     /**
      * 특정 사용자가 대기열에서 이탈했음을 처리
-     * @param userId
+     * @param loginId
      * @return boolean - 사용자가 대기열에서 성공적으로 제거되었으면 true, 아니면 false
      */
-    public boolean removeUserFromQueue(String userId) {
-        Long removedCount = zSetOperations.remove(WAITING_QUEUE_KEY, userId);
+    public boolean removeUserFromQueue(String loginId) {
+        Long removedCount = zSetOperations.remove(WAITING_QUEUE_KEY, loginId);
         if (removedCount != null && removedCount > 0) {
-            log.info("User {} removed from waiting queue (manual removal).", userId);
+            log.info("User {} removed from waiting queue (manual removal).", loginId);
             notifyAllWaitingUsers(); // 순번 업데이트 알림
             return true;
         } else {
             // 사용자가 대기열에 없었거나, 제거 과정에서 문제가 발생한 경우
-            log.warn("Attempted to remove user {} from queue, but user was not found or removal failed. Removed count: {}", userId, removedCount);
+            log.warn("Attempted to remove user {} from queue, but user was not found or removal failed. Removed count: {}", loginId, removedCount);
             return false;
         }
     }

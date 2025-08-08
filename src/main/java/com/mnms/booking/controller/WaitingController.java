@@ -1,14 +1,15 @@
 package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
+import com.mnms.booking.util.JwtPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
@@ -31,15 +32,16 @@ public class WaitingController {
      */
     @GetMapping("/enter")
     @ResponseBody // JSON 응답을 위해 추가
-    public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(@RequestParam("userId") String userId) {
-        long waitingNumber = waitingService.enterWaitingQueue(userId);
+    public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(@AuthenticationPrincipal JwtPrincipal principal) {
+        String loginId = principal.loginId();
+        long waitingNumber = waitingService.enterWaitingQueue(loginId);
 
         if (waitingNumber == 0) {
             // 즉시 입장 가능한 경우
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
+            return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
             // 대기열에 진입한 경우
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
+            return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
 
@@ -48,10 +50,11 @@ public class WaitingController {
      * (이 사용자는 대기열에서 제거됨)
      * userId는 수정할 예정 (추후)
      */
-    @GetMapping("/release/{userId}")
-    public ResponseEntity<String> releaseUser(@PathVariable("userId") String userId) {
+    @GetMapping("/release")
+    public ResponseEntity<String> releaseUser(@AuthenticationPrincipal JwtPrincipal principal) {
+        String loginId = principal.loginId();
         try {
-            boolean removed = waitingService.userExitBookingPage(userId);
+            boolean removed = waitingService.userExitBookingPage(loginId);
             if (removed) {
                 return ResponseEntity.ok("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {
@@ -69,10 +72,11 @@ public class WaitingController {
      * (이 사용자는 대기열에서 제거됨)
      * userId는 수정할 예정 (추후)
      */
-    @GetMapping("/exit/{userId}")
-    public ResponseEntity<String> exitWaitingUser(@PathVariable("userId") String userId) {
+    @GetMapping("/exit")
+    public ResponseEntity<String> exitWaitingUser(@AuthenticationPrincipal JwtPrincipal principal) {
+        String loginId = principal.loginId();
         try {
-            boolean removed = waitingService.removeUserFromQueue(userId);
+            boolean removed = waitingService.removeUserFromQueue(loginId);
             if (removed) {
                 return ResponseEntity.ok("대기하던 사용자가 대기열을 나갔습니다.");
             } else {
@@ -90,9 +94,10 @@ public class WaitingController {
      * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
      * userId는 수정할 예정 (추후)
      */
-    @MessageMapping("/subscribe/waiting/{userId}")
-    public void subscribeWaitingQueue(@DestinationVariable("userId") String userId) {
-        log.info("User {} subscribed to waiting queue updates.", userId);
-        waitingService.getAndPublishWaitingNumber(userId);
+    @MessageMapping("/subscribe/waiting")
+    public void subscribeWaitingQueue(@AuthenticationPrincipal JwtPrincipal principal) {
+        String loginId = principal.loginId();
+        log.info("User {} subscribed to waiting queue updates.", loginId);
+        waitingService.getAndPublishWaitingNumber(loginId);
     }
 }
