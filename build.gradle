@@ -77,6 +77,8 @@ dependencies {
 	implementation 'com.google.zxing:javase:3.5.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
+	// swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 }
 
 tasks.named('test') {

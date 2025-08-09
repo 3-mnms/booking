@@ -63,7 +63,7 @@ public class CaptchaService {
 
         return CaptchaResponseDTO.builder()
                 .success(isValid)
-                .message(isValid ? "인증 성공" : "보안문자 불일치")
+                .message(isValid ? "보안문자 인증되었습니다." : "보안문자 불일치로 인증이 실패하였습니다.")
                 .build();
     }
 }

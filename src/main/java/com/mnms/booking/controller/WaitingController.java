@@ -2,6 +2,10 @@ package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import com.mnms.booking.util.JwtPrincipal;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
 
 @Controller
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/api/booking")
+@Tag(name = "대기열 API", description = "대기열 입장, 예매 화면 입장, 대기번호 조회(websocket), 대기열 퇴장")
 public class WaitingController {
 
     private final WaitingService waitingService;
@@ -26,30 +31,36 @@ public class WaitingController {
     private SimpMessagingTemplate messagingTemplate;
 
 
-    /**
-     * 예매하기 버튼 클릭 시 호출되는 API
-     */
+    // 예매하기 버튼 클릭 시 호출되는 API
     @GetMapping("/enter")
-    @ResponseBody // JSON 응답을 위해 추가
-    public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(@AuthenticationPrincipal JwtPrincipal principal) {
-        String loginId = principal.loginId();
+    @ResponseBody
+    @Operation(summary = "대기열/예매 페이지 진입",
+            description = "페스티벌 수용 인원만큼 예매 페이지 진입하며," +
+                    "나머지 사용자는 대기열에 들어가 대기하게 됩니다.")
+    public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(
+            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
+
+        String loginId = (principal != null) ? principal.loginId() : "swagger-test-user";
         long waitingNumber = waitingService.enterWaitingQueue(loginId);
 
         if (waitingNumber == 0) {
-            // 즉시 입장 가능한 경우
             return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
-            // 대기열에 진입한 경우
             return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
 
-    /**
-     * 대기열에 있는 사용자가 예매 페이지로 진입 완료 후 호출
-     * (이 사용자는 대기열에서 제거됨)
-     */
+
+    // 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
     @GetMapping("/release")
-    public ResponseEntity<String> releaseUser(@AuthenticationPrincipal JwtPrincipal principal) {
+    @Operation(
+            summary = "예매 페이지 진입 완료 처리",
+            description = "예매 페이지에 있던 사용자가 예매 페이지에서 나가면, " +
+                    "대기열에 있던 사용자가 예매 페이지로 입장 하게 됩니다. " +
+                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다."
+    )
+    public ResponseEntity<String> releaseUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         try {
             boolean removed = waitingService.userExitBookingPage(loginId);
@@ -65,12 +76,16 @@ public class WaitingController {
         }
     }
 
-    /**
-     * 대기열에 있는 사용자가 대기열을 나간다 (예매 입장 아님)
-     * (이 사용자는 대기열에서 제거됨)
-     */
+
+    // 대기열에서 퇴장
+    @Operation(
+            summary = "대기열 퇴장",
+            description = "대기 중인 사용자가 스스로 대기열에서 나갈 때 호출됩니다. " +
+                    "호출 시 해당 사용자는 대기열에서 제거됩니다."
+    )
     @GetMapping("/exit")
-    public ResponseEntity<String> exitWaitingUser(@AuthenticationPrincipal JwtPrincipal principal) {
+    public ResponseEntity<String> exitWaitingUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         try {
             boolean removed = waitingService.removeUserFromQueue(loginId);
@@ -86,10 +101,12 @@ public class WaitingController {
         }
     }
 
+
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
      * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
      */
+    @Hidden
     @MessageMapping("/subscribe/waiting")
     public void subscribeWaitingQueue(@AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
