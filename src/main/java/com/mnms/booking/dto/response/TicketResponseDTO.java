@@ -4,7 +4,8 @@ import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.TicketType;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -14,9 +15,9 @@ public class TicketResponseDTO {
     private String reservationNumber;
     private Boolean reservationStatus;
     private TicketType deliveryMethod;
-    private LocalDateTime deliveryDate;
+    private LocalDate deliveryDate;
     private Long userId;
-    private LocalDateTime reservationDate;
+    private LocalDate reservationDate;
     private QrResponseDTO qrCode;
     private Festival festival;
 
@@ -24,6 +25,7 @@ public class TicketResponseDTO {
         return TicketResponseDTO.builder()
                 .id(ticket.getId())
                 .reservationNumber(ticket.getReservationNumber())
+                .reservationStatus(ticket.getReservationStatus())
                 .deliveryMethod(ticket.getDeliveryMethod())
                 .deliveryDate(ticket.getDeliveryDate())
                 .reservationDate(ticket.getReservationDate())

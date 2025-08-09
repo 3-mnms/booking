@@ -25,7 +25,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**", "/h2-console/**").permitAll() // 하위 경로 포함 허용
+                        .requestMatchers("/public/**", "/h2-console/**", "/api/captcha/**").permitAll() // 하위 경로 포함 허용
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

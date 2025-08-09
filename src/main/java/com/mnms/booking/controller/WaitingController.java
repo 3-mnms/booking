@@ -28,7 +28,6 @@ public class WaitingController {
 
     /**
      * 예매하기 버튼 클릭 시 호출되는 API
-     * userId는 수정할 예정 (추후)
      */
     @GetMapping("/enter")
     @ResponseBody // JSON 응답을 위해 추가
@@ -48,7 +47,6 @@ public class WaitingController {
     /**
      * 대기열에 있는 사용자가 예매 페이지로 진입 완료 후 호출
      * (이 사용자는 대기열에서 제거됨)
-     * userId는 수정할 예정 (추후)
      */
     @GetMapping("/release")
     public ResponseEntity<String> releaseUser(@AuthenticationPrincipal JwtPrincipal principal) {
@@ -70,7 +68,6 @@ public class WaitingController {
     /**
      * 대기열에 있는 사용자가 대기열을 나간다 (예매 입장 아님)
      * (이 사용자는 대기열에서 제거됨)
-     * userId는 수정할 예정 (추후)
      */
     @GetMapping("/exit")
     public ResponseEntity<String> exitWaitingUser(@AuthenticationPrincipal JwtPrincipal principal) {
@@ -92,7 +89,6 @@ public class WaitingController {
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
      * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
-     * userId는 수정할 예정 (추후)
      */
     @MessageMapping("/subscribe/waiting")
     public void subscribeWaitingQueue(@AuthenticationPrincipal JwtPrincipal principal) {

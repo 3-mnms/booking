@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +16,7 @@ public class QrRequestDTO {
     private String qrCodeId;
     private String userId;
     private Ticket ticket;
-    private LocalDateTime issuedAt;
+    private LocalDate issuedAt;
     private LocalDateTime expiredAt;
     private String pinCode;
 }

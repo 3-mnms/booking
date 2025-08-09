@@ -1,7 +1,7 @@
 package com.mnms.booking.controller;
 
-import com.mnms.booking.dto.response.KaptchaResponseDTO;
-import com.mnms.booking.service.KaptchaService;
+import com.mnms.booking.dto.response.CaptchaResponseDTO;
+import com.mnms.booking.service.CaptchaService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +16,9 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/captcha")
-public class KaptchaController {
+public class CaptchaController {
 
-    private final KaptchaService kaptchaService;
+    private final CaptchaService kaptchaService;
 
     @GetMapping("/image")
     public void getCaptchaImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -26,11 +26,11 @@ public class KaptchaController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<KaptchaResponseDTO> verifyCaptcha(
+    public ResponseEntity<CaptchaResponseDTO> verifyCaptcha(
             @RequestParam("captcha") String captcha,
             HttpSession session) {
 
-        KaptchaResponseDTO result = kaptchaService.verifyCaptchaResult(captcha, session);
+        CaptchaResponseDTO result = kaptchaService.verifyCaptchaResult(captcha, session);
         return result.isSuccess()
                 ? ResponseEntity.ok(result)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);

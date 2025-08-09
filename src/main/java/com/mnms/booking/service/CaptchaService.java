@@ -1,7 +1,8 @@
 package com.mnms.booking.service;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.mnms.booking.dto.response.KaptchaResponseDTO;
+import com.mnms.booking.dto.request.CaptchaRequestDTO;
+import com.mnms.booking.dto.response.CaptchaResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,12 @@ import java.io.OutputStream;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KaptchaService {
+public class CaptchaService {
 
     private final DefaultKaptcha captchaProducer;
     private static final String CAPTCHA_SESSION_KEY = "captchaCode";
+    private static final long CAPTCHA_EXPIRATION_MILLIS = 3 * 60 * 1000L;
+
 
     // 캡차 이미지 생성
     public void writeCaptchaImage(HttpSession session, HttpServletResponse response) throws IOException {
@@ -39,19 +42,26 @@ public class KaptchaService {
 
     private BufferedImage generateCaptchaImage(HttpSession session) {
         String captchaText = captchaProducer.createText();
-        session.setAttribute(CAPTCHA_SESSION_KEY, captchaText);
+        session.setAttribute(CAPTCHA_SESSION_KEY, new CaptchaRequestDTO(captchaText));
         log.info("Generated Kaptcha Text: {}", captchaText);
-
         return captchaProducer.createImage(captchaText);
     }
 
-    public KaptchaResponseDTO verifyCaptchaResult(String userInputCaptcha, HttpSession session) {
-        String sessionCaptcha = (String) session.getAttribute(CAPTCHA_SESSION_KEY);
+    public CaptchaResponseDTO verifyCaptchaResult(String userInputCaptcha, HttpSession session) {
+        CaptchaRequestDTO captchaRequest = (CaptchaRequestDTO) session.getAttribute(CAPTCHA_SESSION_KEY);
 
-        boolean isValid = sessionCaptcha != null && sessionCaptcha.equalsIgnoreCase(userInputCaptcha);
+        if (captchaRequest == null || captchaRequest.isExpired(CAPTCHA_EXPIRATION_MILLIS)) { // 3분 만료
+            session.removeAttribute(CAPTCHA_SESSION_KEY);
+            return CaptchaResponseDTO.builder()
+                    .success(false)
+                    .message("보안문자가 만료되었습니다.")
+                    .build();
+        }
+
+        boolean isValid = captchaRequest.getCode().equalsIgnoreCase(userInputCaptcha);
         if (isValid) {session.removeAttribute(CAPTCHA_SESSION_KEY);}
 
-        return KaptchaResponseDTO.builder()
+        return CaptchaResponseDTO.builder()
                 .success(isValid)
                 .message(isValid ? "인증 성공" : "보안문자 불일치")
                 .build();

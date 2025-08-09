@@ -3,6 +3,8 @@ package com.mnms.booking.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,10 +21,10 @@ public class QrCode {
     private String qrCodeId;
 
     @Column(name = "issued_at", nullable = false)
-    private LocalDateTime issuedAt;
+    private LocalDate issuedAt;
 
     @Column(name = "expired_at", nullable = false)
-    private LocalDateTime expiredAt;
+    private LocalDate expiredAt;
 
     @Column(name = "used", nullable = false)
     private Boolean used;

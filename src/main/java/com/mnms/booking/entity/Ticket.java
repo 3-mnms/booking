@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import jakarta.persistence.Id;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,10 +30,10 @@ public class Ticket {
     private Long userId; // 예매자 id
 
     @Column(name = "reservation_date")
-    private LocalDateTime reservationDate; // 예매 날짜
+    private LocalDate reservationDate; // 예매 날짜
 
     @Column(name = "delivery_date")
-    private LocalDateTime deliveryDate; // 택배 날짜
+    private LocalDate deliveryDate; // 택배 날짜
 
     @OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private QrCode qrCode;

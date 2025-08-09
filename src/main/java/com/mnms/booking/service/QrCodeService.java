@@ -1,11 +1,15 @@
 package com.mnms.booking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.mnms.booking.dto.request.QrRequestDTO;
+import com.mnms.booking.exception.BusinessException;
+import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.QrCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,10 +43,18 @@ public class QrCodeService {
 
     //
     public BufferedImage generateQrImage(QrRequestDTO payload, int width, int height) throws Exception {
-        String json = objectMapper.writeValueAsString(payload);
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(json, BarcodeFormat.QR_CODE, width, height);
-        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+        try {
+            String json = objectMapper.writeValueAsString(payload);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(json, BarcodeFormat.QR_CODE, width, height);
+            return MatrixToImageWriter.toBufferedImage(bitMatrix);
+        } catch (JsonProcessingException e) {
+            throw new BusinessException(ErrorCode.QR_PAYLOAD_SERIALIZATION_FAILED);
+        } catch (WriterException e) {
+            throw new BusinessException(ErrorCode.QR_IMAGE_GENERATION_FAILED);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.QR_IMAGE_CONVERSION_FAILED);
+        }
     }
 
     public byte[] generateQrImageAsBytes(QrRequestDTO payload, int width, int height) throws Exception {

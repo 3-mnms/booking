@@ -4,6 +4,7 @@ import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,8 +16,8 @@ public class QrResponseDTO {
     private Long id;
     private String qrCodeId;
     private Long userId;
-    private LocalDateTime issuedAt;
-    private LocalDateTime expiredAt;
+    private LocalDate issuedAt;
+    private LocalDate expiredAt;
     private Boolean used;
     private LocalDateTime usedAt;
 
@@ -48,8 +49,8 @@ public class QrResponseDTO {
         QrResponseDTO dto = new QrResponseDTO();
         dto.setUserId(userId);
         dto.setQrCodeId(qrCodeId);
-        dto.setIssuedAt(LocalDateTime.now());
-        dto.setExpiredAt(festival.getPrfpdto().minusMinutes(30));
+        dto.setIssuedAt(LocalDate.now());
+        dto.setExpiredAt(festival.getPrfpdto());
         return dto;
     }
 }

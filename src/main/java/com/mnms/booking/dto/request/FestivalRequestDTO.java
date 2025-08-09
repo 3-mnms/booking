@@ -1,9 +1,11 @@
-package com.mnms.booking.dto.response;
+package com.mnms.booking.dto.request;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
-public class FestivalResponseDTO {
+public class FestivalRequestDTO {
 
     private String mt20id;
 
@@ -11,10 +13,10 @@ public class FestivalResponseDTO {
     private String prfnm;
 
     // 공연 시작일
-    private String prfpdfrom;
+    private LocalDate prfpdfrom;
 
     // 공연 종료일
-    private String prfpdto;
+    private LocalDate prfpdto;
 
     // 공연 시설명
     private String fcltynm;
@@ -23,7 +25,7 @@ public class FestivalResponseDTO {
     private String poster;
 
     // 티켓 비용
-    private String pcseguidance;
+    private int pcseguidance;
 
     // 수용 가능 인원
     private int availableNOP;
