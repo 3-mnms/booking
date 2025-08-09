@@ -1,8 +1,7 @@
 package com.mnms.booking.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +9,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "qr_code")
 public class QrCode {
 
@@ -37,4 +38,20 @@ public class QrCode {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Ticket ticket; // ticket_id
+
+    // 비지니스 로직
+    public void markAsUsed() {
+        if (this.used) {
+            throw new IllegalStateException("이미 사용된 QR 코드입니다.");
+        }
+        if (isExpired()) {
+            throw new IllegalStateException("QR 코드의 유효기간이 지났습니다.");
+        }
+        this.used = true;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    private boolean isExpired() {
+        return LocalDate.now().isAfter(this.expiredAt);
+    }
 }

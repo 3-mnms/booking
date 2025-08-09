@@ -22,5 +22,5 @@ public class Festival {
     private int availableNOp; // 수용 가능 인원
     private String area; // 장소
     private int paper; // 지류 여부
-
+    private int maxTicketsPerUser; // 한 사람당 최대 예매 티켓 수
 }

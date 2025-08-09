@@ -29,7 +29,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/public/**",
                                 "/h2-console/**",
-                                "/api/captcha/**"
+                                "/api/captcha/**",
+                                "/api/qr/**"
                                 ).permitAll() // 하위 경로 포함 허용
                         .anyRequest().authenticated()
                 )

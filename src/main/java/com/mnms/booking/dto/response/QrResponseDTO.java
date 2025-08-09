@@ -2,6 +2,7 @@ package com.mnms.booking.dto.response;
 
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
+import com.mnms.booking.entity.Ticket;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public class QrResponseDTO {
     private LocalDate expiredAt;
     private Boolean used;
     private LocalDateTime usedAt;
+    private Ticket ticket;
 
     public static QrResponseDTO fromEntity(QrCode qrCode) {
         return QrResponseDTO.builder()
@@ -42,15 +44,17 @@ public class QrResponseDTO {
                 .used(this.used != null ? this.used : false) // 기본값 처리
                 .usedAt(this.usedAt)
                 .userId(this.userId)
+                .ticket(this.ticket)
                 .build();
     }
 
-    public static QrResponseDTO create(Long userId, String qrCodeId,Festival festival) {
+    public static QrResponseDTO create(Long userId, String qrCodeId,Festival festival, Ticket ticket) {
         QrResponseDTO dto = new QrResponseDTO();
         dto.setUserId(userId);
         dto.setQrCodeId(qrCodeId);
         dto.setIssuedAt(LocalDate.now());
         dto.setExpiredAt(festival.getPrfpdto());
+        dto.setTicket(ticket);
         return dto;
     }
 }

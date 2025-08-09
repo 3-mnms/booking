@@ -1,17 +1,18 @@
 package com.mnms.booking.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
-@Builder
-@Getter
+@Builder @Getter
 @Table(name = "ticket")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +31,19 @@ public class Ticket {
     private Long userId; // 예매자 id
 
     @Column(name = "reservation_date")
-    private LocalDate reservationDate; // 예매 날짜
+    private LocalDate reservationDate; // 예매한 날짜
 
     @Column(name = "delivery_date")
     private LocalDate deliveryDate; // 택배 날짜
+
+    @Column(name = "performance_date")
+    private LocalDate performanceDate; // 선택한 공연 날짜
+
+    @Column(name = "performance_time")
+    private LocalTime performanceTime; // 선택한 공연 시간
+
+    @Column(name = "selected_ticket_count")
+    private int selectedTicketCount;
 
     @OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private QrCode qrCode;
@@ -41,4 +51,9 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "festival_id")
     private Festival festival;
+
+    // setter
+    public void setQrCode(QrCode qrCode){
+        this.qrCode= qrCode;
+    }
 }
