@@ -1,23 +1,18 @@
 package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.request.TicketRequestDTO;
+import com.mnms.booking.dto.response.UserInfoResponseDTO;
 import com.mnms.booking.dto.response.TicketResponseDTO;
 import com.mnms.booking.service.BookingService;
+import com.mnms.booking.service.UserService;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final UserService userService;
+
+    ///  GET : 페스티벌 예매 정보 조회
+    ///  POST : 페스티벌 예매 정보 선택
+
+
+    /// GET : userId로 예매자 정보 조회 - phone, email, address, birth
+    @GetMapping("/user/info")
+    @Operation(summary = "예매자 정보 조회",
+            description = "예매 과정에서 예매자 정보를 조회합니다."
+    )
+    public ResponseEntity<UserInfoResponseDTO> getUserInfo(@AuthenticationPrincipal JwtPrincipal principal) {
+        UserInfoResponseDTO userInfo = userService.getUserInfoById(principal.userId());
+        return ResponseEntity.ok(userInfo);
+    }
 
     @PostMapping("/reserve")
     @Operation(summary = "페스티벌 예매 티켓 생성",
