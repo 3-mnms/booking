@@ -53,7 +53,7 @@ public class QrResponseDTO {
         dto.setUserId(userId);
         dto.setQrCodeId(qrCodeId);
         dto.setIssuedAt(LocalDate.now());
-        dto.setExpiredAt(festival.getPrfpdto());
+        dto.setExpiredAt(festival.getFdto());
         dto.setTicket(ticket);
         return dto;
     }

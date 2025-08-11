@@ -34,13 +34,10 @@ public class Ticket {
     private LocalDate reservationDate; // 예매한 날짜
 
     @Column(name = "delivery_date")
-    private LocalDate deliveryDate; // 택배 날짜
+    private LocalDateTime deliveryDate; // 택배 날짜
 
     @Column(name = "performance_date")
-    private LocalDate performanceDate; // 선택한 공연 날짜
-
-    @Column(name = "performance_time")
-    private LocalTime performanceTime; // 선택한 공연 시간
+    private LocalDateTime performanceDate; // 선택한 공연 날짜 시간
 
     @Column(name = "selected_ticket_count")
     private int selectedTicketCount;

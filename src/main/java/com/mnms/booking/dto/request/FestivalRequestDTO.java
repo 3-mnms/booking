@@ -3,32 +3,37 @@ package com.mnms.booking.dto.request;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class FestivalRequestDTO {
 
-    private String mt20id;
+    private String id; // 공연 고유 ID (PF000001)
 
-    // 공연명
-    private String prfnm;
+    private String fname; // 공연명
 
-    // 공연 시작일
-    private LocalDate prfpdfrom;
+    private LocalDate fdfrom; // 공연 시작일
 
-    // 공연 종료일
-    private LocalDate prfpdto;
+    private LocalDate fdto; // 공연 종료일
 
-    // 공연 시설명
-    private String fcltynm;
+    private String posterFile; // 공연 대표 이미지 URL
 
-    // 포스터 이미지 경로
-    private String poster;
+    private String fcltynm; // 공연장 장소
 
-    // 티켓 비용
-    private int pcseguidance;
+    private int ticketPick; // 티켓 배송 방법
 
-    // 수용 가능 인원
-    private int availableNOP;
+    private int maxPurchase; // 1회 최대 구매 가능 수량
 
-    // 택배 날짜 (지류티켓 선택 시, 페스티벌 날짜 2주일 전 배송 - 자동) - 추후
+    private int ticketPrice; // 티켓 가격
+
+    private int availableNOP; // 수용인원
+
+    private List<ScheduleDTO> schedules;
+
+    @Data
+    public static class ScheduleDTO {
+        private Long scheduleId;
+        private String dayOfWeek;
+        private String time;
+    }
 }

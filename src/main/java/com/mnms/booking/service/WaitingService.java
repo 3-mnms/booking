@@ -3,7 +3,6 @@ package com.mnms.booking.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,10 +13,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 @Service
@@ -39,23 +38,14 @@ public class WaitingService {
     // Redis Pub/Sub 채널 이름
     private static final String NOTIFICATION_CHANNEL = "waiting_notification";
 
-    // 예매 페이지 수용인원
-    private static final long PERFORMANCE_CAPACITY = 2; // 공연 수용 인원
-    private static final double IMMEDIATE_ENTRY_RATIO = 1; // 기준 : 즉시 입장 비율 (1.5배), 테스트 (1배)
-    private static final long IMMEDIATE_ENTRY_COUNT = (long) (PERFORMANCE_CAPACITY * IMMEDIATE_ENTRY_RATIO);
-
     // scheduled
     private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
     private ScheduledFuture<?> scheduledTask;
+    private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
-
-    @PostConstruct
     public void init() {
         zSetOperations = redisTemplate.opsForZSet();
-        List<String> waitingUsers = getWaitingUsers();
-        if (!waitingUsers.isEmpty()) {
-            startScheduler();
-        }
+        // startScheduler() 호출 코드를 제거합니다.
     }
 
     public WaitingService(
@@ -70,71 +60,101 @@ public class WaitingService {
         scheduler.initialize();
     }
 
-    /**
-     * 사용자 대기열 진입 처리
-     * @param loginId 사용자 ID
-     * @return 대기 순번 (즉시 입장 가능한 경우 0)
-     */
-    public long enterWaitingQueue(String loginId) {
 
-        // 현재 입장한 사용자 수
-        Long currentUserCount = redisTemplate.opsForSet().size(BOOKING_USERS_SET_KEY);
+    /**
+     * 사용자 대기열 진입 처리 (공연별·시간별 분리)
+     * @param festivalId, reservationDate, loginId, availableNOP
+     * @return 대기 순번 (즉시 입장 가능 시 0)
+     */
+    public long enterWaitingQueue(String festivalId, LocalDateTime reservationDate, String loginId, long availableNOP) {
+        String bookingUsersKey = getBookingUsersKey(festivalId, reservationDate);
+        String waitingQueueKey = getWaitingQueueKey(festivalId, reservationDate);
+
+        zSetOperations = redisTemplate.opsForZSet(); // Redis ZSet ops 재설정 필요
+
+        Long currentUserCount = redisTemplate.opsForSet().size(bookingUsersKey);
         if (currentUserCount == null) currentUserCount = 0L;
 
-        // 입장한 사용자가 제한보다 작을 때
-        if(currentUserCount < IMMEDIATE_ENTRY_COUNT){
-            log.info("User {} can enter booking page immediately ({} < {}).", loginId, currentUserCount, IMMEDIATE_ENTRY_COUNT);
-
-            redisTemplate.opsForSet().add(BOOKING_USERS_SET_KEY, loginId); // 사용자 등록
+        if (currentUserCount < availableNOP) {
+            log.info("User {} can enter booking page immediately ({} < {}).", loginId, currentUserCount, availableNOP);
+            redisTemplate.opsForSet().add(bookingUsersKey, loginId);
             return 0L;
-        } else{
-            // 대기열로 보냄 (ZSet)
+        } else {
             long timestamp = System.currentTimeMillis();
-            zSetOperations.add(WAITING_QUEUE_KEY, loginId, timestamp);
+            zSetOperations.add(waitingQueueKey, loginId, timestamp);
+            log.info("User {} added to waiting queue {} with timestamp {}.", loginId, waitingQueueKey, timestamp);
 
-            log.info("User {} added to waiting queue with timestamp {}.", loginId, timestamp);
+            startScheduler(waitingQueueKey, bookingUsersKey, availableNOP);
 
-            // 조건부 스케줄러 시작
-            startScheduler();
-
-            return getAndPublishWaitingNumber(loginId);
+            return getAndPublishWaitingNumber(waitingQueueKey, loginId);
         }
     }
 
     /**
      * 스케줄러 시작 (중복 시작 방지)
      */
-    public synchronized void startScheduler() {
-        if (scheduledTask == null || scheduledTask.isCancelled() || scheduledTask.isDone()) {
-            log.info("대기열 감시 스케줄러 시작됨.");
-            scheduledTask = scheduler.scheduleWithFixedDelay(this::runSchedulerLogic, Duration.ofSeconds(5));
+    public synchronized void startScheduler(String waitingQueueKey, String bookingUsersKey, long availableNOP) {
+        if (scheduledTasks.containsKey(waitingQueueKey) && !scheduledTasks.get(waitingQueueKey).isDone()) {
+            // 이미 스케줄러 실행 중
+            return;
         }
+        log.info("Starting scheduler for queue: {}", waitingQueueKey);
+        ScheduledFuture<?> task = scheduler.scheduleWithFixedDelay(() -> runSchedulerLogic(waitingQueueKey, bookingUsersKey, availableNOP), Duration.ofSeconds(5));
+        scheduledTasks.put(waitingQueueKey, task);
     }
 
     /**
      * 스케줄러 중지
      */
-    public synchronized void stopScheduler() {
-        if (scheduledTask != null && !scheduledTask.isCancelled()) {
-            log.info("대기열이 비어 스케줄러 중지됨.");
-            scheduledTask.cancel(false);
+    public synchronized void stopScheduler(String waitingQueueKey) {
+        ScheduledFuture<?> task = scheduledTasks.get(waitingQueueKey);
+        if (task != null && !task.isCancelled()) {
+            task.cancel(false);
+            scheduledTasks.remove(waitingQueueKey);
+            log.info("Stopped scheduler for queue: {}", waitingQueueKey);
         }
     }
 
     /**
      * 주기적으로 대기열 순번 발행
      */
-    public void runSchedulerLogic() {
-        List<String> waitingUsers = getWaitingUsers();
-        if (waitingUsers.isEmpty()) {
-            stopScheduler(); // 비었으면 중지
+    public void runSchedulerLogic(String waitingQueueKey, String bookingUsersKey, long availableNOP) {
+        zSetOperations = redisTemplate.opsForZSet();
+        Set<String> waitingUsers = zSetOperations.range(waitingQueueKey, 0, -1);
+        if (waitingUsers == null || waitingUsers.isEmpty()) {
+            stopScheduler(waitingQueueKey);
             return;
         }
 
         for (String loginId : waitingUsers) {
-            getAndPublishWaitingNumber(loginId);
+            getAndPublishWaitingNumber(waitingQueueKey, loginId);
         }
-        log.info("대기열 사용자 {}명에게 대기번호 발행 완료.", waitingUsers.size());
+        log.info("Published waiting numbers to {} users for queue {}", waitingUsers.size(), waitingQueueKey);
+
+        // 빈자리 생겼을 때 대기열에서 사용자 입장 처리
+        Long currentBookingCount = redisTemplate.opsForSet().size(bookingUsersKey);
+        if (currentBookingCount == null) currentBookingCount = 0L;
+
+        // 빈자리가 생겼을 때
+        while (currentBookingCount < availableNOP) {
+            Set<String> nextUsers = zSetOperations.range(waitingQueueKey, 0, 0);
+            if (nextUsers == null || nextUsers.isEmpty()) {
+                break;
+            }
+            // 대기열에서 대기자 지우고, 예메 페이지에 입장
+            String nextUser = nextUsers.iterator().next();
+            Long removed = zSetOperations.remove(waitingQueueKey, nextUser);
+
+            // 대기열에 removed 된 사람이 있으면
+            if (removed != null && removed > 0) {
+                redisTemplate.opsForSet().add(bookingUsersKey, nextUser);
+                log.info("User {} moved from waiting queue to booking users for queue {}", nextUser, waitingQueueKey);
+                notifyAllWaitingUsers(waitingQueueKey);
+                currentBookingCount++;
+            } else {
+                break;
+            }
+        }
     }
 
     public List<String> getWaitingUsers() {
@@ -145,34 +165,29 @@ public class WaitingService {
 
     /**
      * 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
-     * @param loginId 사용자 ID
+     * @param waitingQueueKey, userId
      * @return 대기 순번
      */
-    public long getAndPublishWaitingNumber(String loginId) {
-        // 해당 loginId의 대기열 순번을 조회
-        Long rank = zSetOperations.rank(WAITING_QUEUE_KEY, loginId);
-
+    public long getAndPublishWaitingNumber(String waitingQueueKey, String loginId) {
+        zSetOperations = redisTemplate.opsForZSet();
+        Long rank = zSetOperations.rank(waitingQueueKey, loginId);
         if (rank != null) {
             long waitingNumber = rank + 1;
-            //log.info("User {}'s waiting number: {}", loginId, waitingNumber);
-
-            // Redis Pub/Sub 채널로 메시지 발행
             publishWaitingNumber(loginId, waitingNumber);
-
             return waitingNumber;
         }
-        return -1; // 대기열에 없는 경우
+        return -1;
     }
 
     /**
      * Redis Pub/Sub 채널로 대기 순번 정보 발행
-     * @param loginId 사용자 ID
+     * @param userId 사용자 ID
      * @param waitingNumber 대기 순번
      */
-    private void publishWaitingNumber(String loginId, long waitingNumber) {
+    private void publishWaitingNumber(String userId, long waitingNumber) {
         try {
             // immediateEntry는 false (이 메서드는 대기 순번 알림용), message는 null
-            WaitingNumberResponseDTO dto = new WaitingNumberResponseDTO(loginId, waitingNumber, false, null);
+            WaitingNumberResponseDTO dto = new WaitingNumberResponseDTO(userId, waitingNumber, false, null);
             String message = objectMapper.writeValueAsString(dto);
             // Redis 채널로 발행
             stringRedisTemplate.convertAndSend(NOTIFICATION_CHANNEL, message);
@@ -185,22 +200,25 @@ public class WaitingService {
      * 대기열에서 다음 사용자 진입 처리
      * (예매 완료 또는 타임아웃 등으로 인해 예매 페이지에서 나간 경우 호출)
      */
-    public boolean userExitBookingPage(String loginId){
+    public boolean userExitBookingPage(String festivalId, LocalDateTime reservationDate, String userId){
         // 예매 완료된 Set에서 제거
-        Long removed = redisTemplate.opsForSet().remove(BOOKING_USERS_SET_KEY, loginId);
+        Long removed = redisTemplate.opsForSet().remove(BOOKING_USERS_SET_KEY, userId);
 
         if(removed != null && removed > 0){
-            log.info("User {} exited booking page and removed from booking user set.", loginId);
+            log.info("User {} exited booking page and removed from booking user set.", userId);
             // 대기열에서 다음 사용자 진입 처리
-            releaseWaitingUser();
+            releaseWaitingUser(festivalId, reservationDate);
             return true;
         }else{
-            log.warn("User {} was not found in booking user set on exit.", loginId);
+            log.warn("User {} was not found in booking user set on exit.", userId);
             return false;
         }
     }
 
-    public void releaseWaitingUser() {
+    public void releaseWaitingUser(String festivalId, LocalDateTime reservationDate) {
+
+        String waitingQueueKey = getWaitingQueueKey(festivalId, reservationDate);
+
         // 대기열 큐 가장 앞에 있는 사람
         Set<String> releasedUsers = zSetOperations.range(WAITING_QUEUE_KEY, 0, 0);
 
@@ -217,7 +235,7 @@ public class WaitingService {
                 log.info("User {} added to booking user set.", releasedUser);
 
                 // 남은 대기열 사용자에게 순번 알림
-                notifyAllWaitingUsers();
+                notifyAllWaitingUsers(waitingQueueKey);
 
             } else {
                 log.warn("Failed to remove user {} from waiting queue. Removed count: {}", releasedUser, removedCount);
@@ -228,32 +246,33 @@ public class WaitingService {
     /**
      * 모든 대기열 사용자에게 순번 업데이트 알림
      */
-    public void notifyAllWaitingUsers() {
+    public void notifyAllWaitingUsers(String waitingQueueKey) {
         // 대기열 사용자 수 전체 범위 조회
-        Set<String> allUsersInQueue = zSetOperations.range(WAITING_QUEUE_KEY, 0, -1);
+        Set<String> allUsersInQueue = zSetOperations.range(waitingQueueKey, 0, -1);
 
         if (allUsersInQueue != null) {
-            for (String loginId : allUsersInQueue) {
+            for (String userId : allUsersInQueue) {
                 // 각 사용자에게 순번 알림을 Redis Pub/Sub으로 발행
-                getAndPublishWaitingNumber(loginId);
+                getAndPublishWaitingNumber(waitingQueueKey, userId);
             }
         }
     }
 
     /**
      * 특정 사용자가 대기열에서 이탈했음을 처리
-     * @param loginId
+     * @param festivalId, reservationDate, userId
      * @return boolean - 사용자가 대기열에서 성공적으로 제거되었으면 true, 아니면 false
      */
-    public boolean removeUserFromQueue(String loginId) {
-        Long removedCount = zSetOperations.remove(WAITING_QUEUE_KEY, loginId);
+    public boolean removeUserFromQueue(String festivalId, LocalDateTime reservationDate, String userId) {
+        Long removedCount = zSetOperations.remove(WAITING_QUEUE_KEY, userId);
+        String waitingQueueKey = getWaitingQueueKey(festivalId, reservationDate);
         if (removedCount != null && removedCount > 0) {
-            log.info("User {} removed from waiting queue (manual removal).", loginId);
-            notifyAllWaitingUsers(); // 순번 업데이트 알림
+            log.info("User {} removed from waiting queue (manual removal).", userId);
+            notifyAllWaitingUsers(waitingQueueKey); // 순번 업데이트 알림
             return true;
         } else {
             // 사용자가 대기열에 없었거나, 제거 과정에서 문제가 발생한 경우
-            log.warn("Attempted to remove user {} from queue, but user was not found or removal failed. Removed count: {}", loginId, removedCount);
+            log.warn("Attempted to remove user {} from queue, but user was not found or removal failed. Removed count: {}", userId, removedCount);
             return false;
         }
     }
@@ -261,5 +280,17 @@ public class WaitingService {
     @PreDestroy
     public void cleanup() {
         scheduler.shutdown();
+    }
+
+    /// util
+    public String getWaitingQueueKey(String festivalId, LocalDateTime reservationDate) {
+        // reservationDate는 yyyyMMddHHmm 형태로 저장 (ex: 202509011930)
+        String dateStr = reservationDate.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+        return "waiting_queue:" + festivalId + ":" + dateStr;
+    }
+
+    private String getBookingUsersKey(String festivalId, LocalDateTime reservationDate) {
+        String dateStr = reservationDate.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+        return "booking_users:" + festivalId + ":" + dateStr;
     }
 }

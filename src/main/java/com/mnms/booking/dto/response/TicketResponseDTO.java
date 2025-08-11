@@ -6,6 +6,7 @@ import com.mnms.booking.entity.TicketType;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -15,7 +16,7 @@ public class TicketResponseDTO {
     private String reservationNumber;
     private Boolean reservationStatus;
     private TicketType deliveryMethod;
-    private LocalDate deliveryDate;
+    private LocalDateTime deliveryDate;
     private Long userId;
     private LocalDate reservationDate;
     private QrResponseDTO qrCode;

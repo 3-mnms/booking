@@ -26,7 +26,6 @@ public class BookingController {
     ///  GET : 페스티벌 예매 정보 조회
     ///  POST : 페스티벌 예매 정보 선택
 
-
     /// GET : userId로 예매자 정보 조회 - phone, email, address, birth
     @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",

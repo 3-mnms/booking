@@ -1,6 +1,7 @@
 package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
+import com.mnms.booking.service.FestivalService;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
 
+import java.time.LocalDateTime;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -26,22 +29,22 @@ import com.mnms.booking.service.WaitingService;
 public class WaitingController {
 
     private final WaitingService waitingService;
+    private final FestivalService festivalService;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-
-    // 예매하기 버튼 클릭 시 호출되는 API
+    // front - 예매하기 버튼 클릭 시 호출되는 API
     @GetMapping("/enter")
-    @ResponseBody
-    @Operation(summary = "대기열/예매 페이지 진입",
-            description = "페스티벌 수용 인원만큼 예매 페이지 진입하며," +
-                    "나머지 사용자는 대기열에 들어가 대기하게 됩니다.")
     public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(
-            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
+            @RequestParam String festivalId,
+            @RequestParam LocalDateTime reservationDate,
+            @AuthenticationPrincipal JwtPrincipal principal) {
 
-        String loginId = (principal != null) ? principal.loginId() : "swagger-test-user";
-        long waitingNumber = waitingService.enterWaitingQueue(loginId);
+        String loginId = principal != null ? principal.loginId() : "swagger-test-user";
+
+        int availableNOP = festivalService.getCapacity(festivalId); // 수용 인원 가져오기
+        long waitingNumber = waitingService.enterWaitingQueue(festivalId, reservationDate, loginId, availableNOP);
 
         if (waitingNumber == 0) {
             return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
@@ -49,7 +52,6 @@ public class WaitingController {
             return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
-
 
     // 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
     @GetMapping("/release")
@@ -60,10 +62,12 @@ public class WaitingController {
                     "대기열에 있던 모든 대기자의 대기번호가 변경됩니다."
     )
     public ResponseEntity<String> releaseUser(
+            @RequestParam String festivalId,
+            @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         try {
-            boolean removed = waitingService.userExitBookingPage(loginId);
+            boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, loginId);
             if (removed) {
                 return ResponseEntity.ok("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {
@@ -85,10 +89,12 @@ public class WaitingController {
     )
     @GetMapping("/exit")
     public ResponseEntity<String> exitWaitingUser(
+            @RequestParam String festivalId,
+            @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         try {
-            boolean removed = waitingService.removeUserFromQueue(loginId);
+            boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, loginId);
             if (removed) {
                 return ResponseEntity.ok("대기하던 사용자가 대기열을 나갔습니다.");
             } else {
@@ -108,9 +114,13 @@ public class WaitingController {
      */
     @Hidden
     @MessageMapping("/subscribe/waiting")
-    public void subscribeWaitingQueue(@AuthenticationPrincipal JwtPrincipal principal) {
+    public void subscribeWaitingQueue(
+            @RequestParam String festivalId,
+            @RequestParam LocalDateTime reservationDate,
+            @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         log.info("User {} subscribed to waiting queue updates.", loginId);
-        waitingService.getAndPublishWaitingNumber(loginId);
+        String waitingQueueKey = waitingService.getWaitingQueueKey(festivalId, reservationDate);
+        waitingService.getAndPublishWaitingNumber(waitingQueueKey, loginId);
     }
 }

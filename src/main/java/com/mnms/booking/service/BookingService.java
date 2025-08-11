@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -36,7 +37,7 @@ public class BookingService {
 
         // 사용자 예약 티켓 매수, 지류티켓 확인
         validateReservation(userId, request, festival);
-        LocalDate deliveryDate = calculateDeliveryDate(request.getDeliveryMethod(), request);
+        LocalDateTime deliveryDate = calculateDeliveryDate(request.getDeliveryMethod(), request);
 
         // Ticket 저장 (reservation number 자동 래덤 생성됨)
         Ticket ticket = buildTicket(request, userId, festival, deliveryDate);
@@ -58,7 +59,7 @@ public class BookingService {
         int reservedCount = request.getSelectedTicketCount() + alreadyReservedCount;
 
         // 티켓 개수 초과
-        if ( reservedCount > festival.getMaxTicketsPerUser()) {
+        if ( reservedCount > festival.getMaxPurchase()) {
             throw new BusinessException(ErrorCode.TICKET_ALREADY_RESERVED);
         }
 
@@ -69,16 +70,16 @@ public class BookingService {
     }
 
     // deliveryDate 생성
-    private LocalDate calculateDeliveryDate(TicketType deliveryMethod, TicketRequestDTO request) {
+    private LocalDateTime calculateDeliveryDate(TicketType deliveryMethod, TicketRequestDTO request) {
         // 지류 티켓일 경우
-        if (request.getPerformanceDate() == null || request.getPerformanceTime() == null) {
+        if (request.getPerformanceDate() == null) {
                 throw new BusinessException(ErrorCode.FESTIVAL_INVALID_DATE);
         }
         if (deliveryMethod == TicketType.PAPER) {
-            LocalDate deliveryDate = request.getPerformanceDate().minusDays(14);
-            return deliveryDate.isAfter(LocalDate.now())
+            LocalDateTime deliveryDate = request.getPerformanceDate().minusDays(14);
+            return deliveryDate.isAfter(LocalDateTime.now())
                     ? deliveryDate
-                    : LocalDate.now().plusDays(1);
+                    : LocalDateTime.now().plusDays(1);
         }
         // 모바일 티켓일 경우
         return null;
@@ -104,7 +105,7 @@ public class BookingService {
 
     // Ticket 저장
     private Ticket buildTicket(TicketRequestDTO request, Long userId, Festival festival,
-                               LocalDate deliveryDate) { // , QrCode qrCode
+                               LocalDateTime deliveryDate) { // , QrCode qrCode
         return Ticket.builder()
                 .reservationNumber(generateReservationNumber())
                 .reservationStatus(true)
@@ -112,7 +113,6 @@ public class BookingService {
                 .reservationDate(LocalDate.now())
                 .deliveryDate(deliveryDate)
                 .performanceDate(request.getPerformanceDate())
-                .performanceTime(request.getPerformanceTime())
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .festival(festival)
                 .userId(userId)
