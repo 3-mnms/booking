@@ -34,7 +34,7 @@ public class WaitingController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    // front - 예매하기 버튼 클릭 시 호출되는 API
+    /// 예매하기 버튼(front) 클릭 시 호출되는 API
     @GetMapping("/enter")
     public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(
             @RequestParam String festivalId,
@@ -53,7 +53,7 @@ public class WaitingController {
         }
     }
 
-    // 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
+    /// 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
     @GetMapping("/release")
     @Operation(
             summary = "예매 페이지 진입 완료 처리",
@@ -64,7 +64,7 @@ public class WaitingController {
     public ResponseEntity<String> releaseUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
-            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
+            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) { ///  예매칸에 있는 예매자 accessToken
         String loginId = principal.loginId();
         try {
             boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, loginId);
@@ -121,6 +121,7 @@ public class WaitingController {
         String loginId = principal.loginId();
         log.info("User {} subscribed to waiting queue updates.", loginId);
         String waitingQueueKey = waitingService.getWaitingQueueKey(festivalId, reservationDate);
-        waitingService.getAndPublishWaitingNumber(waitingQueueKey, loginId);
+        String notificationChannelKey = waitingService.getNotificationChannelKey(festivalId, reservationDate);
+        waitingService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, loginId);
     }
 }
