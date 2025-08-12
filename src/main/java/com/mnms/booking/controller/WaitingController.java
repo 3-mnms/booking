@@ -2,6 +2,8 @@ package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import com.mnms.booking.service.FestivalService;
+import com.mnms.booking.service.WaitingNotificationService;
+import com.mnms.booking.service.WaitingQueueKeyGenerator;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,8 @@ public class WaitingController {
 
     private final WaitingService waitingService;
     private final FestivalService festivalService;
+    private final WaitingQueueKeyGenerator waitingQueueKeyGenerator;
+    private final WaitingNotificationService waitingNotificationService;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -120,8 +124,8 @@ public class WaitingController {
             @AuthenticationPrincipal JwtPrincipal principal) {
         String loginId = principal.loginId();
         log.info("User {} subscribed to waiting queue updates.", loginId);
-        String waitingQueueKey = waitingService.getWaitingQueueKey(festivalId, reservationDate);
-        String notificationChannelKey = waitingService.getNotificationChannelKey(festivalId, reservationDate);
-        waitingService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, loginId);
+        String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
+        String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
+        waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, loginId);
     }
 }
