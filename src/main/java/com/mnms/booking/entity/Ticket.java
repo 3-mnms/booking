@@ -42,8 +42,6 @@ public class Ticket {
     @Column(name = "selected_ticket_count")
     private int selectedTicketCount; // 선택 매수
 
-
-
     @OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private QrCode qrCode;
 
