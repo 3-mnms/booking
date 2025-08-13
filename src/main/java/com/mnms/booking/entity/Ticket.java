@@ -22,7 +22,7 @@ public class Ticket {
     private String reservationNumber; // 예매번호
 
     @Column(name = "reservation_status")
-    private Boolean reservationStatus; // 예매 상태
+    private ReservationStatus reservationStatus; // 예매상태
 
     @Column(name = "delivery_method")
     private TicketType deliveryMethod; // 수령방법
@@ -40,7 +40,9 @@ public class Ticket {
     private LocalDateTime performanceDate; // 선택한 공연 날짜 시간
 
     @Column(name = "selected_ticket_count")
-    private int selectedTicketCount;
+    private int selectedTicketCount; // 선택 매수
+
+
 
     @OneToOne(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private QrCode qrCode;
@@ -53,4 +55,6 @@ public class Ticket {
     public void setQrCode(QrCode qrCode){
         this.qrCode= qrCode;
     }
+
+    public void setDeliveryMethod(TicketType deliveryMethod){this.deliveryMethod = deliveryMethod;}
 }

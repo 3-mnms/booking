@@ -25,7 +25,7 @@ public class QrCode {
     private LocalDate issuedAt;
 
     @Column(name = "expired_at", nullable = false)
-    private LocalDate expiredAt;
+    private LocalDateTime expiredAt;
 
     @Column(name = "used", nullable = false)
     private Boolean used;
@@ -52,6 +52,6 @@ public class QrCode {
     }
 
     private boolean isExpired() {
-        return LocalDate.now().isAfter(this.expiredAt);
+        return LocalDateTime.now().isAfter(this.expiredAt);
     }
 }

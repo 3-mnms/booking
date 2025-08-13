@@ -1,13 +1,11 @@
 package com.mnms.booking.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.mnms.booking.dto.request.QrRequestDTO;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.exception.BusinessException;
@@ -16,15 +14,11 @@ import com.mnms.booking.repository.QrCodeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +84,7 @@ public class QrCodeService {
 //        }
 
         // 만료 여부 확인
-        if (qrCode.getExpiredAt().isBefore(LocalDate.now())) {
+        if (qrCode.getExpiredAt().isBefore(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.QR_CODE_EXPIRED);
         }
 

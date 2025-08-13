@@ -18,6 +18,9 @@ public class Festival {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // DB PK (자동증가)
 
+    @Column(name = "event_type")
+    private EventType eventType;
+
     @Column(name = "festival_id", unique = true, nullable = false, length = 20)
     private String festivalId; // 공연 고유 ID (PF000001)
 

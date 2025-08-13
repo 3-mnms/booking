@@ -2,15 +2,15 @@ package com.mnms.booking.dto.request;
 
 import com.mnms.booking.entity.TicketType;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Data
-public class TicketRequestDTO {
-
+@Getter
+public class FestivalSelectDeliveryRequestDTO {
     private String festivalId;
-    private int selectedTicketCount; // <= Festival.maxTicketsPerUser
     private LocalDateTime performanceDate;
-    private TicketType deliveryMethod;
-
+    private int selectedTicketCount;
+    private String deliveryMethod;
 }

@@ -1,6 +1,7 @@
 package com.mnms.booking.dto.response;
 
 import com.mnms.booking.entity.Festival;
+import com.mnms.booking.entity.ReservationStatus;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.TicketType;
 import lombok.*;
@@ -14,7 +15,7 @@ public class TicketResponseDTO {
 
     private Long id;
     private String reservationNumber;
-    private Boolean reservationStatus;
+    private ReservationStatus reservationStatus;
     private TicketType deliveryMethod;
     private LocalDateTime deliveryDate;
     private Long userId;

@@ -18,7 +18,7 @@ public class QrResponseDTO {
     private String qrCodeId;
     private Long userId;
     private LocalDate issuedAt;
-    private LocalDate expiredAt;
+    private LocalDateTime expiredAt;
     private Boolean used;
     private LocalDateTime usedAt;
     private Ticket ticket;
@@ -53,7 +53,7 @@ public class QrResponseDTO {
         dto.setUserId(userId);
         dto.setQrCodeId(qrCodeId);
         dto.setIssuedAt(LocalDate.now());
-        dto.setExpiredAt(festival.getFdto());
+        dto.setExpiredAt(ticket.getPerformanceDate().plusMinutes(30));
         dto.setTicket(ticket);
         return dto;
     }
