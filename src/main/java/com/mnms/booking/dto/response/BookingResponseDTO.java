@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -20,7 +22,7 @@ public class BookingResponseDTO {
     private LocalDateTime deliveryDate;
     private Long userId;
     private LocalDate reservationDate;
-    private QrResponseDTO qrCode;
+    private List<QrResponseDTO> qrCodes;
     private Festival festival;
 
     public static BookingResponseDTO fromEntity(Ticket ticket) {
@@ -31,7 +33,9 @@ public class BookingResponseDTO {
                 .deliveryMethod(ticket.getDeliveryMethod())
                 .deliveryDate(ticket.getDeliveryDate())
                 .reservationDate(ticket.getReservationDate())
-                .qrCode(QrResponseDTO.fromEntity(ticket.getQrCode()))
+                .qrCodes(ticket.getQrCodes().stream()
+                        .map(QrResponseDTO::fromEntity)
+                        .collect(Collectors.toList()))
                 .userId(ticket.getUserId())
                 .festival(ticket.getFestival())
                 .build();

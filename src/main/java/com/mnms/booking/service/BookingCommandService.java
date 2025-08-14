@@ -12,9 +12,7 @@ import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
-import com.mnms.kafka.booking.dto.PaymentSuccessEvent;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +24,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Service
@@ -92,10 +94,16 @@ public class BookingCommandService {
 
         ensureDeliveryStepCompleted(ticket);
 
-        QrCode qrCode = createAndSaveQrCode(userId, festival, ticket);
+        // 기존 QR 코드 초기화
+        ticket.getQrCodes().clear();
+        ticket.getQrCodes().addAll(
+                IntStream.range(0, ticket.getSelectedTicketCount())
+                        .mapToObj(i -> createAndSaveQrCode(userId, festival, ticket))
+                        .toList()
+        );
 
-        ticket.setQrCode(qrCode);
         ticketRepository.save(ticket);
+
         return BookingResponseDTO.fromEntity(ticket);
     }
 
@@ -197,10 +205,12 @@ public class BookingCommandService {
 
     /// Qr정보 생성
     private QrCode createAndSaveQrCode(Long userId, Festival festival, Ticket ticket) {
-        String qrCodeId = qrCodeService.generateQrCodeId();
-        if (qrCodeId == null || qrCodeId.isEmpty()) {
-            throw new BusinessException(ErrorCode.QR_CODE_ID_GENERATION_FAILED);
-        }
+        // 중복 없는 QR 코드 ID 생성
+        String qrCodeId;
+        do {
+            qrCodeId = qrCodeService.generateQrCodeId();
+        } while (qrCodeRepository.existsByQrCodeId(qrCodeId));
+
         QrCode qrCode = QrResponseDTO.create(userId, qrCodeId, festival, ticket).toEntity();
         qrCodeRepository.save(qrCode);
         return qrCode;

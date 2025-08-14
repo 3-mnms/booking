@@ -36,7 +36,8 @@ public class QrCode {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id")
     private Ticket ticket; // ticket_id
 
     // 비지니스 로직
