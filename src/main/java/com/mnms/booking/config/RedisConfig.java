@@ -1,11 +1,13 @@
 package com.mnms.booking.config;
 
 import com.mnms.booking.service.RedisMessageSubscriber;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -13,22 +15,33 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 
 @Configuration
+@Slf4j
 public class RedisConfig {
 
-    // Redis Pub/Sub 메시지를 구독하고 처리할 컨테이너
+
+    @PostConstruct
+    public void init() {
+        log.info("RedisConfig bean initialized");
+    }
+
+    /// Redis Pub/Sub 메시지를 구독하고 처리할 컨테이너
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter listenerAdapter // 아래에서 정의할 리스너 어댑터
+            MessageListenerAdapter listenerAdapter
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        // "waiting_notification" 채널을 구독하도록 설정
-        container.addMessageListener(listenerAdapter, new ChannelTopic("waiting_notification"));
+
+        PatternTopic patternTopic = new PatternTopic("waiting_notification:*");
+        container.addMessageListener(listenerAdapter, patternTopic);
+
+        // 구독 시작 시 로그 출력
+        log.info("Subscribed to Redis channels with pattern: {}", patternTopic.getTopic());
         return container;
     }
 
-    // Redis 메시지를 받아 처리할 리스너 어댑터 (RedisMessageSubscriber와 연결)
+    /// Redis 메시지를 받아 처리할 리스너 어댑터 (RedisMessageSubscriber와 연결)
     @Bean
     public MessageListenerAdapter listenerAdapter(RedisMessageSubscriber subscriber) {
         // RedisMessageSubscriber의 "onMessage" 메서드를 호출하도록 설정
@@ -36,7 +49,6 @@ public class RedisConfig {
     }
 
     // Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
-    // String, String 형태로 메시지를 발행할 것이므로 StringRedisTemplate을 사용
     @Bean
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
@@ -48,18 +60,14 @@ public class RedisConfig {
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // Key 직렬화 설정: StringRedisSerializer 사용 (필수)
+        // 직렬화 설정
         template.setKeySerializer(new StringRedisSerializer());
-        // Value 직렬화 설정
         template.setValueSerializer(new StringRedisSerializer());
-
-        // Hash Key/Value 직렬화 설정 (ZSet에서는 직접 사용되지 않지만, 다른 Redis 자료구조 사용 시 일관성을 위해 설정)
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(new StringRedisSerializer());
 
         // 초기화 메서드 호출 (설정 적용)
         template.afterPropertiesSet();
-
         return template;
     }
 }

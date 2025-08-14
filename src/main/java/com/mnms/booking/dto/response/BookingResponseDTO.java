@@ -1,33 +1,41 @@
 package com.mnms.booking.dto.response;
 
 import com.mnms.booking.entity.Festival;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.entity.Ticket;
-import com.mnms.booking.entity.TicketType;
+import com.mnms.booking.enums.TicketType;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
-public class TicketResponseDTO {
+public class BookingResponseDTO {
 
     private Long id;
     private String reservationNumber;
-    private Boolean reservationStatus;
+    private ReservationStatus reservationStatus;
     private TicketType deliveryMethod;
     private LocalDateTime deliveryDate;
-    private String userId;
-    private LocalDateTime reservationDate;
-    private QrResponseDTO qrCode;
+    private Long userId;
+    private LocalDate reservationDate;
+    private List<QrResponseDTO> qrCodes;
     private Festival festival;
 
-    public static TicketResponseDTO fromEntity(Ticket ticket) {
-        return TicketResponseDTO.builder()
+    public static BookingResponseDTO fromEntity(Ticket ticket) {
+        return BookingResponseDTO.builder()
                 .id(ticket.getId())
                 .reservationNumber(ticket.getReservationNumber())
+                .reservationStatus(ticket.getReservationStatus())
                 .deliveryMethod(ticket.getDeliveryMethod())
                 .deliveryDate(ticket.getDeliveryDate())
                 .reservationDate(ticket.getReservationDate())
-                .qrCode(QrResponseDTO.fromEntity(ticket.getQrCode()))
+                .qrCodes(ticket.getQrCodes().stream()
+                        .map(QrResponseDTO::fromEntity)
+                        .collect(Collectors.toList()))
                 .userId(ticket.getUserId())
                 .festival(ticket.getFestival())
                 .build();

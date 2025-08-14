@@ -1,4 +1,4 @@
-package com.mnms.booking.config;
+package com.mnms.kafka.booking.config;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;

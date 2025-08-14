@@ -1,12 +1,9 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,30 +11,29 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RedisMessageSubscriber implements MessageListener {
+public class RedisMessageSubscriber {
 
     private final SimpMessagingTemplate messagingTemplate; // WebSocket 메시지 전송
     private final ObjectMapper objectMapper; // JSON 파싱을 위한 ObjectMapper
 
     // Redis로부터 메시지를 수신할 때 호출되는 메서드
-    @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(String message, String channel) {
+        // 채널 이름
+        log.info("channel name : {}", channel);
+
+        // message는 JSON 문자열 -> DTO로 변환
         try {
-            // Redis에서 받은 메시지 바디를 문자열로 변환
-            String receivedMessage = new String(message.getBody());
-            log.info("Received message from Redis channel: {}", receivedMessage);
+            // 여기에 로그 추가
+            log.info("Received message from Redis channel: {}", message);
 
-            // 받은 JSON 문자열을 WaitingNumberDto 객체로 변환
-            WaitingNumberResponseDTO dto = objectMapper.readValue(receivedMessage, WaitingNumberResponseDTO.class);
+            WaitingNumberResponseDTO dto = new ObjectMapper().readValue(message, WaitingNumberResponseDTO.class);
 
-            // WebSocket을 통해 해당 사용자 토픽으로 메시지 전송
-            messagingTemplate.convertAndSend("/topic/waiting/" + dto.getUserId(), dto);
+            // userId 기준으로 메시지 전송
+            messagingTemplate.convertAndSendToUser(dto.getUserId(), "/queue/waitingNumber", dto);
             log.info("Sent WebSocket message to user {}: {}", dto.getUserId(), dto.getWaitingNumber());
 
-        } catch (JsonProcessingException e) {
-            log.error("Error parsing Redis message to WaitingNumberDto: {}", e.getMessage());
         } catch (Exception e) {
-            log.error("Error processing Redis message: {}", e.getMessage());
+            log.error("예외 발생: {}", e.getMessage(), e);
         }
     }
 }
