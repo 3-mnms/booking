@@ -31,7 +31,7 @@ public class SecurityConfig {
                                 "/h2-console/**",
                                 "/api/captcha/**",
                                 "/api/qr/**",
-                                "/api/tickets/detail"
+                                "/api/booking/detail/phases/1"
                                 ).permitAll() // 하위 경로 포함 허용
                         .anyRequest().authenticated()
                 )

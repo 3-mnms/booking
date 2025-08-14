@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository  extends JpaRepository<Schedule, Long> {
-    @Query("SELECT s FROM Schedule s WHERE s.festival.id = :festivalId")
+    @Query("SELECT s FROM Schedule s WHERE s.festival.festivalId = :festivalId")
     List<Schedule> findByFestivalId(@Param("festivalId") String festivalId);
 }

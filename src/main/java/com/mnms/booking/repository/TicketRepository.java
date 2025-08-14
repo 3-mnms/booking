@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     int countByUserIdAndFestivalId(Long userId, Long festivalId);
 
-    @Query("SELECT t FROM Ticket t WHERE t.festival.id = :festivalId AND t.userId = :userId AND t.performanceDate = :performanceDate")
+    @Query("SELECT t FROM Ticket t WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.performanceDate = :performanceDate")
     Optional<Ticket> findByFestivalIdAndUserIdAndPerformanceDate(
             @Param("festivalId") String festivalId,
             @Param("userId") Long userId,

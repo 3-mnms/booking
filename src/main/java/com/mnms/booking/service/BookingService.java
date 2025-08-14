@@ -13,6 +13,7 @@ import com.mnms.booking.repository.ScheduleRepository;
 import com.mnms.booking.repository.TicketRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookingService {
 
     private final TicketRepository ticketRepository;
@@ -48,14 +52,16 @@ public class BookingService {
             throw new BusinessException(ErrorCode.FESTIVAL_INVALID_DATE);
         }
 
-        // 3. 스케줄 찾기
-        String dayOfWeek = selectDate.getDayOfWeek().name();
+        // 스케줄 찾기
+        String dayOfWeek = selectDate.getDayOfWeek()
+                .getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                .toUpperCase();
+
         Schedule matchedSchedule = festival.getSchedules().stream()
                 .filter(s -> s.getDayOfWeek().equalsIgnoreCase(dayOfWeek) &&
                         LocalTime.parse(s.getTime(), DateTimeFormatter.ofPattern("HH:mm")).equals(selectTime))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_INVALID_TIME));
-
 
         List<Schedule> schedules = scheduleRepository.findByFestivalId(festival.getFestivalId());
         List<ScheduleResponseDTO> scheduleDTOs = schedules.stream()
@@ -92,7 +98,9 @@ public class BookingService {
             throw new BusinessException(ErrorCode.FESTIVAL_INVALID_DATE);
         }
 
-        String dayOfWeek = performanceDate.getDayOfWeek().name(); // MON, TUE, 형태임
+        String dayOfWeek = selectDate.getDayOfWeek()
+                .getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                .toUpperCase();
         boolean isValidSchedule = festival.getSchedules().stream()
                 .anyMatch(s ->
                         s.getDayOfWeek().equalsIgnoreCase(dayOfWeek) &&
