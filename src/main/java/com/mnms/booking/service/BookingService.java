@@ -1,5 +1,6 @@
 package com.mnms.booking.service;
 
+import com.mnms.booking.dto.request.FestivalRequestDTO;
 import com.mnms.booking.dto.request.FestivalSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.FestivalSelectRequestDTO;
 import com.mnms.booking.dto.request.TicketRequestDTO;
@@ -27,8 +28,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookingService {
 
     private final TicketRepository ticketRepository;
@@ -37,7 +39,6 @@ public class BookingService {
     private final QrCodeService qrCodeService;
     private final ScheduleRepository scheduleRepository;
 
-    @Transactional(readOnly = true)
     public FestivalDetailResponseDTO getFestivalDetail(@Valid FestivalSelectRequestDTO request) {
         // 페스티벌 조회
         Festival festival = festivalRepository.findByFestivalId(request.getFestivalId())
@@ -85,7 +86,7 @@ public class BookingService {
 
     // 가예매 상황 : 1차 저장
     @Transactional
-    public void selectFestivalDate(FestivalSelectRequestDTO request, Long userId) {
+    public String selectFestivalDate(FestivalSelectRequestDTO request, Long userId) {
         Festival festival = festivalRepository.findByFestivalId(request.getFestivalId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
 
@@ -115,79 +116,85 @@ public class BookingService {
             throw new BusinessException(ErrorCode.TICKET_ALREADY_RESERVED);
         }
 
+        // 사용자 예약 티켓 매수, 지류티켓 확인
+        validateReservation(userId, request, festival);
+
         // 페스티벌, 유저, 선택 날짜, 시간 저장
         Ticket ticket = Ticket.builder()
                 .festival(festival)
                 .userId(userId)
+                .reservationNumber(generateReservationNumber())
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .performanceDate(performanceDate)
                 .reservationStatus(ReservationStatus.TEMP_RESERVED)
+                .reservationDate(LocalDate.now())
                 .build();
         ticketRepository.save(ticket);
+        return ticket.getReservationNumber();
     }
 
     // 가예매 상황 : 2차 조회
-    @Transactional(readOnly = true)
-    public FestivalBookingDetailResponseDTO getFestivalBookingDetail(@Valid FestivalSelectRequestDTO request, Long userId) {
+    public FestivalBookingDetailResponseDTO getFestivalBookingDetail(@Valid FestivalRequestDTO request, Long userId) {
         // 공연 정보 조회
         Festival festival = festivalRepository.findByFestivalId(request.getFestivalId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
 
-        LocalDateTime performanceDate = request.getPerformanceDate();
-        LocalDate date = performanceDate.toLocalDate();
-        LocalTime time = performanceDate.toLocalTime();
-
-        // 2. 예매 티켓 조회 (해당 유저, 해당 공연 시간)
-        Ticket ticket = ticketRepository.findByFestivalIdAndUserIdAndPerformanceDate(request.getFestivalId(), userId, performanceDate)
+        Ticket ticket = ticketRepository.findByReservationNumber(request.getReservationNumber())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
         // 4. DTO 생성
         return FestivalBookingDetailResponseDTO.builder()
                 .festivalName(festival.getFname())
-                .performanceDate(date)
-                .performanceTime(time)
                 .posterFile(festival.getPosterFile())
-                .ticketCount(ticket.getSelectedTicketCount())
                 .ticketPrice(festival.getTicketPrice())
+                .performanceDate(ticket.getPerformanceDate()) // 선택한 페스티벌 날짜 시간
+                .ticketCount(ticket.getSelectedTicketCount())
                 .build();
     }
 
     // 가예매 상황 : 2차 저장
     @Transactional
     public void selectFestivalDelivery(FestivalSelectDeliveryRequestDTO request, Long userId) {
+
         // 1. 해당 티켓 조회
-        Ticket ticket = ticketRepository.findByFestivalIdAndUserIdAndPerformanceDate(
+        Ticket ticket = ticketRepository.findByFestivalIdAndUserIdAndReservationNumber(
                 request.getFestivalId(),
                 userId,
-                request.getPerformanceDate()
+                request.getReservationNumber()
         ).orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
         TicketType type;
+        // 배송 방법 유효성 검사
+        if (request.getDeliveryMethod() == null) {
+            throw new BusinessException(ErrorCode.FESTIVAL_DELIVERY_INVALID);
+        }
         try {
             type = TicketType.valueOf(request.getDeliveryMethod().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BusinessException(ErrorCode.TICKET_INVALID_DELIVERY_METHOD);
         }
-
         // 티켓 엔티티에 수령 방법 설정
         ticket.setDeliveryMethod(type);
 
-        // 저장
+        // 배송 날짜 설정
+        ticket.setDeliveryDate(calculateDeliveryDate(ticket, type));
         ticketRepository.save(ticket);
     }
 
 
+    // 가예매 상황 : 3차
     @Transactional
-    public TicketResponseDTO reserveTicket(TicketRequestDTO request, Long userId) {
+    public TicketResponseDTO reserveTicket(FestivalRequestDTO request, Long userId) {
         Festival festival = festivalRepository.findByFestivalId(request.getFestivalId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
 
-        // 사용자 예약 티켓 매수, 지류티켓 확인
-        validateReservation(userId, request, festival);
-        LocalDateTime deliveryDate = calculateDeliveryDate(request.getDeliveryMethod(), request);
+        Ticket ticket = ticketRepository.findByReservationNumber(request.getReservationNumber())
+                .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        // Ticket 저장 (reservation number 자동 래덤 생성됨)
-        Ticket ticket = buildTicket(request, userId, festival, deliveryDate);
+        // 2차 완료 여부 검증
+        if (ticket.getDeliveryMethod() == null || ticket.getDeliveryDate() == null) {
+            throw new BusinessException(ErrorCode.FESTIVAL_DELIVERY_NOT_COMPLETED);
+        }
 
         // QR 생성 (Ticket 포함)
         QrCode qrCode = createAndSaveQrCode(userId, festival, ticket);
@@ -200,30 +207,24 @@ public class BookingService {
         return TicketResponseDTO.fromEntity(ticket);
     }
 
-    private void validateReservation(Long userId, TicketRequestDTO request, Festival festival) {
-
-        int alreadyReservedCount = ticketRepository.countByUserIdAndFestivalId(userId, festival.getId());
+    private void validateReservation(Long userId, FestivalSelectRequestDTO request, Festival festival) {
+        int alreadyReservedCount = ticketRepository.countByUserIdAndFestivalIdAndPerformanceDate(userId, festival.getId(), request.getPerformanceDate());
         int reservedCount = request.getSelectedTicketCount() + alreadyReservedCount;
 
         // 티켓 개수 초과
         if ( reservedCount > festival.getMaxPurchase()) {
             throw new BusinessException(ErrorCode.TICKET_ALREADY_RESERVED);
         }
-
-        // 배송 방법 유효성 검사
-        if (request.getDeliveryMethod() == null) {
-            throw new BusinessException(ErrorCode.FESTIVAL_DELIVERY_INVALID);
-        }
     }
 
     // deliveryDate 생성
-    private LocalDateTime calculateDeliveryDate(TicketType deliveryMethod, TicketRequestDTO request) {
+    private LocalDateTime calculateDeliveryDate(Ticket ticket, TicketType deliveryMethod) {
         // 지류 티켓일 경우
-        if (request.getPerformanceDate() == null) {
+        if (ticket.getPerformanceDate() == null) {
                 throw new BusinessException(ErrorCode.FESTIVAL_INVALID_DATE);
         }
         if (deliveryMethod == TicketType.PAPER) {
-            LocalDateTime deliveryDate = request.getPerformanceDate().minusDays(14);
+            LocalDateTime deliveryDate = ticket.getPerformanceDate().minusDays(14);
             return deliveryDate.isAfter(LocalDateTime.now())
                     ? deliveryDate
                     : LocalDateTime.now().plusDays(1);
@@ -248,22 +249,6 @@ public class BookingService {
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.QR_CODE_SAVE_FAILED);
         }
-    }
-
-    // Ticket 저장
-    private Ticket buildTicket(TicketRequestDTO request, Long userId, Festival festival,
-                               LocalDateTime deliveryDate) { // , QrCode qrCode
-        return Ticket.builder()
-                .reservationNumber(generateReservationNumber())
-                .reservationStatus(ReservationStatus.CONFIRMED)
-                .deliveryMethod(request.getDeliveryMethod())
-                .reservationDate(LocalDate.now())
-                .deliveryDate(deliveryDate)
-                .performanceDate(request.getPerformanceDate())
-                .selectedTicketCount(request.getSelectedTicketCount())
-                .festival(festival)
-                .userId(userId)
-                .build();
     }
 
     // reservation number 랜덤 생성

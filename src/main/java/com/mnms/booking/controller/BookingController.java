@@ -1,5 +1,6 @@
 package com.mnms.booking.controller;
 
+import com.mnms.booking.dto.request.FestivalRequestDTO;
 import com.mnms.booking.dto.request.FestivalSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.FestivalSelectRequestDTO;
 import com.mnms.booking.dto.request.TicketRequestDTO;
@@ -14,12 +15,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,24 +37,24 @@ public class BookingController {
         return bookingService.getFestivalDetail(request);
     }
 
-    /// POST : 페스티벌 예매 정보 0차, 1차 선택
+    /// POST : 페스티벌 예매 정보 1차 선택
     @PostMapping("/selectDate")
     @Operation(summary = "페스티벌 특정 페스티벌 날짜, 시간, 매수 선택",
-            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수)"
+            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수)를 입력하고 reservationNumber를 반환합니다."
     )
-    public void selectFestivalDate(
+    public String selectFestivalDate(
             @Valid @RequestBody FestivalSelectRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
-        bookingService.selectFestivalDate(request, principal.userId());
+        return bookingService.selectFestivalDate(request, principal.userId());
     }
 
     /// GET : festival 이름, 날짜, 시간, poster url, 매수, 가격, 예매자 이름, 전화번호, email, 티켓 수령 방법, 주소
     @GetMapping("/detail/phases/2")
     @Operation(summary = "2차 : 예매 단계에서 선택한 예매 상세 조회",
-            description = "festivalId, userId, performanceDate로 공연 및 예매자 상세 정보를 조회합니다.")
+            description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
     public FestivalBookingDetailResponseDTO getFestivalBookingDetail(
-            @Valid @RequestBody FestivalSelectRequestDTO request,
+            @Valid @RequestBody FestivalRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
         return bookingService.getFestivalBookingDetail(request, principal.userId());
@@ -86,12 +84,12 @@ public class BookingController {
     }
 
     /// POST : 3차 예매 완료 (결제 직전)
-    @PostMapping
+    @PostMapping("/qr")
     @Operation(summary = "페스티벌 예매 티켓 생성",
             description = "사용자가 특정 페스티벌 티켓을 예약하기 위한 마지막 가예매 상태입니다."
     )
     public ResponseEntity<TicketResponseDTO> reserveTicket(
-            @Valid @RequestBody TicketRequestDTO request,
+            @Valid @RequestBody FestivalRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
         TicketResponseDTO response = bookingService.reserveTicket(request, principal.userId());

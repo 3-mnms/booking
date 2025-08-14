@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -13,9 +14,9 @@ import java.time.LocalTime;
 public class FestivalBookingDetailResponseDTO {
 
     private String festivalName;
-    private LocalDate performanceDate;
-    private LocalTime performanceTime;
     private String posterFile;
-    private int ticketCount;
     private int ticketPrice;
+
+    private LocalDateTime performanceDate;
+    private int ticketCount;
 }

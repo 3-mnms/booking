@@ -1,6 +1,5 @@
 package com.mnms.booking.repository;
 
-import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,12 +11,15 @@ import java.util.Optional;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    int countByUserIdAndFestivalId(Long userId, Long festivalId);
+    int countByUserIdAndFestivalIdAndPerformanceDate(Long userId, Long festivalId, LocalDateTime performanceDate);
 
-    @Query("SELECT t FROM Ticket t WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.performanceDate = :performanceDate")
-    Optional<Ticket> findByFestivalIdAndUserIdAndPerformanceDate(
+
+    @Query("SELECT t FROM Ticket t WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.reservationNumber = :reservationNumber")
+    Optional<Ticket> findByFestivalIdAndUserIdAndReservationNumber(
             @Param("festivalId") String festivalId,
             @Param("userId") Long userId,
-            @Param("performanceDate") LocalDateTime performanceDate
+            @Param("reservationNumber") String reservationNumber
     );
+
+    Optional<Ticket> findByReservationNumber(String reservationNumber);
 }

@@ -31,7 +31,7 @@ public class Ticket {
     private Long userId; // 예매자 id
 
     @Column(name = "reservation_date")
-    private LocalDate reservationDate; // 예매한 날짜
+    private LocalDate reservationDate; // 예매를 수행한 날짜
 
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate; // 택배 날짜
@@ -53,6 +53,6 @@ public class Ticket {
     public void setQrCode(QrCode qrCode){
         this.qrCode= qrCode;
     }
-
     public void setDeliveryMethod(TicketType deliveryMethod){this.deliveryMethod = deliveryMethod;}
+    public void setDeliveryDate(LocalDateTime deliveryDate){ this.deliveryDate = deliveryDate;}
 }

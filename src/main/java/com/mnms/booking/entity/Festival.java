@@ -1,5 +1,6 @@
 package com.mnms.booking.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,5 +53,6 @@ public class Festival {
     private int availableNOP; // 수용인원
 
     @OneToMany(mappedBy = "festival", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Schedule> schedules = new ArrayList<>();
 }

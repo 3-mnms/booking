@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 public class FestivalSelectDeliveryRequestDTO {
     private String festivalId;
-    private LocalDateTime performanceDate;
-    private int selectedTicketCount;
+    private String reservationNumber;
     private String deliveryMethod;
 }
