@@ -22,11 +22,6 @@ public class WaitingQueueSchedulingService {
     private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
-    @PostConstruct
-    public void init() {
-        scheduler.initialize();
-    }
-
     /**
      * 스케줄러 시작 (중복 시작 방지)
      */

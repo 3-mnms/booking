@@ -1,9 +1,9 @@
 package com.mnms.booking.dto.response;
 
 import com.mnms.booking.entity.Festival;
-import com.mnms.booking.entity.ReservationStatus;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.entity.Ticket;
-import com.mnms.booking.entity.TicketType;
+import com.mnms.booking.enums.TicketType;
 import lombok.*;
 
 import java.time.LocalDate;

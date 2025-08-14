@@ -5,20 +5,27 @@ import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.*;
 import com.mnms.booking.entity.*;
+import com.mnms.booking.enums.ReservationStatus;
+import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
+import com.mnms.kafka.booking.dto.PaymentSuccessEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -29,13 +36,15 @@ import java.util.UUID;
 public class BookingCommandService {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private static final int TEMP_RESERVATION_TTL_MINUTES = 1; // 임시 예약 유지 시간
 
     private final TicketRepository ticketRepository;
     private final QrCodeRepository qrCodeRepository;
     private final FestivalRepository festivalRepository;
     private final QrCodeService qrCodeService;
+    private final ThreadPoolTaskScheduler scheduler;
 
-    /// 1차: 임시 예약
+    /// 1차: 가예매 - 임시 예약
     @Transactional
     public String selectFestivalDate(BookingSelectRequestDTO request, Long userId) {
         Festival festival = getFestivalOrThrow(request.getFestivalId());
@@ -57,10 +66,14 @@ public class BookingCommandService {
                 .build();
 
         ticketRepository.save(ticket);
+
+        // TTL 스케줄링: 일정 시간 지나면 자동 삭제
+        scheduleTempReservationExpiration(ticket.getReservationNumber());
+
         return ticket.getReservationNumber();
     }
 
-    /// 2차: 배송 방법 선택
+    /// 2차: 가예매 - 배송 방법 선택
     @Transactional
     public void selectFestivalDelivery(BookingSelectDeliveryRequestDTO request, Long userId) {
         Ticket ticket = getTicketOrThrow(request.getFestivalId(), userId, request.getReservationNumber());
@@ -71,7 +84,7 @@ public class BookingCommandService {
         ticketRepository.save(ticket);
     }
 
-    /// 3차: 최종 예약 - QR생성
+    /// 3차: 가예매 - 최종 예약 - QR생성
     @Transactional
     public BookingResponseDTO reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = getFestivalOrThrow(request.getFestivalId());
@@ -84,6 +97,24 @@ public class BookingCommandService {
         ticket.setQrCode(qrCode);
         ticketRepository.save(ticket);
         return BookingResponseDTO.fromEntity(ticket);
+    }
+
+    ///  최종 예약 완료
+    public void confirmTicket(String reservationNumber) {
+        ticketRepository.findByReservationNumber(reservationNumber)
+                .ifPresent(ticket -> {
+                    ticket.setReservationStatus(ReservationStatus.CONFIRMED);
+                    ticketRepository.save(ticket);
+                });
+    }
+
+    /// schedule 점검
+    private void scheduleTempReservationExpiration(String reservationNumber) {
+        scheduler.schedule(() -> {
+            ticketRepository.findByReservationNumber(reservationNumber)
+                    .filter(t -> t.getReservationStatus() == ReservationStatus.TEMP_RESERVED)
+                    .ifPresent(ticketRepository::delete);
+        }, Instant.now().plus(TEMP_RESERVATION_TTL_MINUTES, ChronoUnit.MINUTES));
     }
 
     /// 검증

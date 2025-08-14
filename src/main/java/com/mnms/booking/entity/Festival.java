@@ -1,12 +1,11 @@
 package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mnms.booking.enums.EventType;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

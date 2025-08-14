@@ -85,9 +85,6 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
-    ///  POST : 가예매 -> 진예매 (결제 완료 확인 상태)
-
-
     ///  GET
     @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",

@@ -1,4 +1,4 @@
-package com.mnms.booking.entity;
+package com.mnms.booking.enums;
 
 public enum ReservationStatus {
     TEMP_RESERVED,     // 가예매 (결제 전)

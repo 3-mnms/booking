@@ -1,12 +1,12 @@
 package com.mnms.booking.entity;
 
+import com.mnms.booking.enums.ReservationStatus;
+import com.mnms.booking.enums.TicketType;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Id;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Builder @Getter
@@ -55,4 +55,5 @@ public class Ticket {
     }
     public void setDeliveryMethod(TicketType deliveryMethod){this.deliveryMethod = deliveryMethod;}
     public void setDeliveryDate(LocalDateTime deliveryDate){ this.deliveryDate = deliveryDate;}
+    public void setReservationStatus(ReservationStatus reservationStatus){ this.reservationStatus = reservationStatus; }
 }

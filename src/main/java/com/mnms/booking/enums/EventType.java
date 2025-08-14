@@ -1,4 +1,4 @@
-package com.mnms.booking.entity;
+package com.mnms.booking.enums;
 
 public enum EventType {
     FESTIVAL_CREATED,
