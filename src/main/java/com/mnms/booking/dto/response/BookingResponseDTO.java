@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class TicketResponseDTO {
+public class BookingResponseDTO {
 
     private Long id;
     private String reservationNumber;
@@ -23,8 +23,8 @@ public class TicketResponseDTO {
     private QrResponseDTO qrCode;
     private Festival festival;
 
-    public static TicketResponseDTO fromEntity(Ticket ticket) {
-        return TicketResponseDTO.builder()
+    public static BookingResponseDTO fromEntity(Ticket ticket) {
+        return BookingResponseDTO.builder()
                 .id(ticket.getId())
                 .reservationNumber(ticket.getReservationNumber())
                 .reservationStatus(ticket.getReservationStatus())

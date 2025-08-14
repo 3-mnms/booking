@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Getter
-public class FestivalSelectRequestDTO {
+public class BookingSelectRequestDTO {
     private String festivalId;
     private LocalDateTime performanceDate;
     private int selectedTicketCount;

@@ -1,5 +1,6 @@
 package com.mnms.booking.dto.response;
 
+import com.mnms.booking.entity.Festival;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,5 +19,16 @@ public class FestivalDetailResponseDTO {
 
     ///  ticket 정보
     private LocalDateTime performanceDate; // 선택 날짜,시간
+
+    public static FestivalDetailResponseDTO fromEntity(Festival festival, LocalDateTime performanceDate, List<ScheduleResponseDTO> schedules) {
+        return FestivalDetailResponseDTO.builder()
+                .fname(festival.getFname())
+                .ticketPrice(festival.getTicketPrice())
+                .posterFile(festival.getPosterFile())
+                .maxPurchase(festival.getMaxPurchase())
+                .performanceDate(performanceDate)
+                .schedules(schedules)
+                .build();
+    }
 
 }

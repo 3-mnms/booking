@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data @Getter
-public class FestivalRequestDTO {
+public class BookingRequestDTO {
     private String festivalId;
     private String reservationNumber;
 }
