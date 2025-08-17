@@ -1,5 +1,6 @@
 package com.mnms.booking.controller;
 
+import com.mnms.booking.dto.request.BookingCancelRequestDTO;
 import com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
@@ -84,6 +85,17 @@ public class BookingController {
         //return ResponseEntity.ok(response);
     }
 
+    ///  예매 취소
+    @PostMapping("/cancel")
+    @Operation(summary = "예매 취소",
+            description = "사용자가 예약한 티켓을 취소합니다. reservationNumber 필요")
+    public void cancelBooking(
+            @RequestBody BookingCancelRequestDTO request,
+            @AuthenticationPrincipal JwtPrincipal principal
+    ) {
+        bookingCommandService.cancelBooking(request.getReservationNumber(), principal.userId());
+    }
+
     ///  GET
     @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",
@@ -94,6 +106,4 @@ public class BookingController {
         UserInfoResponseDTO userInfo = userService.getUserInfoById(principal.userId());
         return ResponseEntity.ok(userInfo);
     }
-
-
 }

@@ -105,6 +105,7 @@ public class BookingCommandService {
         //return BookingResponseDTO.fromEntity(ticket);
     }
 
+
     ///  최종 예약 완료
     public void confirmTicket(String reservationNumber) {
         ticketRepository.findByReservationNumber(reservationNumber)
@@ -112,6 +113,26 @@ public class BookingCommandService {
                     ticket.setReservationStatus(ReservationStatus.CONFIRMED);
                     ticketRepository.save(ticket);
                 });
+    }
+
+    ///  예매 취소
+    @Transactional
+    public void cancelBooking(String reservationNumber, Long userId) {
+        Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
+
+        if(!ticket.getUserId().equals(userId)){
+            throw new BusinessException(ErrorCode.TICKET_USER_NOT_SAME);
+        }
+
+        if (ticket.getReservationStatus() == ReservationStatus.CANCELED) {
+            throw new BusinessException(ErrorCode.TICKET_ALREADY_CANCELED);
+        }
+
+        // qr 삭제 + ticket 상태 변경
+        ticket.getQrCodes().clear();
+        ticket.setReservationStatus(ReservationStatus.CANCELED);
+        ticketRepository.save(ticket);
     }
 
     /// schedule 점검
@@ -161,7 +182,7 @@ public class BookingCommandService {
 
     private void ensureDeliveryStepCompleted(Ticket ticket) {
         if (ticket.getDeliveryMethod() == null || ticket.getDeliveryDate() == null) {
-            throw new BusinessException(ErrorCode.FESTIVAL_DELIVERY_NOT_COMPLETED);
+            throw new BusinessException(ErrorCode.TICKET_DELIVERY_NOT_COMPLETED);
         }
     }
 
