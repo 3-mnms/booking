@@ -21,6 +21,9 @@ public class Festival {
     @Column(name = "event_type")
     private EventType eventType;
 
+    @Column(name = "organizer")
+    private Long organizer;
+
     @Column(name = "festival_id", unique = true, nullable = false, length = 20)
     private String festivalId; // 공연 고유 ID (PF000001)
 

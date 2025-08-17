@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -61,10 +60,7 @@ public class QrCodeService {
     }
 
 
-    /**
-     * 해당 Festival 주최자 QR 스캔
-     * @param qrCodeId, festivalId
-     */
+    /// 해당 Festival 주최자 QR 스캔
     @Transactional
     public void validateAndUseQrCode(Long userId, String qrCodeId) {
 
@@ -78,10 +74,10 @@ public class QrCodeService {
             throw new BusinessException(ErrorCode.QR_CODE_INVALID);
         }
 
-        /// 주최자 확인 -> 추후 수정
-//        if (!ticket.getFestival().getId().equals(/*여기에 userId를 통해 festivalId 조회*/)) {
-//            throw new BusinessException(ErrorCode.FESTIVAL_MISMATCH);
-//        }
+        // 주최자 확인
+        if (!ticket.getFestival().getOrganizer().equals(userId)) {
+            throw new BusinessException(ErrorCode.FESTIVAL_MISMATCH);
+        }
 
         // 만료 여부 확인
         if (qrCode.getExpiredAt().isBefore(LocalDateTime.now())) {
