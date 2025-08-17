@@ -20,7 +20,7 @@ public class WaitingService {
      * 사용자 대기열 진입 처리
      * @return 대기 순번 (즉시 입장 가능 시 0)
      */
-    public long enterWaitingQueue(String festivalId, LocalDateTime reservationDate, String loginId, long availableNOP) {
+    public long enterWaitingQueue(String festivalId, LocalDateTime reservationDate, String userId, long availableNOP) {
         String bookingUsersKey = waitingQueueKeyGenerator.getBookingUsersKey(festivalId, reservationDate);
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
@@ -28,16 +28,16 @@ public class WaitingService {
         long currentUserCount = waitingQueueRedisService.getBookingUserCount(bookingUsersKey);
 
         if (currentUserCount < availableNOP) {
-            log.info("User {} can enter booking page immediately ({} < {}).", loginId, currentUserCount, availableNOP);
-            waitingQueueRedisService.addBookingUser(bookingUsersKey, loginId);
+            log.info("User {} can enter booking page immediately ({} < {}).", userId, currentUserCount, availableNOP);
+            waitingQueueRedisService.addBookingUser(bookingUsersKey, userId);
             return 0L;
         } else {
-            waitingQueueRedisService.addUserToQueue(waitingQueueKey, loginId);
-            log.info("User {} added to waiting queue {}.", loginId, waitingQueueKey);
+            waitingQueueRedisService.addUserToQueue(waitingQueueKey, userId);
+            log.info("User {} added to waiting queue {}.", userId, waitingQueueKey);
 
             waitingQueueSchedulingService.startScheduler(waitingQueueKey, bookingUsersKey, notificationChannelKey, availableNOP);
 
-            return waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, loginId);
+            return waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
         }
     }
 

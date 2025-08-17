@@ -45,15 +45,15 @@ public class WaitingController {
             @RequestParam LocalDateTime reservationDate,
             @AuthenticationPrincipal JwtPrincipal principal) {
 
-        String loginId = principal != null ? principal.loginId() : "swagger-test-user";
+        String userId = principal != null ? String.valueOf(principal.userId()) : "swagger-test-user";
 
         int availableNOP = festivalService.getCapacity(festivalId); // 수용 인원 가져오기
-        long waitingNumber = waitingService.enterWaitingQueue(festivalId, reservationDate, loginId, availableNOP);
+        long waitingNumber = waitingService.enterWaitingQueue(festivalId, reservationDate, userId, availableNOP);
 
         if (waitingNumber == 0) {
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
+            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(loginId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
+            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
 
@@ -69,9 +69,9 @@ public class WaitingController {
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) { ///  예매칸에 있는 예매자 accessToken
-        String loginId = principal.loginId();
+        String userId = String.valueOf(principal.userId());
         try {
-            boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, loginId);
+            boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, userId);
             if (removed) {
                 return ResponseEntity.ok("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {
@@ -96,9 +96,9 @@ public class WaitingController {
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
-        String loginId = principal.loginId();
+        String userId = String.valueOf(principal.userId());
         try {
-            boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, loginId);
+            boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, userId);
             if (removed) {
                 return ResponseEntity.ok("대기하던 사용자가 대기열을 나갔습니다.");
             } else {
@@ -122,10 +122,10 @@ public class WaitingController {
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @AuthenticationPrincipal JwtPrincipal principal) {
-        String loginId = principal.loginId();
-        log.info("User {} subscribed to waiting queue updates.", loginId);
+        String userId = String.valueOf(principal.userId());
+        log.info("User {} subscribed to waiting queue updates.", userId);
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
-        waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, loginId);
+        waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
     }
 }
