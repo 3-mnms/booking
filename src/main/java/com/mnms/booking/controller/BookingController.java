@@ -6,7 +6,6 @@ import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.BookingDetailResponseDTO;
 import com.mnms.booking.dto.response.FestivalDetailResponseDTO;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
-import com.mnms.booking.dto.response.BookingResponseDTO;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
 import com.mnms.booking.service.UserService;
@@ -77,12 +76,12 @@ public class BookingController {
     @Operation(summary = "페스티벌 예매 티켓 생성",
             description = "사용자가 특정 페스티벌 티켓을 예약하기 위한 마지막 가예매 상태입니다."
     )
-    public ResponseEntity<BookingResponseDTO> reserveTicket(
+    public void reserveTicket(
             @Valid @RequestBody BookingRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
-        BookingResponseDTO response = bookingCommandService.reserveTicket(request, principal.userId());
-        return ResponseEntity.ok(response);
+        bookingCommandService.reserveTicket(request, principal.userId());
+        //return ResponseEntity.ok(response);
     }
 
     ///  GET

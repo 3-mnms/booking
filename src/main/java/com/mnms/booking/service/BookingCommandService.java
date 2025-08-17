@@ -13,6 +13,7 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,21 +25,19 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class BookingCommandService {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    private static final int TEMP_RESERVATION_TTL_MINUTES = 1; // 임시 예약 유지 시간
+    private static final int TEMP_RESERVATION_TTL_MINUTES = 5; // 가예매 유지 시간
 
     private final TicketRepository ticketRepository;
     private final QrCodeRepository qrCodeRepository;
@@ -54,7 +53,6 @@ public class BookingCommandService {
 
         validatePerformanceDate(festival, performanceDate);
         validateScheduleExists(festival, performanceDate);
-        validateTicketAvailability(festival, request.getSelectedTicketCount());
         validateUserReservationLimit(userId, request, festival);
 
         Ticket ticket = Ticket.builder()
@@ -88,7 +86,7 @@ public class BookingCommandService {
 
     /// 3차: 가예매 - 최종 예약 - QR생성
     @Transactional
-    public BookingResponseDTO reserveTicket(BookingRequestDTO request, Long userId) {
+    public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = getFestivalOrThrow(request.getFestivalId());
         Ticket ticket = getTicketByReservationNumberOrThrow(request.getReservationNumber());
 
@@ -104,7 +102,7 @@ public class BookingCommandService {
 
         ticketRepository.save(ticket);
 
-        return BookingResponseDTO.fromEntity(ticket);
+        //return BookingResponseDTO.fromEntity(ticket);
     }
 
     ///  최종 예약 완료
@@ -145,16 +143,18 @@ public class BookingCommandService {
         if (!exists) throw new BusinessException(ErrorCode.FESTIVAL_INVALID_TIME);
     }
 
-    private void validateTicketAvailability(Festival festival, int selectedTicketCount) {
-        if (festival.getAvailableNOP() < selectedTicketCount) {
+    private void validateUserReservationLimit(Long userId, BookingSelectRequestDTO request, Festival festival) {
+        int selectTicketCount = request.getSelectedTicketCount();
+        if (festival.getMaxPurchase() < selectTicketCount){
             throw new BusinessException(ErrorCode.TICKET_ALREADY_RESERVED);
         }
-    }
 
-    private void validateUserReservationLimit(Long userId, BookingSelectRequestDTO request, Festival festival) {
-        int alreadyReserved = ticketRepository.countByUserIdAndFestivalIdAndPerformanceDate(
-                userId, festival.getId(), request.getPerformanceDate());
-        if (alreadyReserved + request.getSelectedTicketCount() > festival.getMaxPurchase()) {
+        LocalDateTime startDate = request.getPerformanceDate();
+        LocalDateTime endDate = startDate.plusSeconds(1);
+
+        Long alreadyReserved = ticketRepository.sumSelectedTicketCount(
+                userId, festival.getFestivalId(), startDate, endDate);
+        if (alreadyReserved + selectTicketCount > festival.getMaxPurchase()) {
             throw new BusinessException(ErrorCode.TICKET_ALREADY_RESERVED);
         }
     }
