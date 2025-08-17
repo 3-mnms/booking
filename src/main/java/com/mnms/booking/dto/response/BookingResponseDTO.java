@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+// 추후에 지울 수 있음. - 가예매 3차에서 반환값으로 사용했었음.
 @Data
 @Builder
 public class BookingResponseDTO {
