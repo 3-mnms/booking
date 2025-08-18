@@ -1,12 +1,16 @@
 package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mnms.booking.dto.response.ScheduleResponseDTO;
+import com.mnms.kafka.booking.dto.ScheduleEventDTO;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
+@Builder
 public class Schedule {
 
     @Id
@@ -23,4 +27,13 @@ public class Schedule {
     @JoinColumn(name = "festival_id", nullable = false)
     @JsonBackReference
     private Festival festival;
+
+    public static Schedule fromDto(
+            ScheduleEventDTO schedule, Festival festival){
+        return Schedule.builder()
+                .dayOfWeek(schedule.getDayOfWeek())
+                .time(schedule.getTime())
+                .festival(festival)
+                .build();
+    }
 }

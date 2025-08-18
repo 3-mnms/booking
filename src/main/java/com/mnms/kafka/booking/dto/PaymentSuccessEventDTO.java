@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSuccessEvent {
+public class PaymentSuccessEventDTO {
     private String reservationNumber;
     private Long userId;
     private int amount; // 필요시 추가

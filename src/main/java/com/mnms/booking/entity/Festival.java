@@ -2,8 +2,11 @@ package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mnms.booking.enums.EventType;
+import com.mnms.kafka.booking.dto.FestivalEventDTO;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,17 +15,12 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 public class Festival {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // DB PK (자동증가)
-
-    @Column(name = "event_type")
-    private EventType eventType;
-
-    @Column(name = "organizer")
-    private Long organizer;
 
     @Column(name = "festival_id", unique = true, nullable = false, length = 20)
     private String festivalId; // 공연 고유 ID (PF000001)
@@ -54,7 +52,31 @@ public class Festival {
     @Column(name = "available_nop")
     private int availableNOP; // 수용인원
 
+    @Column(name = "event_type")
+    private EventType eventType;
+
+    @Column(name = "organizer")
+    private Long organizer;
+
     @OneToMany(mappedBy = "festival", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @Setter
     private List<Schedule> schedules = new ArrayList<>();
+
+    public static Festival fromDto(FestivalEventDTO dto) {
+        return Festival.builder()
+                .festivalId(dto.getFestivalId())
+                .fname(dto.getFname())
+                .fdfrom(dto.getFdfrom())
+                .fdto(dto.getFdto())
+                .posterFile(dto.getPosterFile())
+                .fcltynm(dto.getFcltynm())
+                .ticketPick(dto.getTicketPick())
+                .maxPurchase(dto.getMaxPurchase())
+                .ticketPrice(dto.getTicketPrice())
+                .availableNOP(dto.getAvailableNOP())
+                .eventType(dto.getEventType())
+                .organizer(dto.getOrganizer())
+                .build();
+    }
 }
