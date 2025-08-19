@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -34,4 +35,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     );
 
     Optional<Ticket> findByReservationNumber(String reservationNumber);
+
+    // host
+    @Query("SELECT DISTINCT t.userId FROM Ticket t WHERE t.festival.festivalId = :festivalId")
+    List<Long> findUserIdByFestivalId(@Param("festivalId") String festivalId);
+
 }

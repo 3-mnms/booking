@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    // 보안문자
+    SECURITY_NUMBER_INVALID("S001", "입력한 문자가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+
     // FESTIVAL
     FESTIVAL_NOT_FOUND("F001","입력 ID에 해당하는 페스티벌을 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
     FESTIVAL_INVALID_DATE("F002", "해당 날짜의 페스티벌을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -17,7 +20,9 @@ public enum ErrorCode {
     TICKET_ALREADY_RESERVED("T001", "예약 가능한 티켓 수를 초과하였습니다.", HttpStatus.CONFLICT),
     TICKET_NOT_FOUND("T002", "해당하는 티켓을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     TICKET_INVALID_DELIVERY_METHOD("T003", "수령 방법이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
-    FESTIVAL_DELIVERY_NOT_COMPLETED("T004", "티켓 수령 방법이 선택되지 않았습니다.", HttpStatus.BAD_REQUEST),
+    TICKET_DELIVERY_NOT_COMPLETED("T004", "티켓 수령 방법이 선택되지 않았습니다.", HttpStatus.BAD_REQUEST),
+    TICKET_USER_NOT_SAME("T005", "사용자가 티켓 소유자가 아닙니다.", HttpStatus.FORBIDDEN),
+    TICKET_ALREADY_CANCELED("T006", "티켓이 이미 예매 취소되었습니다.", HttpStatus.CONFLICT),
 
     // QR
     QR_CODE_SAVE_FAILED("Q001", "QR 코드 생성 또는 저장을 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),

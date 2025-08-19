@@ -7,7 +7,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.mnms.booking.dto.request.QrRequestDTO;
 import com.mnms.booking.entity.QrCode;
+import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.QrCodeService;
+import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,11 +50,11 @@ public class QrCodeController {
     @PostMapping(value = "/validate/{qrCodeId}")
     @Operation(summary = "QR 코드 스캔 및 유효성 검사",
             description = "qrCodeId와 사용자 ID로 QR 코드 유효성 검사 후 QR 사용 처리합니다.")
-    public ResponseEntity<Void> validateAndUseQrCode(
+    public ResponseEntity<SuccessResponse<Void>> validateAndUseQrCode(
             @PathVariable String qrCodeId,
             @AuthenticationPrincipal JwtPrincipal principal) {
 
         qrCodeService.validateAndUseQrCode(principal.userId(), qrCodeId);
-        return ResponseEntity.ok().build();
+        return ApiResponseUtil.success(null, "QR 스캔 완료");
     }
 }

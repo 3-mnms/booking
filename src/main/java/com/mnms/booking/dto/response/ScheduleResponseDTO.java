@@ -1,5 +1,6 @@
 package com.mnms.booking.dto.response;
 
+import com.mnms.booking.entity.Schedule;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

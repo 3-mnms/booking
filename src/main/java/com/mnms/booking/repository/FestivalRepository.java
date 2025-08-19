@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface FestivalRepository extends JpaRepository<Festival, Long> {
     // 필요한 커스텀 쿼리가 있으면 여기에 추가 작성 가능
     Optional<Festival> findByFestivalId(String festivalId);
+    Optional<Festival> findByOrganizer(Long organizer);
 }

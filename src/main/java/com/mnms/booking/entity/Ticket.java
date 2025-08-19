@@ -12,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Builder @Getter
-@Table(name = "ticket")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "ticket")
 public class Ticket {
 
     @Id
