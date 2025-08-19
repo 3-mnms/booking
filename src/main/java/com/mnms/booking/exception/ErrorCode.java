@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    // 보안문자
+    SECURITY_NUMBER_INVALID("S001", "입력한 문자가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+
     // FESTIVAL
     FESTIVAL_NOT_FOUND("F001","입력 ID에 해당하는 페스티벌을 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
     FESTIVAL_INVALID_DATE("F002", "해당 날짜의 페스티벌을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

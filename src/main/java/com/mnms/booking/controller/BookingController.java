@@ -7,9 +7,11 @@ import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.BookingDetailResponseDTO;
 import com.mnms.booking.dto.response.FestivalDetailResponseDTO;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
+import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
 import com.mnms.booking.service.UserService;
+import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,18 +36,18 @@ public class BookingController {
     @Operation(summary = "1차 : 예매 단계에서 선택한 예매 상세 조회",
             description = "festivalId와 performanceDate(사용자가 선택한 날짜 시간) 으로 공연 상세 정보를 조회합니다." +
                     "selectedTicketCount는 0으로 넣을 것!")
-    public FestivalDetailResponseDTO getFestivalDetail(@Valid @RequestBody BookingSelectRequestDTO request) {
-        return bookingQueryService.getFestivalDetail(request);
+    public ResponseEntity<SuccessResponse<FestivalDetailResponseDTO>> getFestivalDetail(@Valid @RequestBody BookingSelectRequestDTO request) {
+        return ApiResponseUtil.success(bookingQueryService.getFestivalDetail(request));
     }
 
     @GetMapping("/detail/phases/2")
     @Operation(summary = "2차 : 예매 단계에서 선택한 예매 상세 조회",
             description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
-    public BookingDetailResponseDTO getFestivalBookingDetail(
+    public ResponseEntity<SuccessResponse<BookingDetailResponseDTO>> getFestivalBookingDetail(
             @Valid @RequestBody BookingRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
-        return bookingQueryService.getFestivalBookingDetail(request, principal.userId());
+        return ApiResponseUtil.success(bookingQueryService.getFestivalBookingDetail(request, principal.userId()));
     }
 
 
@@ -54,22 +56,23 @@ public class BookingController {
     @Operation(summary = "페스티벌 특정 페스티벌 날짜, 시간, 매수 선택",
             description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수)를 입력하고 reservationNumber를 반환합니다."
     )
-    public String selectFestivalDate(
+    public ResponseEntity<SuccessResponse<String>> selectFestivalDate(
             @Valid @RequestBody BookingSelectRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
-        return bookingCommandService.selectFestivalDate(request, principal.userId());
+        return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, principal.userId()));
     }
 
     @PostMapping("/selectDeliveryMethod")
     @Operation(summary = "페스티벌 특정 페스티벌 티켓 수령 방법 선택",
             description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수), deliveryMethod(MOBILE or PAPER)"
     )
-    public void selectFestivalDelivery(
+    public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
         bookingCommandService.selectFestivalDelivery(request, principal.userId());
+        return ApiResponseUtil.success(null, "예매 티켓 수령 방법 선택 완료");
     }
 
     /// POST : 3차 예매 완료 (결제 직전)
@@ -77,23 +80,24 @@ public class BookingController {
     @Operation(summary = "페스티벌 예매 티켓 생성",
             description = "사용자가 특정 페스티벌 티켓을 예약하기 위한 마지막 가예매 상태입니다."
     )
-    public void reserveTicket(
+    public ResponseEntity<SuccessResponse<Void>> reserveTicket(
             @Valid @RequestBody BookingRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
         bookingCommandService.reserveTicket(request, principal.userId());
-        //return ResponseEntity.ok(response);
+        return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
     }
 
     ///  예매 취소
     @PostMapping("/cancel")
     @Operation(summary = "예매 취소",
             description = "사용자가 예약한 티켓을 취소합니다. reservationNumber 필요")
-    public void cancelBooking(
+    public ResponseEntity<SuccessResponse<Void>> cancelBooking(
             @RequestBody BookingCancelRequestDTO request,
             @AuthenticationPrincipal JwtPrincipal principal
     ) {
         bookingCommandService.cancelBooking(request.getReservationNumber(), principal.userId());
+        return ApiResponseUtil.success(null, "페스티벌 예매 취소");
     }
 
     ///  GET
@@ -102,8 +106,7 @@ public class BookingController {
             description = "예매 과정에서 예매자 정보를 조회합니다." +
                     "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
     )
-    public ResponseEntity<UserInfoResponseDTO> getUserInfo(@AuthenticationPrincipal JwtPrincipal principal) {
-        UserInfoResponseDTO userInfo = userService.getUserInfoById(principal.userId());
-        return ResponseEntity.ok(userInfo);
+    public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(@AuthenticationPrincipal JwtPrincipal principal) {
+        return ApiResponseUtil.success(userService.getUserInfoById(principal.userId()));
     }
 }

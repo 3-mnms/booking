@@ -101,8 +101,6 @@ public class BookingCommandService {
         );
 
         ticketRepository.save(ticket);
-
-        //return BookingResponseDTO.fromEntity(ticket);
     }
 
 

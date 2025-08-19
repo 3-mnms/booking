@@ -1,9 +1,11 @@
 package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
+import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.FestivalService;
 import com.mnms.booking.service.WaitingNotificationService;
 import com.mnms.booking.service.WaitingQueueKeyGenerator;
+import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.JwtPrincipal;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +42,7 @@ public class WaitingController {
 
     /// 예매하기 버튼(front) 클릭 시 호출되는 API
     @GetMapping("/enter")
-    public ResponseEntity<WaitingNumberResponseDTO> enterBookingPage(
+    public ResponseEntity<SuccessResponse<WaitingNumberResponseDTO>> enterBookingPage(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @AuthenticationPrincipal JwtPrincipal principal) {
@@ -51,9 +53,9 @@ public class WaitingController {
         long waitingNumber = waitingService.enterWaitingQueue(festivalId, reservationDate, userId, availableNOP);
 
         if (waitingNumber == 0) {
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
+            return ApiResponseUtil.success(new WaitingNumberResponseDTO(userId, 0, true, "REDIRECT_TO_BOOKING_PAGE"));
         } else {
-            return ResponseEntity.ok(new WaitingNumberResponseDTO(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
+            return ApiResponseUtil.success(new WaitingNumberResponseDTO(userId, waitingNumber, false, "WAITING_QUEUE_ENTERED"));
         }
     }
 
@@ -65,7 +67,7 @@ public class WaitingController {
                     "대기열에 있던 사용자가 예매 페이지로 입장 하게 됩니다. " +
                     "대기열에 있던 모든 대기자의 대기번호가 변경됩니다."
     )
-    public ResponseEntity<String> releaseUser(
+    public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) { ///  예매칸에 있는 예매자 accessToken
@@ -73,14 +75,12 @@ public class WaitingController {
         try {
             boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, userId);
             if (removed) {
-                return ResponseEntity.ok("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
+                return ApiResponseUtil.success("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("해당 사용자는 예매 사용자 목록에 없습니다.");
+                return ApiResponseUtil.fail("해당 사용자는 예매 사용자 목록에 없습니다.", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("서버 오류로 인해 사용자를 처리하지 못했습니다.");
+            return ApiResponseUtil.fail("서버 오류로 인해 사용자를 처리하지 못했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -92,7 +92,7 @@ public class WaitingController {
                     "호출 시 해당 사용자는 대기열에서 제거됩니다."
     )
     @GetMapping("/exit")
-    public ResponseEntity<String> exitWaitingUser(
+    public ResponseEntity<SuccessResponse<String>> exitWaitingUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
             @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
@@ -100,14 +100,12 @@ public class WaitingController {
         try {
             boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, userId);
             if (removed) {
-                return ResponseEntity.ok("대기하던 사용자가 대기열을 나갔습니다.");
+                return ApiResponseUtil.success("대기하던 사용자가 대기열을 나갔습니다.");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("해당 사용자는 대기열 목록에 없습니다.");
+                return ApiResponseUtil.fail("해당 사용자는 대기열 목록에 없습니다.", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("서버 오류로 인해 사용자를 처리하지 못했습니다.");
+            return ApiResponseUtil.fail("서버 오류로 인해 사용자를 처리하지 못했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
