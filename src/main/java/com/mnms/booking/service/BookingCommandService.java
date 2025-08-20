@@ -107,7 +107,7 @@ public class BookingCommandService {
         ticketRepository.save(ticket);
     }
 
-    ///  최종 완료
+    /// 최종 완료 - status 변경
     @Transactional
     public void confirmTicket(String reservationNumber, boolean paymentStatus) {
         Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
