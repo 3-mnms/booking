@@ -9,6 +9,7 @@ import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import com.mnms.booking.kafka.dto.PaymentSuccessEventDTO;
 import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
@@ -26,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -105,12 +107,16 @@ public class BookingCommandService {
 
 
     ///  최종 예약 완료
-    public void confirmTicket(String reservationNumber) {
-        ticketRepository.findByReservationNumber(reservationNumber)
-                .ifPresent(ticket -> {
-                    ticket.setReservationStatus(ReservationStatus.CONFIRMED);
-                    ticketRepository.save(ticket);
-                });
+    public void confirmTicket(String reservationNumber, Boolean paymentStatus) {
+        Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
+
+        if (paymentStatus) {
+            bookingTicket.setReservationStatus(ReservationStatus.CONFIRMED);
+        } else {
+            bookingTicket.setReservationStatus(ReservationStatus.CANCELED);
+        }
+        ticketRepository.save(bookingTicket);
     }
 
     ///  예매 취소

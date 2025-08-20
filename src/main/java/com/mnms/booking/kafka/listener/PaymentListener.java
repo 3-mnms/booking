@@ -16,7 +16,7 @@ public class PaymentListener {
 
     @KafkaListener(topics = "${app.kafka.topic.payment-event}", groupId = "booking-service-group",  containerFactory = "kafkaListenerContainerFactory")
     public void consumePaymentSuccess(PaymentSuccessEventDTO event) {
-        log.info("Received payment success event: {}", event);
-        bookingCommandService.confirmTicket(event.getReservationNumber());
+        log.info("Received payment success event: {}, {}", event.getReservationNumber(), event.getPaymentStatus());
+        bookingCommandService.confirmTicket(event.getReservationNumber(), event.getPaymentStatus());
     }
 }

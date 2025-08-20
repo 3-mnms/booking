@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentSuccessEventDTO {
     private String reservationNumber;
-    private Long userId;
-    private int amount; // 필요시 추가
+    private Boolean paymentStatus;
 }
