@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ScheduleResponseDTO {
-    private Long scheduleId; // 공연 일정 PK
     private String dayOfWeek; // 요일 코드
     private String time;      // 공연 시작 시간 (HH:mm)
 }
