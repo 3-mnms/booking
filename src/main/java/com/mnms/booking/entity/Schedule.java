@@ -1,13 +1,13 @@
 package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.mnms.kafka.booking.dto.ScheduleEventDTO;
+import com.mnms.booking.kafka.dto.ScheduleEventDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Builder
-@Getter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule {

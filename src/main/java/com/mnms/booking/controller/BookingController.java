@@ -10,9 +10,9 @@ import com.mnms.booking.dto.response.UserInfoResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
-import com.mnms.booking.service.UserService;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.JwtPrincipal;
+import com.mnms.booking.util.UserApiClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class BookingController {
 
     private final BookingCommandService bookingCommandService;
     private final BookingQueryService bookingQueryService;
-    private final UserService userService;
+    private final UserApiClient userApiClient;
 
     /// GET : 페스티벌 예매 정보 조회
     @GetMapping("/detail/phases/1")
@@ -107,6 +107,6 @@ public class BookingController {
                     "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
     )
     public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(@AuthenticationPrincipal JwtPrincipal principal) {
-        return ApiResponseUtil.success(userService.getUserInfoById(principal.userId()));
+        return ApiResponseUtil.success(userApiClient.getUserInfoById(principal.userId()));
     }
 }

@@ -2,13 +2,15 @@ package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mnms.booking.enums.EventType;
-import com.mnms.kafka.booking.dto.FestivalEventDTO;
+import com.mnms.booking.kafka.dto.FestivalEventDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -52,9 +54,6 @@ public class Festival {
     @Column(name = "available_nop")
     private int availableNOP; // 수용인원
 
-    @Column(name = "event_type")
-    private EventType eventType;
-
     @Column(name = "organizer")
     private Long organizer;
 
@@ -66,7 +65,7 @@ public class Festival {
 
     public static Festival fromDto(FestivalEventDTO dto) {
         return Festival.builder()
-                .festivalId(dto.getFestivalId())
+                .festivalId(dto.getId())
                 .fname(dto.getFname())
                 .fdfrom(dto.getFdfrom())
                 .fdto(dto.getFdto())
@@ -76,8 +75,44 @@ public class Festival {
                 .maxPurchase(dto.getMaxPurchase())
                 .ticketPrice(dto.getTicketPrice())
                 .availableNOP(dto.getAvailableNOP())
-                .eventType(dto.getEventType())
-                .organizer(dto.getOrganizer())
+                .organizer(dto.getUserId())
                 .build();
+    }
+
+    public void updateFromDto(FestivalEventDTO dto) {
+        if (dto.getFname() != null) this.fname = dto.getFname();
+        if (dto.getUserId() != null) this.organizer = dto.getUserId();
+        if (dto.getPosterFile() != null) this.posterFile = dto.getPosterFile();
+        if (dto.getFdfrom() != null) this.fdfrom = dto.getFdfrom();
+        if (dto.getFdto() != null) this.fdto = dto.getFdto();
+        if (dto.getFcltynm() != null) this.fcltynm = dto.getFcltynm();
+        if (dto.getMaxPurchase() != 0) this.maxPurchase = dto.getMaxPurchase();
+        if (dto.getAvailableNOP() != 0) this.availableNOP = dto.getAvailableNOP();
+        if (dto.getTicketPrice() != 0) this.ticketPrice = dto.getTicketPrice();
+        if (dto.getTicketPick() != 0) this.ticketPick = dto.getTicketPick();
+    }
+
+    public void mergeSchedules(List<Schedule> updatedSchedules) {
+        Map<Long, Schedule> existingMap = this.schedules.stream()
+                .collect(Collectors.toMap(Schedule::getScheduleId, s -> s));
+
+        List<Schedule> merged = new ArrayList<>();
+
+        for (Schedule updated : updatedSchedules) {
+            Schedule schedule = existingMap.get(updated.getScheduleId());
+            if (schedule != null) {
+                schedule.setScheduleId(updated.getScheduleId());
+                schedule.setDayOfWeek(updated.getDayOfWeek());
+                schedule.setTime(updated.getTime());
+                merged.add(schedule);
+            } else {
+                updated.setFestival(this);
+                merged.add(updated);
+            }
+        }
+
+        // 기존에 있고 이번 업데이트에 없는 스케줄은 제거
+        this.schedules.clear();
+        this.schedules.addAll(merged);
     }
 }

@@ -1,4 +1,4 @@
-package com.mnms.kafka.booking.dto;
+package com.mnms.booking.kafka.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

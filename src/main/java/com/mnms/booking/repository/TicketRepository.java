@@ -1,5 +1,6 @@
 package com.mnms.booking.repository;
 
+import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,4 +46,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             "AND t.performanceDate = :performanceDate")
     List<Long> findDistinctUserIdsByFestivalIdAndPerformanceDate(@Param("festivalId") String festivalId,
                                                            @Param("performanceDate") LocalDateTime performanceDate);
+
+
+    @Query("SELECT t " +
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId ")
+    List<Ticket> findByFestivalId(String festivalId);
 }

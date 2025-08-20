@@ -1,7 +1,7 @@
-package com.mnms.kafka.booking.listener;
+package com.mnms.booking.kafka.listener;
 
+import com.mnms.booking.kafka.dto.PaymentSuccessEventDTO;
 import com.mnms.booking.service.BookingCommandService;
-import com.mnms.kafka.booking.dto.PaymentSuccessEventDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
