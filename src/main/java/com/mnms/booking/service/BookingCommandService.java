@@ -103,7 +103,6 @@ public class BookingCommandService {
                         .mapToObj(i -> createAndSaveQrCode(userId, festival, ticket))
                         .toList()
         );
-
         ticketRepository.save(ticket);
     }
 

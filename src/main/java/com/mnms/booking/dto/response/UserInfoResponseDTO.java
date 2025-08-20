@@ -8,8 +8,5 @@ import java.util.List;
 @Data
 @Builder
 public class UserInfoResponseDTO {
-    private String phone;
     private String email;
-    private List<AddressResponseDTO> address;
-    private String birth;
 }
