@@ -49,6 +49,10 @@ public class Ticket {
     private int selectedTicketCount; // 선택 매수
 
     @Setter
+    @Column(name = "address")
+    private String address; // 수령주소
+
+    @Setter
     @Builder.Default
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QrCode> qrCodes = new ArrayList<>();

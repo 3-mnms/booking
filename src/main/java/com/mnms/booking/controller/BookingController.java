@@ -64,8 +64,8 @@ public class BookingController {
     }
 
     @PostMapping("/selectDeliveryMethod")
-    @Operation(summary = "페스티벌 특정 페스티벌 티켓 수령 방법 선택",
-            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수), deliveryMethod(MOBILE or PAPER)"
+    @Operation(summary = "페스티벌 특정 페스티벌 티켓 수령 방법, 주소 선택",
+            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수), deliveryMethod(MOBILE or PAPER), address(String)"
     )
     public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,

@@ -82,9 +82,11 @@ public class BookingCommandService {
     public void selectFestivalDelivery(BookingSelectDeliveryRequestDTO request, Long userId) {
         Ticket ticket = getTicketOrThrow(request.getFestivalId(), userId, request.getReservationNumber());
         TicketType type = parseDeliveryMethod(request.getDeliveryMethod());
-
         ticket.setDeliveryMethod(type);
-        ticket.setDeliveryDate(calculateDeliveryDate(ticket, type));
+        if(TicketType.PAPER.equals(type)){
+            ticket.setAddress(request.getAddress());
+            ticket.setDeliveryDate(calculateDeliveryDate(ticket, type));
+        }
         ticketRepository.save(ticket);
     }
 
@@ -192,7 +194,7 @@ public class BookingCommandService {
     }
 
     private void ensureDeliveryStepCompleted(Ticket ticket) {
-        if (ticket.getDeliveryMethod() == null || ticket.getDeliveryDate() == null) {
+        if (ticket.getDeliveryMethod() == null && ticket.getDeliveryDate() == null) {
             throw new BusinessException(ErrorCode.TICKET_DELIVERY_NOT_COMPLETED);
         }
     }
