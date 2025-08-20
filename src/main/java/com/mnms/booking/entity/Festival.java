@@ -1,10 +1,10 @@
 package com.mnms.booking.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.mnms.booking.enums.EventType;
 import com.mnms.booking.kafka.dto.FestivalEventDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -92,6 +92,7 @@ public class Festival {
         if (dto.getTicketPick() != 0) this.ticketPick = dto.getTicketPick();
     }
 
+    @Transactional
     public void mergeSchedules(List<Schedule> updatedSchedules) {
         Map<Long, Schedule> existingMap = this.schedules.stream()
                 .collect(Collectors.toMap(Schedule::getScheduleId, s -> s));

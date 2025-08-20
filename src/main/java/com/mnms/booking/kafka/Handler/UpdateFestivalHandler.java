@@ -5,6 +5,7 @@ import com.mnms.booking.kafka.dto.FestivalEventDTO;
 import com.mnms.booking.repository.FestivalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class UpdateFestivalHandler implements FestivalEventHandler {
     private final FestivalRepository festivalRepository;
 
     @Override
+    @Transactional
     public void handle(FestivalEventDTO dto) {
         festivalRepository.findByFestivalId(dto.getId())
                 .ifPresent(festival -> {

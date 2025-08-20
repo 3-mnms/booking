@@ -29,7 +29,7 @@ public class HostController {
         return ApiResponseUtil.success(hostService.getBookingsByOrganizer(hostRequestDTO));
     }
 
-    // 주최자 측 예매자 조회
+    /// 주최자 측 예매자 조회
     @PostMapping("/booking/list")
     public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(@RequestBody Long hostUserId) {
         List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(hostUserId);
