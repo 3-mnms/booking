@@ -15,6 +15,7 @@ import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +40,14 @@ import java.util.stream.IntStream;
 public class BookingCommandService {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    private static final int TEMP_RESERVATION_TTL_MINUTES = 5; // 가예매 유지 시간
+    private static final int TEMP_RESERVATION_TTL_MINUTES = 30; // 가예매 유지 시간
 
     private final TicketRepository ticketRepository;
     private final QrCodeRepository qrCodeRepository;
     private final FestivalRepository festivalRepository;
     private final QrCodeService qrCodeService;
     private final ThreadPoolTaskScheduler scheduler;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /// 1차: 가예매 - 임시 예약
     @Transactional
@@ -86,7 +88,7 @@ public class BookingCommandService {
         ticketRepository.save(ticket);
     }
 
-    /// 3차: 가예매 - 최종 예약 - QR생성
+    /// 3차: 가예매 - 예약 - QR생성
     @Transactional
     public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = getFestivalOrThrow(request.getFestivalId());
@@ -105,18 +107,24 @@ public class BookingCommandService {
         ticketRepository.save(ticket);
     }
 
-
-    ///  최종 예약 완료
-    public void confirmTicket(String reservationNumber, Boolean paymentStatus) {
+    ///  최종 완료
+    @Transactional
+    public void confirmTicket(String reservationNumber, boolean paymentStatus) {
         Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
-                        .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        if (paymentStatus) {
-            bookingTicket.setReservationStatus(ReservationStatus.CONFIRMED);
-        } else {
-            bookingTicket.setReservationStatus(ReservationStatus.CANCELED);
-        }
+        // 결제 상태 변경
+        ReservationStatus newStatus = paymentStatus ?
+                ReservationStatus.CONFIRMED :
+                ReservationStatus.CANCELED;
+        bookingTicket.setReservationStatus(newStatus);
         ticketRepository.save(bookingTicket);
+
+        // WebSocket 전송
+        messagingTemplate.convertAndSend(
+                "/topic/ticket-status",
+                new TicketStatusResponseDTO(bookingTicket.getReservationNumber(), newStatus)
+        );
     }
 
     ///  예매 취소
