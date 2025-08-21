@@ -1,18 +1,16 @@
-# Production runtime for Spring Boot (Java 17)
-FROM eclipse-temurin:17-jre-alpine
-
-# Create non-root user
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring
-
+# -------- build stage --------
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
+COPY gradlew gradlew
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
+COPY src src
+RUN chmod +x gradlew && ./gradlew bootJar --no-daemon
 
-# Copy built jar from Gradle output (placed by CI step './gradlew bootJar')
-# If multiple jars exist, the newest will be chosen at build time by the builder.
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} /app/app.jar
-
+# -------- run stage --------
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+# 빌드 산출물 복사 (이름 모르면 * 로)
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75"
-
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]
