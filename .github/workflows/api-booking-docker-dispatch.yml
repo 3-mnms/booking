@@ -60,8 +60,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # develop → 두 환경 모두 디스패치
-      - name: Dispatch to GitOps (develop-gke)
+      # develop → 한번만 디스패치 (두 타깃 동시)
+      - name: Dispatch to GitOps (develop-gke + develop-aws)
         if: ${{ github.ref_name == 'develop' }}
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -73,25 +73,10 @@ jobs:
               "service": "${{ env.SERVICE }}",
               "image":   "${{ env.IMAGE }}",
               "tag":     "${{ env.TAG }}",
-              "env":     "develop-gke"
+              "targets": "develop-gke,develop-aws"
             }
 
-      - name: Dispatch to GitOps (develop-aws)
-        if: ${{ github.ref_name == 'develop' }}
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token:  ${{ secrets.GH_PAT }}
-          repository: ${{ env.DEVOPS_REPO }}
-          event-type: image-updated
-          client-payload: |
-            {
-              "service": "${{ env.SERVICE }}",
-              "image":   "${{ env.IMAGE }}",
-              "tag":     "${{ env.TAG }}",
-              "env":     "develop-aws"
-            }
-
-      # main → prod 디스패치
+      # main → prod
       - name: Dispatch to GitOps (prod)
         if: ${{ github.ref_name == 'main' }}
         uses: peter-evans/repository-dispatch@v3
