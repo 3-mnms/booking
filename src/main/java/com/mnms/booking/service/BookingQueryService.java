@@ -88,7 +88,6 @@ public class BookingQueryService {
         return scheduleRepository.findByFestivalId(festival.getFestivalId())
                 .stream()
                 .map(s -> ScheduleResponseDTO.builder()
-                        .scheduleId(s.getScheduleId())
                         .dayOfWeek(s.getDayOfWeek())
                         .time(s.getTime())
                         .build())

@@ -1,5 +1,6 @@
 package com.mnms.booking.repository;
 
+import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,7 +28,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("endDate") LocalDateTime endDate);
 
 
-    @Query("SELECT t FROM Ticket t WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.reservationNumber = :reservationNumber")
+    @Query("SELECT t " +
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.reservationNumber = :reservationNumber")
     Optional<Ticket> findByFestivalIdAndUserIdAndReservationNumber(
             @Param("festivalId") String festivalId,
             @Param("userId") Long userId,
@@ -37,7 +40,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Optional<Ticket> findByReservationNumber(String reservationNumber);
 
     // host
-    @Query("SELECT DISTINCT t.userId FROM Ticket t WHERE t.festival.festivalId = :festivalId")
-    List<Long> findUserIdByFestivalId(@Param("festivalId") String festivalId);
+    @Query("SELECT DISTINCT t.userId " +
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId " +
+            "AND t.performanceDate = :performanceDate")
+    List<Long> findDistinctUserIdsByFestivalIdAndPerformanceDate(@Param("festivalId") String festivalId,
+                                                           @Param("performanceDate") LocalDateTime performanceDate);
 
+
+    @Query("SELECT t " +
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId ")
+    List<Ticket> findByFestivalId(String festivalId);
 }

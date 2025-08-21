@@ -9,4 +9,5 @@ public class BookingSelectDeliveryRequestDTO {
     private String festivalId;
     private String reservationNumber;
     private String deliveryMethod;
+    private String address;
 }
