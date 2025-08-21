@@ -2,12 +2,15 @@ package com.mnms.booking.util;
 
 import com.mnms.booking.dto.response.BookingUserInfoResponseDTO;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
+import com.mnms.booking.exception.BusinessException;
+import com.mnms.booking.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +29,6 @@ public class UserApiClient {
     private String userServiceUrl;
 
     public List<BookingUserInfoResponseDTO> getUsersByIds(List<Long> userIds) {
-        //return restTemplate.postForObject(bookingUserServiceUrl, userIds, List.class);
         ResponseEntity<List<BookingUserInfoResponseDTO>> response =
                 restTemplate.exchange(
                         userServiceUrl,
@@ -40,5 +42,13 @@ public class UserApiClient {
     public UserInfoResponseDTO getUserInfoById(Long userId) {
         String url = String.format("%s/%d", userServiceUrl, userId);
         return restTemplate.getForObject(url, UserInfoResponseDTO.class);
+    }
+
+    public Long requireUserId(Authentication authentication) {
+        try {
+            return Long.parseLong(authentication.getName());
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ErrorCode.USER_INVALID);
+        }
     }
 }

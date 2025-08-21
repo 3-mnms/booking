@@ -6,7 +6,7 @@ import com.mnms.booking.service.FestivalService;
 import com.mnms.booking.service.WaitingNotificationService;
 import com.mnms.booking.service.WaitingQueueKeyGenerator;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.JwtPrincipal;
+import com.mnms.booking.util.UserApiClient;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class WaitingController {
     private final FestivalService festivalService;
     private final WaitingQueueKeyGenerator waitingQueueKeyGenerator;
     private final WaitingNotificationService waitingNotificationService;
+    private final UserApiClient userApiClient;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -45,9 +47,9 @@ public class WaitingController {
     public ResponseEntity<SuccessResponse<WaitingNumberResponseDTO>> enterBookingPage(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
-            @AuthenticationPrincipal JwtPrincipal principal) {
+            Authentication authentication) {
 
-        String userId = principal != null ? String.valueOf(principal.userId()) : "swagger-test-user";
+        String userId =  authentication != null ? getUserId(authentication) : "swagger-test-user";
 
         int availableNOP = festivalService.getCapacity(festivalId); // 수용 인원 가져오기
         long waitingNumber = waitingService.enterWaitingQueue(festivalId, reservationDate, userId, availableNOP);
@@ -70,10 +72,9 @@ public class WaitingController {
     public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
-            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) { ///  예매칸에 있는 예매자 accessToken
-        String userId = String.valueOf(principal.userId());
+            @Parameter(hidden = true) Authentication authentication) { ///  예매칸에 있는 예매자 accessToken
         try {
-            boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, userId);
+            boolean removed = waitingService.userExitBookingPage(festivalId, reservationDate, getUserId(authentication));
             if (removed) {
                 return ApiResponseUtil.success("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {
@@ -95,10 +96,9 @@ public class WaitingController {
     public ResponseEntity<SuccessResponse<String>> exitWaitingUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
-            @Parameter(hidden = true) @AuthenticationPrincipal JwtPrincipal principal) {
-        String userId = String.valueOf(principal.userId());
+            @Parameter(hidden = true) Authentication authentication) {
         try {
-            boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, userId);
+            boolean removed = waitingService.removeUserFromQueue(festivalId, reservationDate, getUserId(authentication));
             if (removed) {
                 return ApiResponseUtil.success("대기하던 사용자가 대기열을 나갔습니다.");
             } else {
@@ -119,11 +119,15 @@ public class WaitingController {
     public void subscribeWaitingQueue(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
-            @AuthenticationPrincipal JwtPrincipal principal) {
-        String userId = String.valueOf(principal.userId());
+            Authentication authentication) {
+        String userId = getUserId(authentication);
         log.info("User {} subscribed to waiting queue updates.", userId);
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
         waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
+    }
+
+    public String getUserId(Authentication authentication) {
+        return String.valueOf(userApiClient.requireUserId(authentication));
     }
 }

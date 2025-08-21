@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    // USER
+    USER_INVALID("U001", "잘못된 사용자 ID 형식입니다", HttpStatus.BAD_REQUEST),
+
     // 보안문자
     SECURITY_NUMBER_INVALID("S001", "입력한 문자가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 
