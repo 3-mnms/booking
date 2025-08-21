@@ -1,7 +1,6 @@
 package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.request.HostRequestDTO;
-import com.mnms.booking.dto.response.BookingUserInfoResponseDTO;
 import com.mnms.booking.dto.response.HostResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.HostService;

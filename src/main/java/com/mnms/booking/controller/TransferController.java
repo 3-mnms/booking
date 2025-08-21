@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class TransferController {
     private final TransferService transferService;
 
-
     @PostMapping
     public void transferController(@RequestParam("file") MultipartFile image, HttpServletRequest request){
         transferService.callOcr(image);

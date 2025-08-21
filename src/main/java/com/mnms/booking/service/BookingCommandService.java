@@ -27,6 +27,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -94,18 +95,40 @@ public class BookingCommandService {
     @Transactional
     public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = getFestivalOrThrow(request.getFestivalId());
-        Ticket ticket = getTicketByReservationNumberOrThrow(request.getReservationNumber());
+        Long selectedTicketCount = ticketRepository.findSelectedTicketCountByReservationNumber(request.getReservationNumber());
 
+        validateCapacity(festival, request, selectedTicketCount);
+
+        Ticket ticket = getTicketByReservationNumberOrThrow(request.getReservationNumber());
+        ticket.setReservationStatus(ReservationStatus.PAYMENT_IN_PROGRESS);
         ensureDeliveryStepCompleted(ticket);
 
-        // 기존 QR 코드 초기화
+        regenerateQrCodes(ticket, userId, festival);
+
+        ticketRepository.save(ticket);
+    }
+
+    private void validateCapacity(Festival festival, BookingRequestDTO request, Long selectedTicketCount) {
+        int totalCount = ticketRepository.getTotalSelectedTicketCount(
+                request.getFestivalId(),
+                request.getPerformanceDate(),
+                List.of(ReservationStatus.CONFIRMED, ReservationStatus.PAYMENT_IN_PROGRESS)
+        );
+
+        log.info("total selected ticket count : {}", totalCount);
+
+        if (totalCount + selectedTicketCount > festival.getAvailableNOP()) {
+            throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVALIABLE_PEOPLE);
+        }
+    }
+
+    private void regenerateQrCodes(Ticket ticket, Long userId, Festival festival) {
         ticket.getQrCodes().clear();
         ticket.getQrCodes().addAll(
                 IntStream.range(0, ticket.getSelectedTicketCount())
                         .mapToObj(i -> createAndSaveQrCode(userId, festival, ticket))
                         .toList()
         );
-        ticketRepository.save(ticket);
     }
 
     /// 최종 완료 - status 변경
@@ -130,21 +153,21 @@ public class BookingCommandService {
 
     ///  예매 취소
     @Transactional
-    public void cancelBooking(String reservationNumber, Long userId) {
+    public void cancelBooking(String reservationNumber, boolean paymentStatus) {
         Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        if(!ticket.getUserId().equals(userId)){
-            throw new BusinessException(ErrorCode.TICKET_USER_NOT_SAME);
-        }
+        ReservationStatus status = paymentStatus
+                ? ReservationStatus.CANCELED
+                : ticket.getReservationStatus();
 
-        if (ticket.getReservationStatus() == ReservationStatus.CANCELED) {
-            throw new BusinessException(ErrorCode.TICKET_ALREADY_CANCELED);
+        if (ticket.getReservationStatus() == ReservationStatus.CONFIRMED) {
+            throw new BusinessException(ErrorCode.TICKET_FAIL_CANCEL);
         }
 
         // qr 삭제 + ticket 상태 변경
         ticket.getQrCodes().clear();
-        ticket.setReservationStatus(ReservationStatus.CANCELED);
+        ticket.setReservationStatus(status);
         ticketRepository.save(ticket);
     }
 

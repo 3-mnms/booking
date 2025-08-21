@@ -18,7 +18,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -87,18 +86,6 @@ public class BookingController {
     ) {
         bookingCommandService.reserveTicket(request, userApiClient.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
-    }
-
-    ///  예매 취소
-    @PostMapping("/cancel")
-    @Operation(summary = "예매 취소",
-            description = "사용자가 예약한 티켓을 취소합니다. reservationNumber 필요")
-    public ResponseEntity<SuccessResponse<Void>> cancelBooking(
-            @RequestBody BookingCancelRequestDTO request,
-            Authentication authentication
-    ) {
-        bookingCommandService.cancelBooking(request.getReservationNumber(), userApiClient.requireUserId(authentication));
-        return ApiResponseUtil.success(null, "페스티벌 예매 취소");
     }
 
     ///  GET

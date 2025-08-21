@@ -18,14 +18,16 @@ public enum ErrorCode {
     FESTIVAL_INVALID_TIME("F003", "해당 시간의 페스티벌을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FESTIVAL_DELIVERY_INVALID("F004", "유효하지 않은 배송 방법입니다.", HttpStatus.BAD_REQUEST),
     FESTIVAL_MISMATCH("F005", "해당하는 QR의 페스티벌 주최자가 아닙니다.", HttpStatus.FORBIDDEN),
-
+    FESTIVAL_LIMIT_AVALIABLE_PEOPLE("F006", "해당 페스티벌 수용 인원이 초과되어 예매를 진행할 수 없습니다.", HttpStatus.CONFLICT),
+    
     // TICKET
     TICKET_ALREADY_RESERVED("T001", "예약 가능한 티켓 수를 초과하였습니다.", HttpStatus.CONFLICT),
     TICKET_NOT_FOUND("T002", "해당하는 티켓을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     TICKET_INVALID_DELIVERY_METHOD("T003", "수령 방법이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     TICKET_DELIVERY_NOT_COMPLETED("T004", "티켓 수령 방법이 선택되지 않았습니다.", HttpStatus.BAD_REQUEST),
-    TICKET_USER_NOT_SAME("T005", "사용자가 티켓 소유자가 아닙니다.", HttpStatus.FORBIDDEN),
-    TICKET_ALREADY_CANCELED("T006", "티켓이 이미 예매 취소되었습니다.", HttpStatus.CONFLICT),
+    TICKET_FAIL_CANCEL("T005", "티켓 취소가 실패했습니다.", HttpStatus.CONFLICT),
+    TICKET_USER_NOT_SAME("T006", "사용자가 티켓 소유자가 아닙니다.", HttpStatus.FORBIDDEN),
+    TICKET_ALREADY_CANCELED("T007", "티켓이 이미 예매 취소되었습니다.", HttpStatus.CONFLICT),
 
     // QR
     QR_CODE_SAVE_FAILED("Q001", "QR 코드 생성 또는 저장을 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
