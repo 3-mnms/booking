@@ -30,9 +30,10 @@ public enum ErrorCode {
     QR_CODE_NOT_FOUND("Q003", "QR 코드를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     QR_CODE_INVALID("Q004", "QR 코드가 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
     QR_CODE_EXPIRED("Q005", "QR 코드의 만료일이 지났습니다.", HttpStatus.GONE),
-    QR_CODE_ALREADY_USED("Q006", "QR 코드가 이미 사용되었습니다.", HttpStatus.CONFLICT);
+    QR_CODE_ALREADY_USED("Q006", "QR 코드가 이미 사용되었습니다.", HttpStatus.CONFLICT),
 
-
+    // Transfer
+    TRANSFER_NOT_VALID_FILE_TYPE("TR001","유효하지 않은 파일 확장자입니다.",HttpStatus.NOT_ACCEPTABLE);
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지
     private final HttpStatus status;  //http status 코드
