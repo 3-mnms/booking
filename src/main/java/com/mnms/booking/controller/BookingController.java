@@ -11,13 +11,13 @@ import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.JwtPrincipal;
 import com.mnms.booking.util.UserApiClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +45,10 @@ public class BookingController {
             description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
     public ResponseEntity<SuccessResponse<BookingDetailResponseDTO>> getFestivalBookingDetail(
             @Valid @RequestBody BookingRequestDTO request,
-            @AuthenticationPrincipal JwtPrincipal principal
+            Authentication authentication
     ) {
-        return ApiResponseUtil.success(bookingQueryService.getFestivalBookingDetail(request, principal.userId()));
+        Long userId = userApiClient.requireUserId(authentication);
+        return ApiResponseUtil.success(bookingQueryService.getFestivalBookingDetail(request, userId));
     }
 
 
@@ -58,9 +59,9 @@ public class BookingController {
     )
     public ResponseEntity<SuccessResponse<String>> selectFestivalDate(
             @Valid @RequestBody BookingSelectRequestDTO request,
-            @AuthenticationPrincipal JwtPrincipal principal
+            Authentication authentication
     ) {
-        return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, principal.userId()));
+        return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, userApiClient.requireUserId(authentication)));
     }
 
     @PostMapping("/selectDeliveryMethod")
@@ -69,9 +70,9 @@ public class BookingController {
     )
     public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
-            @AuthenticationPrincipal JwtPrincipal principal
+            Authentication authentication
     ) {
-        bookingCommandService.selectFestivalDelivery(request, principal.userId());
+        bookingCommandService.selectFestivalDelivery(request, userApiClient.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 수령 방법 선택 완료");
     }
 
@@ -82,9 +83,9 @@ public class BookingController {
     )
     public ResponseEntity<SuccessResponse<Void>> reserveTicket(
             @Valid @RequestBody BookingRequestDTO request,
-            @AuthenticationPrincipal JwtPrincipal principal
+            Authentication authentication
     ) {
-        bookingCommandService.reserveTicket(request, principal.userId());
+        bookingCommandService.reserveTicket(request, userApiClient.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
     }
 
@@ -94,9 +95,9 @@ public class BookingController {
             description = "사용자가 예약한 티켓을 취소합니다. reservationNumber 필요")
     public ResponseEntity<SuccessResponse<Void>> cancelBooking(
             @RequestBody BookingCancelRequestDTO request,
-            @AuthenticationPrincipal JwtPrincipal principal
+            Authentication authentication
     ) {
-        bookingCommandService.cancelBooking(request.getReservationNumber(), principal.userId());
+        bookingCommandService.cancelBooking(request.getReservationNumber(), userApiClient.requireUserId(authentication));
         return ApiResponseUtil.success(null, "페스티벌 예매 취소");
     }
 
@@ -106,7 +107,7 @@ public class BookingController {
             description = "예매 과정에서 예매자 정보를 조회합니다." +
                     "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
     )
-    public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(@AuthenticationPrincipal JwtPrincipal principal) {
-        return ApiResponseUtil.success(userApiClient.getUserInfoById(principal.userId()));
+    public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(Authentication authentication) {
+        return ApiResponseUtil.success(userApiClient.getUserInfoById(userApiClient.requireUserId(authentication)));
     }
 }

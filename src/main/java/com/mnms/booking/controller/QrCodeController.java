@@ -1,26 +1,19 @@
 package com.mnms.booking.controller;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.mnms.booking.dto.request.QrRequestDTO;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.QrCodeService;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.JwtPrincipal;
+import com.mnms.booking.util.UserApiClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +22,7 @@ import java.time.LocalDateTime;
 public class QrCodeController {
 
     private final QrCodeService qrCodeService;
+    private final UserApiClient userApiClient;
 
     /// Qrcode 이미지 조회
     @GetMapping(value = "/image/{qrCodeId}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -52,9 +46,9 @@ public class QrCodeController {
             description = "qrCodeId와 사용자 ID로 QR 코드 유효성 검사 후 QR 사용 처리합니다.")
     public ResponseEntity<SuccessResponse<Void>> validateAndUseQrCode(
             @PathVariable String qrCodeId,
-            @AuthenticationPrincipal JwtPrincipal principal) {
+            Authentication authentication) {
 
-        qrCodeService.validateAndUseQrCode(principal.userId(), qrCodeId);
+        qrCodeService.validateAndUseQrCode(userApiClient.requireUserId(authentication), qrCodeId);
         return ApiResponseUtil.success(null, "QR 스캔 완료");
     }
 }
