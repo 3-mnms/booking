@@ -31,10 +31,8 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew bootJar --no-daemon
 
-      - name: ⏱️ Tag & Env
-        run: |
-          echo "TAG=v$(date -u +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then echo "ENV=prod" >> $GITHUB_ENV; else echo "ENV=develop" >> $GITHUB_ENV; fi
+      - name: ⏱️ Tag
+        run: echo "TAG=v$(date -u +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - uses: docker/setup-buildx-action@v3
 
@@ -62,7 +60,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Dispatch to GitOps
+      # develop → 두 환경 모두 디스패치
+      - name: Dispatch to GitOps (develop-gke)
+        if: ${{ github.ref_name == 'develop' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token:  ${{ secrets.GH_PAT }}
@@ -73,5 +73,36 @@ jobs:
               "service": "${{ env.SERVICE }}",
               "image":   "${{ env.IMAGE }}",
               "tag":     "${{ env.TAG }}",
-              "env":     "${{ env.ENV }}"
+              "env":     "develop-gke"
+            }
+
+      - name: Dispatch to GitOps (develop-aws)
+        if: ${{ github.ref_name == 'develop' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "env":     "develop-aws"
+            }
+
+      # main → prod 디스패치
+      - name: Dispatch to GitOps (prod)
+        if: ${{ github.ref_name == 'main' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "env":     "prod"
             }
