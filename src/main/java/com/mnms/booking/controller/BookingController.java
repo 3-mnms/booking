@@ -51,7 +51,6 @@ public class BookingController {
         return ApiResponseUtil.success(bookingQueryService.getFestivalBookingDetail(request, userId));
     }
 
-
     /// POST
     @PostMapping("/selectDate")
     @Operation(summary = "페스티벌 특정 페스티벌 날짜, 시간, 매수 선택",

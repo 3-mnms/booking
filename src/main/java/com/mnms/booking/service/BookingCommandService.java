@@ -13,6 +13,7 @@ import com.mnms.booking.kafka.dto.PaymentSuccessEventDTO;
 import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
+import com.mnms.booking.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -49,6 +50,7 @@ public class BookingCommandService {
     private final QrCodeService qrCodeService;
     private final ThreadPoolTaskScheduler scheduler;
     private final SimpMessagingTemplate messagingTemplate;
+    private final CommonUtils commonUtils;
 
     /// 1차: 가예매 - 임시 예약
     @Transactional
@@ -63,7 +65,7 @@ public class BookingCommandService {
         Ticket ticket = Ticket.builder()
                 .festival(festival)
                 .userId(userId)
-                .reservationNumber(generateReservationNumber())
+                .reservationNumber(commonUtils.generateReservationNumber())
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .performanceDate(performanceDate)
                 .reservationStatus(ReservationStatus.TEMP_RESERVED)
@@ -271,11 +273,5 @@ public class BookingCommandService {
         QrCode qrCode = QrResponseDTO.create(userId, qrCodeId, festival, ticket).toEntity();
         qrCodeRepository.save(qrCode);
         return qrCode;
-    }
-
-    ///  reservation number 랜덤 생성
-    private String generateReservationNumber() {
-        String uuidPart = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
-        return "T" + uuidPart;
     }
 }

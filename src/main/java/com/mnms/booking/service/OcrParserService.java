@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -21,52 +22,50 @@ public class OcrParserService {
     public static List<PersonInfoResponseDTO> parseOcrResult(
             String ocrJson, Map<String, String> targetInfo) throws IOException {
 
-        List<PersonInfoResponseDTO> result = new ArrayList<>();
+        List<String> ocrTexts = extractOcrTexts(ocrJson);
+        log.info("ocr : {}", ocrTexts);
 
+        return targetInfo.entrySet().stream()
+                .map(entry -> matchPersonInfo(entry.getKey(), entry.getValue(), ocrTexts))
+                .collect(Collectors.toList());
+    }
+
+    /// OCR 2차 추출
+    private static List<String> extractOcrTexts(String ocrJson) throws IOException {
         JsonNode root = objectMapper.readTree(ocrJson);
         JsonNode images = root.path("images");
 
-        // OCR 전체 텍스트 수집
-        List<String> ocrTexts = new ArrayList<>();
+        List<String> texts = new ArrayList<>();
         for (JsonNode imageNode : images) {
             JsonNode fields = imageNode.path("fields");
             for (JsonNode field : fields) {
-                ocrTexts.add(field.path("inferText").asText());
+                texts.add(field.path("inferText").asText());
             }
         }
+        return texts;
+    }
 
-        log.info("ocr : {}", ocrTexts);
+    /// OCR 3차 추출
+    private static PersonInfoResponseDTO matchPersonInfo(
+            String name, String rrn, List<String> ocrTexts) {
 
-        for (Map.Entry<String, String> entry : targetInfo.entrySet()) {
-            String name = entry.getKey();
-            String rrn = entry.getValue();
+        String normalizedNamePattern = "\\b" + Pattern.quote(name.replaceAll("\\s", "")) + "\\b";
 
-            Optional<String> matchedName = ocrTexts.stream()
-                    .map(t -> t.replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
-                    .filter(t -> t.matches(".*\\b" + Pattern.quote(name) + "\\b.*"))
-                    .findFirst();
+        String matchedName = ocrTexts.stream()
+                .map(t -> t.replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
+                .filter(t -> t.matches(".*" + normalizedNamePattern + ".*"))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME));
 
-            Optional<String> matchedRrn = ocrTexts.stream()
-                    .filter(t -> t.contains(rrn) && t.matches(".*\\d{6}-[1-4].*"))
-                    .findFirst();
+        String matchedRrn = ocrTexts.stream()
+                .filter(t -> t.contains(rrn) && t.matches(".*\\d{6}-[1-4].*"))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN));
 
-            log.info("user : {}, {}", matchedName, matchedRrn);
-
-            // 결과 확인
-            if (matchedName.isEmpty() || matchedRrn.isEmpty()) {
-                throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_INFORM);
-            }
-
-            if (!name.equals(matchedName.get())) {
-                throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
-            }
-
-            result.add(new PersonInfoResponseDTO(
-                    matchedName.get(),
-                    matchedRrn.get()
-            ));
+        if (!name.equals(matchedName)) {
+            throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
         }
 
-        return result;
+        return new PersonInfoResponseDTO(matchedName, matchedRrn);
     }
 }

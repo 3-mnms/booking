@@ -62,4 +62,17 @@ public class Ticket {
     @JoinColumn(name = "festival_id")
     private Festival festival;
 
+    public void updateTicketInfo(String reservationNumber,
+                                 TicketType deliveryMethod,
+                                 Long userId,
+                                 LocalDate reservationDate,
+                                 String address) {
+
+        this.reservationNumber = reservationNumber;
+        this.deliveryMethod = deliveryMethod;
+        this.userId = userId;
+        this.reservationDate = reservationDate;
+        this.address = address;
+    }
+
 }

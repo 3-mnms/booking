@@ -40,7 +40,8 @@ public enum ErrorCode {
     // Transfer
     TRANSFER_NOT_VALID_FILE_TYPE("TR001","유효하지 않은 파일 확장자입니다.",HttpStatus.NOT_ACCEPTABLE),
     TRANSFER_NOT_FOUND_INFORM("TR002", "검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
-    TRANSFER_NOT_FOUND_NAME("TR003", "이름 검사에 실패하였습니다.", HttpStatus.NOT_FOUND);
+    TRANSFER_NOT_FOUND_NAME("TR003", "이름 검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
+    TRANSFER_NOT_FOUND_RRN("TR003", "주민등록 번호 검사에 실패하였습니다.", HttpStatus.NOT_FOUND);
 
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지
