@@ -1,112 +1,61 @@
 package com.mnms.booking.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
+import com.mnms.booking.entity.QrCode;
+import com.mnms.booking.entity.Ticket;
+import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import com.mnms.booking.repository.QrCodeRepository;
+import com.mnms.booking.repository.TicketRepository;
+import com.mnms.booking.util.CommonUtils;
+import com.mnms.booking.util.UserApiClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class TransferService {
 
-    @Value("${ocr.key}")
-    private String ocrKey;
+    private final UserApiClient userApiClient;
+    private final TicketRepository ticketRepository;
+    private final QrCodeRepository qrCodeRepository;
+    private final CommonUtils commonUtils;
+    private final QrCodeService qrCodeService;
 
-    @Value("${ocr.invoke_url}")
-    private String ocrInvokeUrl;
+    public void updateTicket(Long ticketId, UpdateTicketRequestDTO request) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+        TicketType deliveryMethod = TicketType.valueOf(request.getDeliveryMethod());
 
+        List<QrCode> existingQrs = qrCodeRepository.findByTicketId(ticket.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.QR_CODE_NOT_FOUND));
 
-    public String callOcr(MultipartFile image){
-        try {
-            String extension = getExtension(image.getOriginalFilename());
-            if (!"pdf".equalsIgnoreCase(extension)) {
-                throw new BusinessException(ErrorCode.TRANSFER_NOT_VALID_FILE_TYPE);
-            }
+        // ticket 업데이트
+        ticket.updateTicketInfo(
+                commonUtils.generateReservationNumber(),
+                deliveryMethod,
+                request.getTransfereeId(),
+                LocalDate.now(),
+                request.getAddress()
+        );
 
-            // 2. MultipartFile → Resource
-            ByteArrayResource fileResource = new ByteArrayResource(image.getBytes()) {
-                @Override
-                public String getFilename() {
-                    return image.getOriginalFilename();
-                }
-            };
+        // qr code 업데이트
+        existingQrs.forEach(qr -> {
+            qr.setQrCodeId(qrCodeService.generateQrCodeId());
+            qr.setUserId(request.getTransfereeId());
+            qr.setTicket(ticket);
+        });
 
-            MultiValueMap<String, Object> multipartBody = getApiBody(image, fileResource);
-
-            // 5. 헤더 구성
-            HttpHeaders headers = getApiHeaders();
-
-
-            String response = postApi(headers, multipartBody);
-            return response;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ticket.getQrCodes().clear();
+        ticket.getQrCodes().addAll(existingQrs);
     }
-
-    private String postApi(HttpHeaders headers, MultiValueMap<String, Object> multipartBody) {
-        RestClient restClient=RestClient.create();
-        String response = restClient.post()
-                .uri(ocrInvokeUrl)
-                .headers(h -> h.addAll(headers))
-                .body(multipartBody)
-                .retrieve()
-                .body(String.class);
-        return response;
-    }
-
-    private HttpHeaders getApiHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        headers.set("X-OCR-SECRET", ocrKey);
-        return headers;
-    }
-
-    private static MultiValueMap<String, Object> getApiBody(MultipartFile image, ByteArrayResource fileResource) throws JsonProcessingException {
-        Map<String,Object> messageBody = new HashMap<>();
-        messageBody.put("version","V2");
-        messageBody.put("requestId", UUID.randomUUID().toString());
-        messageBody.put("timestamp",System.currentTimeMillis());
-        messageBody.put("lang","ko");
-        messageBody.put("enableTableDetection",false);
-
-        Map<String, Object> imageInfo = new HashMap<>();
-        imageInfo.put("format", "pdf");
-        imageInfo.put("name", image.getOriginalFilename());
-
-        messageBody.put("images", new Object[]{imageInfo});
-
-        String messageJson = objectMapper.writeValueAsString(messageBody);
-
-        // 4. multipart/form-data body 구성
-        MultiValueMap<String, Object> multipartBody = new LinkedMultiValueMap<>();
-        multipartBody.add("file", fileResource);
-        multipartBody.add("message", messageJson);
-        return multipartBody;
-    }
-
-    private String getExtension(String filename) {
-        if (filename == null || !filename.contains(".")) {
-            return "";
-        }
-        return filename.substring(filename.lastIndexOf('.') + 1);
-    }
-
 }

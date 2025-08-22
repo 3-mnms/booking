@@ -6,7 +6,7 @@ import com.mnms.booking.service.FestivalService;
 import com.mnms.booking.service.WaitingNotificationService;
 import com.mnms.booking.service.WaitingQueueKeyGenerator;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.UserApiClient;
+import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
@@ -37,7 +36,7 @@ public class WaitingController {
     private final FestivalService festivalService;
     private final WaitingQueueKeyGenerator waitingQueueKeyGenerator;
     private final WaitingNotificationService waitingNotificationService;
-    private final UserApiClient userApiClient;
+    private final SecurityResponseUtil securityResponseUtil;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -128,6 +127,6 @@ public class WaitingController {
     }
 
     public String getUserId(Authentication authentication) {
-        return String.valueOf(userApiClient.requireUserId(authentication));
+        return String.valueOf(securityResponseUtil.requireUserId(authentication));
     }
 }

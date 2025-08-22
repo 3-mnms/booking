@@ -28,4 +28,15 @@ public class PaymentListener {
         PaymentSuccessEventDTO event = objectMapper.readValue(message, PaymentSuccessEventDTO.class);
         bookingCommandService.confirmTicket(event.getReservationNumber(), event.isSuccess());
     }
+
+    @KafkaListener(topics = "${app.kafka.topic.payment-cancel-event}", groupId = "booking-service-group")
+    public void consumeRefundSuccess(String message) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        PaymentSuccessEventDTO event = objectMapper.readValue(message, PaymentSuccessEventDTO.class);
+        bookingCommandService.cancelBooking(event.getReservationNumber(), event.isSuccess());
+    }
 }

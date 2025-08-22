@@ -18,6 +18,7 @@ public class QrCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // qr_id
 
+    @Setter
     @Column(name = "qr_code_id", nullable = false)
     private String qrCodeId;
 
@@ -33,9 +34,11 @@ public class QrCode {
     @Column(name = "used_at")
     private LocalDateTime usedAt;
 
+    @Setter
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private Ticket ticket; // ticket_id

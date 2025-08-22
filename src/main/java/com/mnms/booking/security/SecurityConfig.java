@@ -1,9 +1,7 @@
 package com.mnms.booking.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +34,9 @@ public class SecurityConfig {
                                 "/api/qr/**",
                                 "/api/booking/detail/phases/1",
                                 "/api/host/**",
-                                "/api/booking/confirm"
+                                "/api/booking/confirm",
+                                "/api/transfer/**",
+                                "/api/transfer/**"
                         ).permitAll() // 하위 경로 포함 허용
                         .anyRequest().permitAll()
                 )
