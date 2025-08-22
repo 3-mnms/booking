@@ -52,6 +52,7 @@ jobs:
           tags: |
             type=raw,value=${{ env.TAG_AMD }}
             type=raw,value=${{ env.TAG_ARM }}
+            type=raw,value=latest
             type=sha
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
 
@@ -61,8 +62,7 @@ jobs:
           file: ./Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          # tags: ${{ steps.meta.outputs.tags }}
-          tags: v0.1
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
