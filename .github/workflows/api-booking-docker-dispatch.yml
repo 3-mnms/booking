@@ -32,11 +32,7 @@ jobs:
       - run: ./gradlew bootJar --no-daemon
 
       - name: ⏱️ Tag
-        run: |
-          TS=$(date -u +'%Y%m%d%H%M%S')
-          echo "TAG_AMD=v${TS}-win" >> $GITHUB_ENV
-          echo "TAG_ARM=v${TS}-mac" >> $GITHUB_ENV
-          echo "TAG=v${TS}-win" >> $GITHUB_ENV
+        run: echo "TAG=v$(date -u +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - uses: docker/setup-buildx-action@v3
 
@@ -50,11 +46,14 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
           tags: |
-            type=raw,value=${{ env.TAG_AMD }}
-            type=raw,value=${{ env.TAG_ARM }}
-            type=raw,value=latest
+            # 1) 타임스탬프 태그 (기본)
+            type=raw,value=${{ env.TAG }}
+            # 2) git sha 태그
             type=sha
-            type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
+            # 3) 고정 별칭
+            type=raw,value=v0.1
+            # 4) latest (main, develop 모두에서 발행)
+            type=raw,value=latest
 
       - uses: docker/build-push-action@v5
         with:
@@ -68,33 +67,33 @@ jobs:
           cache-to: type=gha,mode=max
 
       # develop → 한번만 디스패치 (두 타깃 동시)
-      # - name: Dispatch to GitOps (develop-gke + develop-aws)
-      #   if: ${{ github.ref_name == 'develop' }}
-      #   uses: peter-evans/repository-dispatch@v3
-      #   with:
-      #     token:  ${{ secrets.GH_PAT }}
-      #     repository: ${{ env.DEVOPS_REPO }}
-      #     event-type: image-updated
-      #     client-payload: |
-      #       {
-      #         "service": "${{ env.SERVICE }}",
-      #         "image":   "${{ env.IMAGE }}",
-      #         "tag":     "${{ env.TAG }}",
-      #         "targets": "develop-gke,develop-aws"
-      #       }
+      - name: Dispatch to GitOps (develop-gke + develop-aws)
+        if: ${{ github.ref_name == 'develop' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "targets": "develop-gke,develop-aws"
+            }
 
-      # # main → prod
-      # - name: Dispatch to GitOps (prod)
-      #   if: ${{ github.ref_name == 'main' }}
-      #   uses: peter-evans/repository-dispatch@v3
-      #   with:
-      #     token:  ${{ secrets.GH_PAT }}
-      #     repository: ${{ env.DEVOPS_REPO }}
-      #     event-type: image-updated
-      #     client-payload: |
-      #       {
-      #         "service": "${{ env.SERVICE }}",
-      #         "image":   "${{ env.IMAGE }}",
-      #         "tag":     "${{ env.TAG }}",
-      #         "env":     "prod"
-      #       }
+      # main → prod
+      - name: Dispatch to GitOps (prod)
+        if: ${{ github.ref_name == 'main' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "env":     "prod"
+            }
