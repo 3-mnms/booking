@@ -9,12 +9,10 @@ import com.mnms.booking.service.OcrParserService;
 import com.mnms.booking.service.OcrService;
 import com.mnms.booking.service.TransferService;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,20 +27,18 @@ import java.util.*;
 public class TransferController {
     private final OcrService ocrService;
     private final TransferService transferService;
-    private final SecurityResponseUtil securityResponseUtil;
 
     @PostMapping("/extract")
     public ResponseEntity<SuccessResponse<List<PersonInfoResponseDTO>>> extractPersonInfo(
             @RequestPart("file") MultipartFile file,
             @RequestPart("targetInfo") String targetInfoJson) throws IOException {
-
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> targetInfo = objectMapper.readValue(targetInfoJson, new TypeReference<>() {});
 
         String ocrJson = ocrService.callOcr(file);
         List<PersonInfoResponseDTO> people = OcrParserService.parseOcrResult(ocrJson, targetInfo);
 
-        return ApiResponseUtil.success(people);
+        return ApiResponseUtil.success(people, "가족관계증명서 인증이 완료되었습니다.");
     }
 
     @PutMapping("/{ticketId}")

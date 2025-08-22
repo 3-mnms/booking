@@ -55,7 +55,6 @@ public class TransferService {
             qr.setTicket(ticket);
         });
 
-        // 기존 컬렉션 유지하면서 update
         ticket.getQrCodes().clear();
         ticket.getQrCodes().addAll(existingQrs);
     }

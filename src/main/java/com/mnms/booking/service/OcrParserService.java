@@ -23,8 +23,6 @@ public class OcrParserService {
             String ocrJson, Map<String, String> targetInfo) throws IOException {
 
         List<String> ocrTexts = extractOcrTexts(ocrJson);
-        log.info("ocr : {}", ocrTexts);
-
         return targetInfo.entrySet().stream()
                 .map(entry -> matchPersonInfo(entry.getKey(), entry.getValue(), ocrTexts))
                 .collect(Collectors.toList());
