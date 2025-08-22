@@ -1,6 +1,5 @@
 package com.mnms.booking.controller;
 
-import com.mnms.booking.dto.request.BookingCancelRequestDTO;
 import com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
@@ -11,6 +10,7 @@ import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
 import com.mnms.booking.util.ApiResponseUtil;
+import com.mnms.booking.util.SecurityResponseUtil;
 import com.mnms.booking.util.UserApiClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,9 +29,10 @@ public class BookingController {
     private final BookingCommandService bookingCommandService;
     private final BookingQueryService bookingQueryService;
     private final UserApiClient userApiClient;
+    private final SecurityResponseUtil securityResponseUtil;
 
     /// GET : 페스티벌 예매 정보 조회
-    @GetMapping("/detail/phases/1")
+    @PostMapping("/detail/phases/1")
     @Operation(summary = "1차 : 예매 단계에서 선택한 예매 상세 조회",
             description = "festivalId와 performanceDate(사용자가 선택한 날짜 시간) 으로 공연 상세 정보를 조회합니다." +
                     "selectedTicketCount는 0으로 넣을 것!")
@@ -39,14 +40,14 @@ public class BookingController {
         return ApiResponseUtil.success(bookingQueryService.getFestivalDetail(request));
     }
 
-    @GetMapping("/detail/phases/2")
+    @PostMapping("/detail/phases/2")
     @Operation(summary = "2차 : 예매 단계에서 선택한 예매 상세 조회",
             description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
     public ResponseEntity<SuccessResponse<BookingDetailResponseDTO>> getFestivalBookingDetail(
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
     ) {
-        Long userId = userApiClient.requireUserId(authentication);
+        Long userId = securityResponseUtil.requireUserId(authentication);
         return ApiResponseUtil.success(bookingQueryService.getFestivalBookingDetail(request, userId));
     }
 
@@ -60,7 +61,7 @@ public class BookingController {
             @Valid @RequestBody BookingSelectRequestDTO request,
             Authentication authentication
     ) {
-        return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, userApiClient.requireUserId(authentication)));
+        return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, securityResponseUtil.requireUserId(authentication)));
     }
 
     @PostMapping("/selectDeliveryMethod")
@@ -71,7 +72,7 @@ public class BookingController {
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
             Authentication authentication
     ) {
-        bookingCommandService.selectFestivalDelivery(request, userApiClient.requireUserId(authentication));
+        bookingCommandService.selectFestivalDelivery(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 수령 방법 선택 완료");
     }
 
@@ -84,7 +85,7 @@ public class BookingController {
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
     ) {
-        bookingCommandService.reserveTicket(request, userApiClient.requireUserId(authentication));
+        bookingCommandService.reserveTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
     }
 
@@ -95,6 +96,6 @@ public class BookingController {
                     "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
     )
     public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(Authentication authentication) {
-        return ApiResponseUtil.success(userApiClient.getUserInfoById(userApiClient.requireUserId(authentication)));
+        return ApiResponseUtil.success(userApiClient.getUserInfoById(securityResponseUtil.requireUserId(authentication)));
     }
 }

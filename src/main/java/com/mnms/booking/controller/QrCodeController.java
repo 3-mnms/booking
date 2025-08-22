@@ -4,7 +4,7 @@ import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.QrCodeService;
 import com.mnms.booking.util.ApiResponseUtil;
-import com.mnms.booking.util.UserApiClient;
+import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class QrCodeController {
 
     private final QrCodeService qrCodeService;
-    private final UserApiClient userApiClient;
+    private final SecurityResponseUtil securityResponseUtil;
 
     /// Qrcode 이미지 조회
     @GetMapping(value = "/image/{qrCodeId}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -47,7 +47,7 @@ public class QrCodeController {
             @PathVariable String qrCodeId,
             Authentication authentication) {
 
-        qrCodeService.validateAndUseQrCode(userApiClient.requireUserId(authentication), qrCodeId);
+        qrCodeService.validateAndUseQrCode(securityResponseUtil.requireUserId(authentication), qrCodeId);
         return ApiResponseUtil.success(null, "QR 스캔 완료");
     }
 }

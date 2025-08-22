@@ -36,7 +36,8 @@ public class SecurityConfig {
                                 "/api/qr/**",
                                 "/api/booking/detail/phases/1",
                                 "/api/host/**",
-                                "/api/booking/confirm"
+                                "/api/booking/confirm",
+                                "/api/transfer/**"
                         ).permitAll() // 하위 경로 포함 허용
                         .anyRequest().permitAll()
                 )
