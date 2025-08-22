@@ -9,6 +9,7 @@ import com.mnms.booking.service.OcrParserService;
 import com.mnms.booking.service.OcrService;
 import com.mnms.booking.service.TransferService;
 import com.mnms.booking.util.ApiResponseUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class TransferController {
     private final TransferService transferService;
 
     @PostMapping("/extract")
+    @Operation(summary = "가족 간 양도 진행 인증 시도",
+            description = "가족관계증명서 pdf를 첨부하고 양도자 및 양수자의 이름과 주민등록번호로 요청하고, 인증 완료 응답을 보냅니다."
+    )
     public ResponseEntity<SuccessResponse<List<PersonInfoResponseDTO>>> extractPersonInfo(
             @RequestPart("file") MultipartFile file,
             @RequestPart("targetInfo") String targetInfoJson) throws IOException {
@@ -42,6 +46,9 @@ public class TransferController {
     }
 
     @PutMapping("/{ticketId}")
+    @Operation(summary = "양도 완료",
+            description = "양도가 완료되면 티켓과 QR 정보가 업데이트 됩니다."
+    )
     public ResponseEntity<SuccessResponse<Void>> updateTicket(
             @PathVariable Long ticketId,
             @RequestBody UpdateTicketRequestDTO request) {
