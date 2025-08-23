@@ -30,7 +30,8 @@ public class TransferService {
     private final CommonUtils commonUtils;
     private final QrCodeService qrCodeService;
 
-    public void updateTicket(Long ticketId, UpdateTicketRequestDTO request) {
+    // 가족간 양도
+    public void updateFamilyTicket(Long ticketId, UpdateTicketRequestDTO request) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 

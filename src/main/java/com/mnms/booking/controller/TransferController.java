@@ -45,14 +45,29 @@ public class TransferController {
         return ApiResponseUtil.success(people, "가족관계증명서 인증이 완료되었습니다.");
     }
 
+    // 가족간 양도 요청
+    /*
+    @PostMapping("/{ticketId}")
+    @Operation(summary = "양도 요청",
+            description = "양도자가 양도 요청 보내기"
+    )
+    public ResponseEntity<SuccessResponse<Void>> updateTicket(){
+
+    }*/
+
+
+    // 가족간 양도 승인
     @PutMapping("/{ticketId}")
     @Operation(summary = "양도 완료",
-            description = "양도가 완료되면 티켓과 QR 정보가 업데이트 됩니다."
+            description = "양수자가 양도 요청 승인시, 양도가 완료되며 티켓과 QR 정보가 업데이트 됩니다."
     )
     public ResponseEntity<SuccessResponse<Void>> updateTicket(
             @PathVariable Long ticketId,
             @RequestBody UpdateTicketRequestDTO request) {
-        transferService.updateTicket(ticketId, request);
+        transferService.updateFamilyTicket(ticketId, request);
         return ApiResponseUtil.success(null, "티켓 양도가 성공적으로 진행되었습니다.");
     }
+
+    // 지인간 양도 승인
+
 }

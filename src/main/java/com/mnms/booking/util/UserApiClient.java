@@ -1,13 +1,16 @@
 package com.mnms.booking.util;
 
+import com.mnms.booking.dto.response.ApiResponseDTO;
 import com.mnms.booking.dto.response.BookingUserInfoResponseDTO;
-import com.mnms.booking.dto.response.TransferUserResponse;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+
+import java.util.Collections;
 import java.util.List;
 
 
@@ -17,22 +20,21 @@ public class UserApiClient {
 
     private final WebClient webClient;
 
-    @Value("${booking.user.service.url}")
-    private String bookingUserServiceUrl;
-
-    @Value("${user.service.url}")
+    @Value("${base.service.url}${user.service.url}")
     private String userServiceUrl;
 
+    @Value("${base.service.url}${booking.user.service.url}")
+    private String bookingUserServiceUrl;
 
     // userId 리스트 요청
     public List<BookingUserInfoResponseDTO> getUsersByIds(List<Long> userIds) {
-        return webClient.post()
+        ApiResponseDTO<List<BookingUserInfoResponseDTO>> response = webClient.post()
                 .uri(bookingUserServiceUrl)
                 .bodyValue(userIds)
                 .retrieve()
-                .bodyToFlux(BookingUserInfoResponseDTO.class)
-                .collectList()
+                .bodyToMono(new ParameterizedTypeReference<ApiResponseDTO<List<BookingUserInfoResponseDTO>>>() {})
                 .block();
+        return response != null ? response.getData() : Collections.emptyList();
     }
 
     // userId로 요청
