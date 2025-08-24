@@ -11,16 +11,20 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class HostService {
 
     private final TicketRepository ticketRepository;
@@ -42,12 +46,25 @@ public class HostService {
             tickets.addAll(ticketRepository.findByFestivalId(festival.getFestivalId()));
         }
 
+        if (tickets.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         List<Long> userIds = tickets.stream()
                 .map(Ticket::getUserId)
                 .distinct()
                 .toList();
 
-        List<BookingUserInfoResponseDTO> users = userApiClient.getUsersByIds(userIds);
+        List<BookingUserInfoResponseDTO> users;
+        try {
+            users = userApiClient.getUsersByIds(userIds);
+            if (users == null) users = Collections.emptyList();
+        } catch (WebClientResponseException e) {
+            throw new BusinessException(ErrorCode.USER_API_ERROR);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.UNKNOWN_ERROR);
+        }
+
         Map<Long, BookingUserInfoResponseDTO> userMap = users.stream()
                 .collect(Collectors.toMap(BookingUserInfoResponseDTO::getUserId, u -> u));
 
@@ -60,9 +77,9 @@ public class HostService {
                             t.getUserId(),
                             t.getSelectedTicketCount(),
                             t.getDeliveryMethod(),
+                            t.getAddress(),
                             user != null ? user.getName() : null,
-                            user != null ? user.getPhone() : null,
-                            user != null ? user.getAddress() : null
+                            user != null ? user.getPhone() : null
                     );
                 })
                 .toList();

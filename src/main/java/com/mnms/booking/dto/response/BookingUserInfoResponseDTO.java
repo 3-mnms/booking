@@ -11,5 +11,4 @@ public class BookingUserInfoResponseDTO {
     private Long userId;
     private String name;
     private String phone;
-    private String address;
 }

@@ -17,9 +17,9 @@ public class HostResponseDTO {
     private Long userId;
     private int selectedTicketCount;
     private TicketType deliveryMethod;
+    private String address;
 
     // user info
     private String userName;
     private String phoneNumber;
-    private String address;
 }
