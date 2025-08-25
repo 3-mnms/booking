@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableKafka
-public class TeckitApplication {
+public class TekcitApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TeckitApplication.class, args);
+		SpringApplication.run(TekcitApplication.class, args);
 	}
 
 }

@@ -38,7 +38,7 @@ public class HostController {
     @PostMapping("/booking/list")
     @Operation(summary = "예매자 정보 조회",
             description = "예매자 정보 조회, 주최자 혹은 운영자로 로그인해야합니다.")
-    @PreAuthorize("hasAnyRole('HOST', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('HOST')")
     public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(Authentication authentication) {
         List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(bookings);

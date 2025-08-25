@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Service
@@ -13,6 +15,41 @@ public class WaitingQueueRedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ZSetOperations<String, String> zSetOperations;
+
+    /// Lua 스크립트
+    private static final String ENTER_SCRIPT =
+            "local current = redis.call('SCARD', KEYS[1]); " +
+                    "if current < tonumber(ARGV[1]) then " +
+                    "  redis.call('SADD', KEYS[1], ARGV[2]); " +
+                    "  return 1; " +
+                    "else " +
+                    "  return 0; " +
+                    "end";
+
+    private final DefaultRedisScript<Long> enterScript;
+
+    {
+        enterScript = new DefaultRedisScript<>();
+        enterScript.setScriptText(ENTER_SCRIPT);
+        enterScript.setResultType(Long.class);
+    }
+
+    /**
+     * Lua 스크립트로 안전하게 유저 추가 시도
+     * @return true = 즉시 입장, false = 대기열 필요
+     */
+    public boolean tryEnterBooking(String bookingUsersKey, long availableNOP, String userId) {
+        Long result = redisTemplate.execute(
+                enterScript,
+                Collections.singletonList(bookingUsersKey),
+                String.valueOf(availableNOP),
+                userId
+        );
+        return result != null && result == 1;
+    }
+    //
+
+
 
     public WaitingQueueRedisService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
