@@ -37,15 +37,20 @@ dependencies {
 
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-
-	// h2
+	// mariadb + h2
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	runtimeOnly 'com.h2database:h2'
+
+	// mongodb
+	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 
 	// websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -54,13 +59,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'redis.clients:jedis' // 삭제 가능
 
-	// mariadb
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-
-	// mongodb
-	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
 	// kaptcha
 	implementation 'com.github.penggle:kaptcha:2.3.2'
 
@@ -68,20 +66,23 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 
 	// JSON 직렬화용
-	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	//implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 	// QR 생성
 	implementation 'com.google.zxing:core:3.5.2'
 	implementation 'com.google.zxing:javase:3.5.2'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
 	// WebClient 사용
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// test
+	testImplementation 'it.ozimov:embedded-redis:0.7.3'
 }
 
 tasks.named('test') {

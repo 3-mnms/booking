@@ -16,27 +16,21 @@ public class WaitingService {
     private final WaitingNotificationService waitingNotificationService;
     private final WaitingQueueKeyGenerator waitingQueueKeyGenerator;
 
-    /**
-     * 사용자 대기열 진입 처리
-     * @return 대기 순번 (즉시 입장 가능 시 0)
-     */
+    /// 사용자 대기열 진입 처리
     public long enterWaitingQueue(String festivalId, LocalDateTime reservationDate, String userId, long availableNOP) {
         String bookingUsersKey = waitingQueueKeyGenerator.getBookingUsersKey(festivalId, reservationDate);
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
 
-        long currentUserCount = waitingQueueRedisService.getBookingUserCount(bookingUsersKey);
+        boolean entered = waitingQueueRedisService.tryEnterBooking(bookingUsersKey, availableNOP, userId);
 
-        if (currentUserCount < availableNOP) {
-            log.info("User {} can enter booking page immediately ({} < {}).", userId, currentUserCount, availableNOP);
-            waitingQueueRedisService.addBookingUser(bookingUsersKey, userId);
-            return 0L;
+        if (entered) {
+            log.info("User {} entered booking page immediately.", userId);
+            return 0L; // 즉시 입장
         } else {
             waitingQueueRedisService.addUserToQueue(waitingQueueKey, userId);
             log.info("User {} added to waiting queue {}.", userId, waitingQueueKey);
-
             waitingQueueSchedulingService.startScheduler(waitingQueueKey, bookingUsersKey, notificationChannelKey, availableNOP);
-
             return waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
         }
     }

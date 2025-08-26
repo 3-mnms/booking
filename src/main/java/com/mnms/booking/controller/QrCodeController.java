@@ -14,6 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/qr")
@@ -38,6 +42,29 @@ public class QrCodeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    ///  Qrcode 이미지 qrCodeId 리스트로 조회
+    @GetMapping("/images")
+    @Operation(summary = "QR 코드 이미지 다수 조회",
+            description = "qrCodeId 리스트로 여러 개의 QR 코드 이미지를 Base64 인코딩된 문자열로 반환합니다.")
+    public ResponseEntity<List<String>> getQrCodeImages(@RequestParam List<String> qrCodeIds) {
+        List<String> images = new ArrayList<>();
+        for (String qrCodeId : qrCodeIds) {
+            QrCode qrCode = qrCodeService.getQrCodeByCode(qrCodeId);
+            String qrCodeText = qrCode.getQrCodeId();
+
+            try {
+                byte[] imageBytes = qrCodeService.generateQrCodeImage(qrCodeText, 250, 250);
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                images.add(base64Image);
+            } catch (Exception e) {
+                images.add(null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+        return ResponseEntity.ok(images);
+    }
+
 
     /// 페스티벌 주최자 QR 스캔
     @PostMapping(value = "/validate/{qrCodeId}")

@@ -67,4 +67,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     int getTotalSelectedTicketCount(@Param("festivalId") String festivalId,
                                     @Param("performanceDate") LocalDateTime performanceDate,
                                     @Param("statuses") List<ReservationStatus> statuses);
+
+    List<Ticket> findByUserIdAndReservationStatusIn(Long userId, List<ReservationStatus> statuses);
+    Optional<Ticket> findByUserIdAndReservationNumber(Long userId, String reservationNumber);
 }

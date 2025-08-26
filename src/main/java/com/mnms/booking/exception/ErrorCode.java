@@ -10,6 +10,7 @@ public enum ErrorCode {
     USER_INVALID("U001", "잘못된 사용자 ID 형식입니다", HttpStatus.BAD_REQUEST),
     USER_API_ERROR("U002", "예매자 정보를 가져오는데 실패했습니다.", HttpStatus.CONFLICT),
     UNKNOWN_ERROR("U003", "알 수 없는 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    USER_UNAUTHORIZED_ACCESS("U004", "잘못된 사용자 예매내역 입니다.", HttpStatus.UNAUTHORIZED),
     // 보안문자
     SECURITY_NUMBER_INVALID("S001", "입력한 문자가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 

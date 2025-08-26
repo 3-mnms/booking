@@ -6,6 +6,7 @@ import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.BookingDetailResponseDTO;
 import com.mnms.booking.dto.response.FestivalDetailResponseDTO;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
+import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
@@ -19,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

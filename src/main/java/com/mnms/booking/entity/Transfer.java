@@ -24,8 +24,10 @@ public class Transfer {
     private TransferType type;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private TransferStatus status = TransferStatus.PENDING;
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
 }

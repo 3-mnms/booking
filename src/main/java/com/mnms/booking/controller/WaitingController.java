@@ -20,12 +20,13 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.mnms.booking.service.WaitingService;
 
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/booking")
