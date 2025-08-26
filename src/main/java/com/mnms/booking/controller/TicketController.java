@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,22 +27,21 @@ public class TicketController {
     private final TicketService ticketService;
     private final SecurityResponseUtil securityResponseUtil;
 
-    @GetMapping("/user")
-    @Operation(summary = "예매 정보 정보 조회",
-            description = "예매 완료한 티켓 정보를 조회" +
-                    "예매자가 예매 완료한 티켓 정보를 조회할 수 있다."
+    @GetMapping
+    @Operation(summary = "예매한 티켓 정보 조회",
+            description = "예매자가 예매 완료한 전체 티켓 리스트를 조회합니다. (status : 완료, 취소한 티켓 조회 가능)"
     )
     public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
         List<TicketResponseDTO> tickets = ticketService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(tickets);
     }
 
-    @GetMapping("/user/detail")
-    @Operation(summary = "예매자 정보 조회",
-            description = "예매 완료한 티켓 정보를 조회" +
-                    "예매자가 예매 완료한 티켓 정보를 조회할 수 있다."
+    @GetMapping("/detail")
+    @Operation(summary = "예매한 티켓 정보 디테일 조회",
+            description = "예매자가 예매 완료한 티켓 정보를 조회합니다. " +
+                    "ex : /api/ticket/detail?reservationNumber=T24CBD629 조회"
     )
-    public ResponseEntity<SuccessResponse<TicketDetailResponseDTO>> getUserTicketDetail(@Valid @RequestBody String reservationNumber,
+    public ResponseEntity<SuccessResponse<TicketDetailResponseDTO>> getUserTicketDetail(@RequestParam String reservationNumber,
                                                                                         Authentication authentication) {
         TicketDetailResponseDTO ticket = ticketService.getTicketDetailByUser(reservationNumber, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(ticket);
