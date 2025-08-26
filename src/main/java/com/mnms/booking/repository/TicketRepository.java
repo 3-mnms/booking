@@ -70,4 +70,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findByUserIdAndReservationStatusIn(Long userId, List<ReservationStatus> statuses);
     Optional<Ticket> findByUserIdAndReservationNumber(Long userId, String reservationNumber);
+
+    @Query("SELECT t FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId " +
+            "AND t.reservationStatus = :status")
+    List<Ticket> findByFestivalIdAndReservationStatus(@Param("festivalId") String festivalId,
+                                                      @Param("status") ReservationStatus status);
 }
