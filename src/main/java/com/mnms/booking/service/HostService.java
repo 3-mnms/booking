@@ -5,6 +5,7 @@ import com.mnms.booking.dto.response.BookingUserInfoResponseDTO;
 import com.mnms.booking.dto.response.HostResponseDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.FestivalRepository;
@@ -35,15 +36,15 @@ public class HostService {
         return ticketRepository.findDistinctUserIdsByFestivalIdAndPerformanceDate(request.getFestivalId(), request.getPerformanceDate());
     }
 
-    public List<HostResponseDTO> getBookingInfoByHost(Long hostUserId) {
-        List<Festival> festivals = festivalRepository.findByOrganizer(hostUserId);
+    public List<HostResponseDTO> getBookingInfoByHost(String festivalId, Long hostUserId) {
+        List<Festival> festivals = festivalRepository.findByFestivalIdAndOrganizer(festivalId, hostUserId);
         if (festivals == null) {
             throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
         }
 
         List<Ticket> tickets = new ArrayList<>();
         for (Festival festival : festivals) {
-            tickets.addAll(ticketRepository.findByFestivalId(festival.getFestivalId()));
+            tickets.addAll(ticketRepository.findByFestivalIdAndReservationStatus(festival.getFestivalId(), ReservationStatus.CONFIRMED));
         }
 
         if (tickets.isEmpty()) {

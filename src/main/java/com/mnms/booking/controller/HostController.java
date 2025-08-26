@@ -30,7 +30,7 @@ public class HostController {
     @Operation(summary = "주최자 도메인에 예매자 리스트 제공",
             description = "주최자가 FestivalId와 PerformanceDate를 제공하면 해당하는 예매자 userId를 리스트로 제공합니다. front와 관련 없음"
     )
-    public ResponseEntity<SuccessResponse<List<Long>>> getBookingsByOrganizer(@RequestBody HostRequestDTO hostRequestDTO) {
+    public ResponseEntity<SuccessResponse<List<Long>>> getBookingsByOrXSanizer(@RequestBody HostRequestDTO hostRequestDTO) {
         return ApiResponseUtil.success(hostService.getBookingsByOrganizer(hostRequestDTO));
     }
 
@@ -39,8 +39,9 @@ public class HostController {
     @Operation(summary = "예매자 정보 조회",
             description = "예매자 정보 조회, 주최자 혹은 운영자로 로그인해야합니다.")
     @PreAuthorize("hasAnyRole('HOST')")
-    public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(Authentication authentication) {
-        List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(securityResponseUtil.requireUserId(authentication));
+    public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(@RequestParam String festivalId,
+                                                                                 Authentication authentication) {
+        List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(festivalId, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(bookings);
     }
 }
