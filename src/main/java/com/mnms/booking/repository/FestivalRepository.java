@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface FestivalRepository extends JpaRepository<Festival, Long> {
+
     Optional<Festival> findByFestivalId(String festivalId);
-    List<Festival> findByFestivalIdAndOrganizer(String festivalId , Long organizer);
+    Festival findByFestivalIdAndOrganizer(String festivalId , Long organizer);
 }

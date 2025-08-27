@@ -36,7 +36,7 @@ public class BookingController {
     /// GET : 페스티벌 예매 정보 조회
     @PostMapping("/detail/phases/1")
     @Operation(summary = "1차 : 예매 단계에서 선택한 예매 상세 조회",
-            description = "festivalId와 performanceDate(사용자가 선택한 날짜 시간) 으로 공연 상세 정보를 조회합니다." +
+            description = "festivalId와 performanceDate(사용자가 선택한 날짜, 시간)으로 공연 상세 정보를 조회합니다." +
                     "selectedTicketCount는 0으로 넣을 것!")
     public ResponseEntity<SuccessResponse<FestivalDetailResponseDTO>> getFestivalDetail(@Valid @RequestBody BookingSelectRequestDTO request) {
         return ApiResponseUtil.success(bookingQueryService.getFestivalDetail(request));
@@ -67,7 +67,7 @@ public class BookingController {
 
     @PostMapping("/selectDeliveryMethod")
     @Operation(summary = "페스티벌 특정 페스티벌 티켓 수령 방법, 주소 선택",
-            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수), deliveryMethod(MOBILE or PAPER), address(String)"
+            description = "festivalId, performanceDate(선택한날짜,시간), deliveryMethod(MOBILE or PAPER), address(String)"
     )
     public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
