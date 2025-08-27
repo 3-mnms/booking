@@ -5,9 +5,13 @@ import com.mnms.booking.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -37,6 +41,18 @@ public class SecurityResponseUtil {
         }
 
         return name;
+    }
+
+    // Authentication에서 ROLE 빼오기
+    public List<String> requireRole(Authentication authentication) {
+        if (authentication == null || authentication.getAuthorities() == null) {
+            return List.of(); // 빈 리스트 반환
+        }
+
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
     }
 
 }

@@ -36,16 +36,21 @@ public class HostService {
         return ticketRepository.findDistinctUserIdsByFestivalIdAndPerformanceDate(request.getFestivalId(), request.getPerformanceDate());
     }
 
-    public List<HostResponseDTO> getBookingInfoByHost(String festivalId, Long hostUserId) {
-        List<Festival> festivals = festivalRepository.findByFestivalIdAndOrganizer(festivalId, hostUserId);
-        if (festivals == null) {
+    public List<HostResponseDTO> getBookingInfoByHost(String festivalId, Long hostUserId, List<String> role) {
+
+        Festival festival;
+        if (role.contains("ROLE_ADMIN")) {
+            festival = festivalRepository.findByFestivalId(festivalId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
+        } else {
+            festival = festivalRepository.findByFestivalIdAndOrganizer(festivalId, hostUserId);
+        }
+
+        if (festival == null) {
             throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
         }
 
-        List<Ticket> tickets = new ArrayList<>();
-        for (Festival festival : festivals) {
-            tickets.addAll(ticketRepository.findByFestivalIdAndReservationStatus(festival.getFestivalId(), ReservationStatus.CONFIRMED));
-        }
+        List<Ticket> tickets = new ArrayList<>(ticketRepository.findByFestivalIdAndReservationStatus(festival.getFestivalId(), ReservationStatus.CONFIRMED));
 
         if (tickets.isEmpty()) {
             return Collections.emptyList();

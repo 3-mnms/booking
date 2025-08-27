@@ -9,6 +9,7 @@ import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/host")
 @Tag(name = "주최자 관련 API", description = "주최자 예매자 명단 조회, 주최자 도메인 데이터 제공 API")
@@ -38,10 +40,10 @@ public class HostController {
     @PostMapping("/booking/list")
     @Operation(summary = "예매자 정보 조회",
             description = "예매자 정보 조회, 주최자 혹은 운영자로 로그인해야합니다.")
-    @PreAuthorize("hasAnyRole('HOST')")
+    @PreAuthorize("hasAnyRole('HOST', 'ADMIN')")
     public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(@RequestParam String festivalId,
                                                                                  Authentication authentication) {
-        List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(festivalId, securityResponseUtil.requireUserId(authentication));
+        List<HostResponseDTO> bookings = hostService.getBookingInfoByHost(festivalId, securityResponseUtil.requireUserId(authentication), securityResponseUtil.requireRole(authentication));
         return ApiResponseUtil.success(bookings);
     }
 }
