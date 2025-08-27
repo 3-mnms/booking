@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTicketRequestDTO {
-    private Long transfereeId; // userId에 해당함
+    private Long transferId;
+    private Long receiverId;
+    private String transferStatus;
+
     private String deliveryMethod;
     private String address;
 }

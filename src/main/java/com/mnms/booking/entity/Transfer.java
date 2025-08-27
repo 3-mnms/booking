@@ -7,9 +7,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transfer {
@@ -18,6 +18,9 @@ public class Transfer {
     private Long id;
 
     private Long senderId;
+
+    private String senderName;
+
     private Long receiverId;
 
     @Enumerated(EnumType.STRING)
@@ -25,7 +28,7 @@ public class Transfer {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private TransferStatus status = TransferStatus.PENDING;
+    private TransferStatus status = TransferStatus.REQUESTED;
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
