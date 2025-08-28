@@ -28,7 +28,7 @@ public class HostController {
     private final HostService hostService;
 
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Operation(summary = "주최자 도메인에 예매자 리스트 제공",
             description = "주최자가 FestivalId와 PerformanceDate를 제공하면 해당하는 예매자 userId를 리스트로 제공합니다. front와 관련 없음"
     )
