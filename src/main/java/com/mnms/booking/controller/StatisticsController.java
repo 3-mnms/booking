@@ -1,5 +1,6 @@
 package com.mnms.booking.controller;
 
+import com.mnms.booking.dto.response.StatisticsBookingDTO;
 import com.mnms.booking.dto.response.StatisticsQrCodeResponseDTO;
 import com.mnms.booking.dto.response.StatisticsUserResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
@@ -65,5 +66,23 @@ public class StatisticsController {
         StatisticsQrCodeResponseDTO statistics = statisticsQrCodeService.getPerformanceEnterStatistics(festivalId, performanceDate, userId, isHost, isAdmin);
 
         return ApiResponseUtil.success(statistics, "공연 입장 통계 정보가 성공적으로 조회되었습니다.");
+    }
+
+    @GetMapping("/booking/{festivalId}")
+    @Operation(summary = "공연별 예매자 수 / 수용 인원 요약 조회",
+            description = "주최자가 자신의 페스티벌에 대한 각 공연(날짜/시간)별 예매 현황과 총 수용 인원을 요약하여 조회합니다.")
+    public ResponseEntity<SuccessResponse<List<StatisticsBookingDTO>>> getBookingSummary(
+            @PathVariable String festivalId,
+            Authentication authentication) {
+
+        String userId = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        statisticsQueryService.validateHostOrAdminAccess(festivalId, userId, isAdmin);
+
+        List<StatisticsBookingDTO> summary = statisticsQueryService.getBookingSummary(festivalId);
+
+        return ApiResponseUtil.success(summary, "공연 요약 정보가 성공적으로 조회되었습니다.");
     }
 }
