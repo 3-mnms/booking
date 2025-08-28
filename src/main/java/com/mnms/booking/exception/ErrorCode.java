@@ -47,7 +47,10 @@ public enum ErrorCode {
     TRANSFER_NOT_FOUND_INFORM("TR002", "검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
     TRANSFER_NOT_FOUND_NAME("TR003", "이름 검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
     TRANSFER_NOT_FOUND_RRN("TR003", "주민등록 번호 검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
-    TRANSFER_NOT_EXIST("TR004", "양도 요청이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+    TRANSFER_NOT_EXIST("TR004", "양도 요청이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRANSFER_NOT_MATCH_RECEIVER("TR005", "양도 승인하는 양수자가 맞지 않습니다.", HttpStatus.BAD_REQUEST),
+    TRANSFER_NOT_MATCH_TYPE("TR006", "양도 타입이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
+    TRANSFER_NOT_MATCH_SENDER("TR007", "양도자의 티켓과 매칭되지 않습니다.", HttpStatus.CONFLICT);
 
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지

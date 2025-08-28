@@ -50,7 +50,8 @@ public class OcrParserService {
         String normalizedNamePattern = "\\b" + Pattern.quote(name.replaceAll("\\s", "")) + "\\b";
 
         String matchedName = ocrTexts.stream()
-                .map(t -> t.replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
+                .map(t -> t.replaceAll("\\([^)]*\\)", "")
+                        .replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
                 .filter(t -> t.matches(".*" + normalizedNamePattern + ".*"))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME));

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transfer {
@@ -23,10 +24,13 @@ public class Transfer {
 
     private Long receiverId;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
     private TransferType type;
 
-    @Enumerated(EnumType.STRING)
+    @Setter
     @Builder.Default
     private TransferStatus status = TransferStatus.REQUESTED;
 

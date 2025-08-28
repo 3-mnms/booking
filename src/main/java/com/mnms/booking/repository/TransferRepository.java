@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface TransferRepository extends JpaRepository<Transfer, Long> {
     List<Transfer> findByReceiverId(Long userId);
+    Optional<Transfer> findById(Long id);
 }

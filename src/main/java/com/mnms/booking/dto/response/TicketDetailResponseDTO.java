@@ -21,6 +21,7 @@ public class TicketDetailResponseDTO {
     private TicketType deliveryMethod; // 티켓 수령 방법
     private List<String> qrId;
     private String address;
+    private String posterFile;
 
     // festival
     private String fname; // 공연명
@@ -40,6 +41,7 @@ public class TicketDetailResponseDTO {
                 .qrId(qrIds)
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
+                .posterFile(festival.getPosterFile())
                 .build();
     }
 }
