@@ -14,14 +14,14 @@ import org.slf4j.LoggerFactory;
 import java.text.DecimalFormat;
 
 @Service
-public class StatisticsService {
-    private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
+public class StatisticsUserService {
+    private static final Logger logger = LoggerFactory.getLogger(StatisticsUserService.class);
     private final StatisticsRepository statisticsRepository;
     private final WebClient webClient;
     private final String userStatsListApi;
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
-    public StatisticsService(
+    public StatisticsUserService(
             StatisticsRepository statisticsRepository,
             WebClient.Builder webClientBuilder,
             @Value("${base.service.url}") String baseApiUrl,
