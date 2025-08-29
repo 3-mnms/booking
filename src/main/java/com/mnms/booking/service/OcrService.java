@@ -52,9 +52,7 @@ public class OcrService {
             // 5. 헤더 구성
             HttpHeaders headers = getApiHeaders();
 
-
-            String response = postApi(headers, multipartBody);
-            return response;
+            return postApi(headers, multipartBody);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,13 +60,12 @@ public class OcrService {
 
     private String postApi(HttpHeaders headers, MultiValueMap<String, Object> multipartBody) {
         RestClient restClient=RestClient.create();
-        String response = restClient.post()
+        return restClient.post()
                 .uri(ocrInvokeUrl)
                 .headers(h -> h.addAll(headers))
                 .body(multipartBody)
                 .retrieve()
                 .body(String.class);
-        return response;
     }
 
     private HttpHeaders getApiHeaders() {

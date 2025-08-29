@@ -33,6 +33,10 @@ public class TransferService {
         Ticket ticket = ticketRepository.findByReservationNumber(dto.getReservationNumber())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
+        if(transferRepository.existsByTicket(ticket)){
+            throw new BusinessException(ErrorCode.TRANSFER_ALREADY_EXIST_REQUEST);
+        }
+
         if(!ticket.getUserId().equals(userId)){
             throw new BusinessException(ErrorCode.TICKET_USER_NOT_SAME);
         }
@@ -50,14 +54,14 @@ public class TransferService {
 
     ///  양도 요청 조회
     public List<TicketTransferResponseDTO> watchTransfer(Long userId) {
-        List<Transfer> transfers = transferRepository.findByReceiverId(userId);
+        List<Transfer> transfers = transferRepository.findByReceiverIdWithTicketAndFestival(
+                userId, List.of(TransferStatus.COMPLETED, TransferStatus.CANCELED));
 
         if (transfers.isEmpty()) {
             throw new BusinessException(ErrorCode.TRANSFER_NOT_EXIST);
         }
 
         transfers.forEach(transfer -> log.info("transfer: {}", transfer));
-
         return transfers.stream()
                 .map(transfer -> {
                     Ticket ticket = transfer.getTicket();

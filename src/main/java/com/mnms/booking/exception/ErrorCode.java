@@ -51,6 +51,7 @@ public enum ErrorCode {
     TRANSFER_NOT_MATCH_RECEIVER("TR005", "양도 승인하는 양수자가 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSFER_NOT_MATCH_TYPE("TR006", "양도 타입이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSFER_NOT_MATCH_SENDER("TR007", "양도자의 티켓과 매칭되지 않습니다.", HttpStatus.CONFLICT),
+    TRANSFER_ALREADY_EXIST_REQUEST("T008", "이미 진행되고 있는 양도 거래가 존재합니다.", HttpStatus.CONFLICT),
 
     // STATISTICS (통계 관련 에러 코드 추가)
     STATISTICS_ACCESS_DENIED("ST001", "통계 정보에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),

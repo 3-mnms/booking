@@ -1,6 +1,6 @@
 package com.mnms.booking.enums;
 
-public enum TicketType {
+public enum  TicketType {
     MOBILE,
     PAPER
 }

@@ -104,8 +104,9 @@ public class TransferCompletionService {
     public void updateOthersTicket(String reservationNumber, boolean paymentStatus) {
         Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
-
         Transfer transfer = transferRepository.findByTicket(ticket);
+
+        // 결제 kafka 로직 변경 시 수정 예정
         if (!paymentStatus) {
             transfer.setStatus(TransferStatus.CANCELED);
             return;
