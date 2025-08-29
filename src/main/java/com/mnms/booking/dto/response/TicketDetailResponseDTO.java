@@ -24,6 +24,7 @@ public class TicketDetailResponseDTO {
     private String posterFile;
 
     // festival
+    private String festivalId; // festivalId
     private String fname; // 공연명
     private String fcltynm; // 장소
 
@@ -39,6 +40,7 @@ public class TicketDetailResponseDTO {
                 .deliveryMethod(ticket.getDeliveryMethod())
                 .address(ticket.getAddress())
                 .qrId(qrIds)
+                .festivalId(festival.getFestivalId())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
                 .posterFile(festival.getPosterFile())

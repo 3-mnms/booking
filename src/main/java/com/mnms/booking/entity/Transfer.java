@@ -29,7 +29,7 @@ public class Transfer {
     @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
-    private TransferType type;
+    private TransferType transferType;
 
     @Setter
     private TicketType ticketType;

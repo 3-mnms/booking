@@ -37,4 +37,13 @@ public class TransferOthersResponseDTO {
                 .performanceDate(ticket.getPerformanceDate())
                 .build();
     }
+
+    // 취소
+    public static TransferOthersResponseDTO canceled(String reservationNumber, Long senderId, Long receiverId) {
+        return TransferOthersResponseDTO.builder()
+                .reservationNumber(reservationNumber)
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .build();
+    }
 }

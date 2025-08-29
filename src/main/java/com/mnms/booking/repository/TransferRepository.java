@@ -3,6 +3,7 @@ package com.mnms.booking.repository;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.Transfer;
 import com.mnms.booking.enums.TransferStatus;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,8 +13,11 @@ import java.util.Optional;
 
 public interface TransferRepository extends JpaRepository<Transfer, Long> {
     Transfer findByTicket(Ticket ticket);
+
+    @EntityGraph(attributePaths = {"ticket", "ticket.qrCodes"})
     Optional<Transfer> findById(Long id);
-    boolean existsByTicket(Ticket ticket);
+
+    boolean existsByTicket_Id(Long id);
 
     @Query("SELECT t FROM Transfer t " +
             "JOIN FETCH t.ticket ticket " +

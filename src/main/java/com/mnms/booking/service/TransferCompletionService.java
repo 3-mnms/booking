@@ -46,23 +46,13 @@ public class TransferCompletionService {
         validateReceiver(transfer, userId);
 
         // CANCELED 처리
-        if (request.getTransferStatus() == TransferStatus.CANCELED) {
-            transfer.setStatus(TransferStatus.CANCELED);
+        if (handleCancel(transfer, request)) {
             return;
         }
 
-        // ticket 점검
-        Ticket ticket = getTicketOrThrow(transfer.getTicket().getReservationNumber());
-        validateTicketStatus(ticket);
-
         // transfer 상태 업데이트
         transfer.setStatus(TransferStatus.COMPLETED);
-        transfer.setTicketType(request.getTicketType());
-        transfer.setAddress(request.getAddress());
-
-        // ticket, QR 정보 업데이트
-        updateTicketInfo(ticket, request, userId);
-        updateQrCodes(ticket, request, userId);
+        applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), true);
     }
 
     /// 지인 간 양도 요청 수락
@@ -77,13 +67,8 @@ public class TransferCompletionService {
         validateReceiver(transfer, userId);
 
         // CANCELED 처리
-        if (request.getTransferStatus() == TransferStatus.CANCELED) {
-            transfer.setStatus(TransferStatus.CANCELED);
-            return TransferOthersResponseDTO.builder()
-                    .reservationNumber(reservationNumber)
-                    .senderId(transfer.getSenderId())
-                    .receiverId(userId)
-                    .build();
+        if(handleCancel(transfer, request)){
+            return TransferOthersResponseDTO.canceled(reservationNumber, transfer.getSenderId(), userId);
         }
 
         Ticket ticket = getTicketOrThrow(reservationNumber);
@@ -104,6 +89,7 @@ public class TransferCompletionService {
     public void updateOthersTicket(String reservationNumber, boolean paymentStatus) {
         Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
+
         Transfer transfer = transferRepository.findByTicket(ticket);
 
         // 결제 kafka 로직 변경 시 수정 예정
@@ -113,7 +99,6 @@ public class TransferCompletionService {
         }
 
         transfer.setStatus(TransferStatus.COMPLETED);
-
         UpdateTicketRequestDTO request = UpdateTicketRequestDTO.builder()
                 .transferId(transfer.getId())
                 .senderId(transfer.getSenderId())
@@ -122,14 +107,34 @@ public class TransferCompletionService {
                 .address(transfer.getAddress())
                 .build();
 
-        updateTicketInfo(ticket, request, transfer.getReceiverId());
-        updateQrCodes(ticket, request, transfer.getReceiverId());
+        applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
     }
 
-
     /// UTIL
+    private void applyTicketAndQrUpdate(Transfer transfer, UpdateTicketRequestDTO request,
+                                        Long receiverId, boolean updateTransferFields) {
+        Ticket ticket = getTicketOrThrow(transfer.getTicket().getReservationNumber());
+        validateTicketStatus(ticket);
+
+        if (updateTransferFields) {
+            transfer.setTicketType(request.getTicketType());
+            transfer.setAddress(request.getAddress());
+        }
+
+        updateTicketInfo(ticket, request, receiverId);
+        updateQrCodes(ticket, request, receiverId);
+    }
+
+    private boolean handleCancel(Transfer transfer, UpdateTicketRequestDTO request) {
+        if (request.getTransferStatus() == TransferStatus.CANCELED) {
+            transfer.setStatus(TransferStatus.CANCELED);
+            return true;
+        }
+        return false;
+    }
+
     private void validateTransferType(Transfer transfer, TransferType expectedType) {
-        if (!transfer.getType().equals(expectedType)) {
+        if (!transfer.getTransferType().equals(expectedType)) {
             throw new BusinessException(ErrorCode.TRANSFER_NOT_MATCH_TYPE);
         }
     }
@@ -188,8 +193,5 @@ public class TransferCompletionService {
             qr.setUserId(receiverId);
             qr.setTicket(ticket);
         });
-
-        ticket.getQrCodes().clear();
-        ticket.getQrCodes().addAll(existingQrs);
     }
 }

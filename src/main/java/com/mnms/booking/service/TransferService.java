@@ -33,7 +33,7 @@ public class TransferService {
         Ticket ticket = ticketRepository.findByReservationNumber(dto.getReservationNumber())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        if(transferRepository.existsByTicket(ticket)){
+        if(transferRepository.existsByTicket_Id(ticket.getId())){
             throw new BusinessException(ErrorCode.TRANSFER_ALREADY_EXIST_REQUEST);
         }
 
@@ -46,7 +46,7 @@ public class TransferService {
                 .senderId(userId)
                 .senderName(dto.getSenderName())
                 .receiverId(dto.getRecipientId())
-                .type("OTHERS".equals(dto.getTransferType()) ? TransferType.OTHERS : TransferType.FAMILY)
+                .transferType("OTHERS".equals(dto.getTransferType()) ? TransferType.OTHERS : TransferType.FAMILY)
                 .status(TransferStatus.REQUESTED)
                 .build();
         transferRepository.save(transfer);

@@ -20,7 +20,7 @@ public class TicketTransferResponseDTO {
     ///  TRANSFER
     private Long senderId;
     private String senderName;
-    private TransferType type;
+    private TransferType transferType;
     private LocalDateTime createdAt;
     private String status;
 
@@ -32,13 +32,14 @@ public class TicketTransferResponseDTO {
 
     ///  TICKET
     private LocalDateTime performanceDate;
+    private String reservationNumber;
     private int selectedTicketCount;
 
     public static TicketTransferResponseDTO from(Transfer transfer, Ticket ticket, Festival festival) {
         return TicketTransferResponseDTO.builder()
                 .senderId(transfer.getSenderId())
                 .senderName(transfer.getSenderName())
-                .type(transfer.getType())
+                .transferType(transfer.getTransferType())
                 .createdAt(transfer.getCreatedAt())
                 .status(String.valueOf(transfer.getStatus()))
                 .fname(festival.getFname())
@@ -46,6 +47,7 @@ public class TicketTransferResponseDTO {
                 .fcltynm(festival.getFcltynm())
                 .ticketPrice(festival.getTicketPrice())
                 .performanceDate(ticket.getPerformanceDate())
+                .reservationNumber(ticket.getReservationNumber())
                 .selectedTicketCount(ticket.getSelectedTicketCount())
                 .build();
     }
