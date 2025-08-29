@@ -77,6 +77,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByFestivalIdAndReservationStatus(@Param("festivalId") String festivalId,
                                                       @Param("status") ReservationStatus status);
 
+    Optional<List<Ticket>> findByUserId(Long userId);
+
     // userId와 festivalId가 일치하는 티켓이 존재하는지 확인
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Ticket t WHERE t.userId = :userId AND t.festival.festivalId = :festivalId")
     boolean existsByUserIdAndFestivalId(@Param("userId") Long userId, @Param("festivalId") String festivalId);

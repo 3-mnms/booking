@@ -75,4 +75,11 @@ public class Ticket {
         this.address = address;
     }
 
+    public boolean isCanceled() {
+        return reservationStatus.equals(ReservationStatus.CANCELED);
+    }
+
+    public boolean isExpired() {
+        return performanceDate.isBefore(LocalDateTime.now());
+    }
 }

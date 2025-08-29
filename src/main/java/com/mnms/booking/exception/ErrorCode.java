@@ -1,6 +1,7 @@
 package com.mnms.booking.exception;
 
 import lombok.Getter;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -30,6 +31,8 @@ public enum ErrorCode {
     TICKET_FAIL_CANCEL("T005", "티켓 취소가 실패했습니다.", HttpStatus.CONFLICT),
     TICKET_USER_NOT_SAME("T006", "사용자가 티켓 소유자가 아닙니다.", HttpStatus.FORBIDDEN),
     TICKET_ALREADY_CANCELED("T007", "티켓이 이미 예매 취소되었습니다.", HttpStatus.CONFLICT),
+    TICKET_EXPIRED("T008", "티켓의 유효기간이 만료되었습니다.", HttpStatus.CONFLICT),
+    TICKET_CANCELED("T009", "취소된 티켓입니다.", HttpStatus.CONFLICT),
 
     // QR
     QR_CODE_SAVE_FAILED("Q001", "QR 코드 생성 또는 저장을 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
@@ -44,10 +47,15 @@ public enum ErrorCode {
     TRANSFER_NOT_FOUND_INFORM("TR002", "검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
     TRANSFER_NOT_FOUND_NAME("TR003", "이름 검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
     TRANSFER_NOT_FOUND_RRN("TR003", "주민등록 번호 검사에 실패하였습니다.", HttpStatus.NOT_FOUND),
+    TRANSFER_NOT_EXIST("TR004", "양도 요청이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRANSFER_NOT_MATCH_RECEIVER("TR005", "양도 승인하는 양수자가 맞지 않습니다.", HttpStatus.BAD_REQUEST),
+    TRANSFER_NOT_MATCH_TYPE("TR006", "양도 타입이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
+    TRANSFER_NOT_MATCH_SENDER("TR007", "양도자의 티켓과 매칭되지 않습니다.", HttpStatus.CONFLICT);
 
     // STATISTICS (통계 관련 에러 코드 추가)
     STATISTICS_ACCESS_DENIED("ST001", "통계 정보에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),
     STATISTICS_NOT_FOUND("ST002", "해당 페스티벌의 통계 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+
 
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지
