@@ -1,5 +1,6 @@
 package com.mnms.booking.repository;
 
+import com.mnms.booking.dto.response.StatisticsBookingDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.ReservationStatus;
@@ -84,4 +85,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // 특정 festivalId에 대한 유효한 공연 날짜-시간을 모두 조회
     @Query("SELECT DISTINCT t.performanceDate FROM Ticket t WHERE t.festival.festivalId = :festivalId")
     List<LocalDateTime> findDistinctPerformanceDateByFestivalId(@Param("festivalId") String festivalId);
+
+    @Query("SELECT new com.mnms.booking.dto.response.StatisticsBookingDTO(" +
+            "t.performanceDate, SUM(t.selectedTicketCount), 0) " +
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId AND t.reservationStatus = :status " +
+            "GROUP BY t.performanceDate")
+    List<StatisticsBookingDTO> findBookedSummary(String festivalId, ReservationStatus status);
 }
