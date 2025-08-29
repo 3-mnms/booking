@@ -10,6 +10,7 @@ import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.OcrParserService;
 import com.mnms.booking.service.OcrService;
+import com.mnms.booking.service.TransferCompletionService;
 import com.mnms.booking.service.TransferService;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
@@ -17,7 +18,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -30,17 +30,17 @@ import java.util.*;
 @RequestMapping("/api/transfer")
 @RequiredArgsConstructor
 @Tag(name = "양도 API", description = "양도 및 OCR, Ticket 재생성")
-@Slf4j
 public class TransferController {
     private final OcrService ocrService;
     private final TransferService transferService;
     private final SecurityResponseUtil securityResponseUtil;
+    private final TransferCompletionService transferCompletionService;
 
 
-    ///  가족 인증
+    ///  가족관계증명서 인증
     @PostMapping("/extract")
     @Operation(summary = "가족 간 양도 진행 인증 시도",
-            description = "가족관계증명서 pdf를 첨부하고 양도자 및 양수자의 이름과 주민등록번호로 요청하고, 인증 완료 응답을 보냅니다."
+            description = "가족관계증명서 PDF를 첨부하고 양도자 및 양수자의 이름과 주민등록번호로 요청하고, 인증 완료 응답을 보냅니다."
     )
     public ResponseEntity<SuccessResponse<List<PersonInfoResponseDTO>>> extractPersonInfo(
             @RequestPart("file") MultipartFile file,
@@ -85,19 +85,20 @@ public class TransferController {
     public ResponseEntity<SuccessResponse<Void>> responseTicketFamily(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
-        transferService.updateFamilyTicket(request, securityResponseUtil.requireUserId(authentication));
+        transferCompletionService.updateFamilyTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(null, "티켓 양도가 성공적으로 진행되었습니다.");
     }
 
     /// 지인간 양도 요청 승인
     @PutMapping("/acceptance/others")
     @Operation(summary = "타인 간 양도 요청 완료",
-            description = "타인 간 양도 요청 시, 양수자가 요청을 수락하면 결제 요청이 넘어가게 됩니다."
+            description = "타인 간 양도 요청 시, 양수자가 요청을 수락하면 결제 요청이 넘어가게 됩니다. " +
+            "결제 완료 후 kafka 메시지 받으면 양도 완료됩니다."
     )
     public ResponseEntity<SuccessResponse<TransferOthersResponseDTO>> responseTicketOthers(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
-            TransferOthersResponseDTO response = transferService.proceedOthersTicket(request, securityResponseUtil.requireUserId(authentication));
+            TransferOthersResponseDTO response = transferCompletionService.proceedOthersTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(response);
     }
 }

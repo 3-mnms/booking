@@ -27,14 +27,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final SecurityResponseUtil securityResponseUtil;
 
-    @GetMapping
-    @Operation(summary = "예매한 티켓 정보 조회",
-            description = "예매자가 예매 완료한 전체 티켓 리스트를 조회합니다. (status : 완료, 취소한 티켓 조회 가능)"
-    )
-    public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
-        List<TicketResponseDTO> tickets = ticketService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
-        return ApiResponseUtil.success(tickets);
-    }
+
 
     @GetMapping("/detail")
     @Operation(summary = "예매한 티켓 정보 디테일 조회",
