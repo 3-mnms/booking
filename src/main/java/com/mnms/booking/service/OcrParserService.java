@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,27 +47,28 @@ public class OcrParserService {
     private static PersonInfoResponseDTO matchPersonInfo(
             String name, String rrn, List<String> ocrTexts) {
 
-        // 임시 수정
-        String normalizedNamePattern = name.replaceAll("\\s", "").replaceAll("\\\\[bQE]", "");
-        log.info("normalizedNamePattern : {}", normalizedNamePattern);
-
-        String matchedName = ocrTexts.stream()
+        List<String> cleanedOcrTexts = ocrTexts.stream()
                 .map(t -> t.replaceAll("\\([^)]*\\)", "")
                         .replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
-                .filter(t -> t.contains(normalizedNamePattern))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME));
+                .toList();
 
-        String matchedRrn = ocrTexts.stream()
-                .filter(t -> t.contains(rrn) && t.matches(".*\\d{6}-[1-4].*"))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN));
+        String normalizedName = name.replaceAll("\\s", "").replaceAll("\\\\[bQE]", "");
+        String foundName = null, foundRrn = null;
 
-        /* 임시 삭제
-        if (!name.equals(matchedName)) {
+        for (String text : cleanedOcrTexts) {
+            if (foundName == null && text.contains(normalizedName)) foundName = text;
+            if (foundRrn == null && text.contains(rrn) && text.matches(".*\\d{6}-[1-4].*")) {
+                foundRrn = text;
+            }
+            if (foundName != null && foundRrn != null) break;
+        }
+
+        if (foundName == null) {
             throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
-        }*/
-
-        return new PersonInfoResponseDTO(matchedName, matchedRrn);
+        }
+        if (foundRrn == null) {
+            throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN);
+        }
+        return new PersonInfoResponseDTO(foundName, foundRrn);
     }
 }
