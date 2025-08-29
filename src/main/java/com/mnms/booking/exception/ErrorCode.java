@@ -22,7 +22,7 @@ public enum ErrorCode {
     FESTIVAL_DELIVERY_INVALID("F004", "유효하지 않은 배송 방법입니다.", HttpStatus.BAD_REQUEST),
     FESTIVAL_MISMATCH("F005", "해당하는 QR의 페스티벌 주최자가 아닙니다.", HttpStatus.FORBIDDEN),
     FESTIVAL_LIMIT_AVALIABLE_PEOPLE("F006", "해당 페스티벌 수용 인원이 초과되어 예매를 진행할 수 없습니다.", HttpStatus.CONFLICT),
-    
+
     // TICKET
     TICKET_ALREADY_RESERVED("T001", "예약 가능한 티켓 수를 초과하였습니다.", HttpStatus.CONFLICT),
     TICKET_NOT_FOUND("T002", "해당하는 티켓을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -51,6 +51,11 @@ public enum ErrorCode {
     TRANSFER_NOT_MATCH_RECEIVER("TR005", "양도 승인하는 양수자가 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSFER_NOT_MATCH_TYPE("TR006", "양도 타입이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSFER_NOT_MATCH_SENDER("TR007", "양도자의 티켓과 매칭되지 않습니다.", HttpStatus.CONFLICT);
+
+    // STATISTICS (통계 관련 에러 코드 추가)
+    STATISTICS_ACCESS_DENIED("ST001", "통계 정보에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    STATISTICS_NOT_FOUND("ST002", "해당 페스티벌의 통계 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+
 
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지
