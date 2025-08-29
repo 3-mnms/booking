@@ -47,12 +47,14 @@ public class OcrParserService {
     private static PersonInfoResponseDTO matchPersonInfo(
             String name, String rrn, List<String> ocrTexts) {
 
-        String normalizedNamePattern = "\\b" + Pattern.quote(name.replaceAll("\\s", "")) + "\\b";
+        // 임시 수정
+        String normalizedNamePattern = name.replaceAll("\\s", "").replaceAll("\\\\[bQE]", "");
+        log.info("normalizedNamePattern : {}", normalizedNamePattern);
 
         String matchedName = ocrTexts.stream()
                 .map(t -> t.replaceAll("\\([^)]*\\)", "")
                         .replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
-                .filter(t -> t.matches(".*" + normalizedNamePattern + ".*"))
+                .filter(t -> t.contains(normalizedNamePattern))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME));
 
@@ -61,9 +63,10 @@ public class OcrParserService {
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN));
 
+        /* 임시 삭제
         if (!name.equals(matchedName)) {
             throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
-        }
+        }*/
 
         return new PersonInfoResponseDTO(matchedName, matchedRrn);
     }

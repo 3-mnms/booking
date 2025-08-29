@@ -10,6 +10,7 @@ import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.OcrParserService;
 import com.mnms.booking.service.OcrService;
+import com.mnms.booking.service.TransferCompletionService;
 import com.mnms.booking.service.TransferService;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
@@ -35,6 +36,7 @@ public class TransferController {
     private final OcrService ocrService;
     private final TransferService transferService;
     private final SecurityResponseUtil securityResponseUtil;
+    private final TransferCompletionService transferCompletionService;
 
 
     ///  가족 인증
@@ -85,7 +87,7 @@ public class TransferController {
     public ResponseEntity<SuccessResponse<Void>> responseTicketFamily(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
-        transferService.updateFamilyTicket(request, securityResponseUtil.requireUserId(authentication));
+        transferCompletionService.updateFamilyTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(null, "티켓 양도가 성공적으로 진행되었습니다.");
     }
 
@@ -97,7 +99,7 @@ public class TransferController {
     public ResponseEntity<SuccessResponse<TransferOthersResponseDTO>> responseTicketOthers(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
-            TransferOthersResponseDTO response = transferService.proceedOthersTicket(request, securityResponseUtil.requireUserId(authentication));
+            TransferOthersResponseDTO response = transferCompletionService.proceedOthersTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(response);
     }
 }

@@ -1,5 +1,6 @@
 package com.mnms.booking.entity;
 
+import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
 import jakarta.persistence.*;
@@ -31,10 +32,15 @@ public class Transfer {
     private TransferType type;
 
     @Setter
+    private TicketType ticketType;
+
+    @Setter
+    private String address;
+
+    @Setter
     @Builder.Default
     private TransferStatus status = TransferStatus.REQUESTED;
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt;
 }
