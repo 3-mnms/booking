@@ -1,11 +1,13 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
+import com.mnms.booking.dto.response.TicketStatusResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.Transfer;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
@@ -17,6 +19,7 @@ import com.mnms.booking.repository.TransferRepository;
 import com.mnms.booking.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,7 @@ public class TransferCompletionService {
     private final TransferRepository transferRepository;
     private final CommonUtils commonUtils;
     private final QrCodeService qrCodeService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /// 가족 간 양도 수락
     @Transactional(rollbackFor = BusinessException.class)
@@ -92,22 +96,28 @@ public class TransferCompletionService {
 
         Transfer transfer = transferRepository.findByTicket(ticket);
 
+        ReservationStatus newStatus = paymentStatus ?
+                ReservationStatus.CONFIRMED :
+                ReservationStatus.CANCELED;
+
         // 결제 kafka 로직 변경 시 수정 예정
-        if (!paymentStatus) {
+        if (paymentStatus) {
+            transfer.setStatus(TransferStatus.COMPLETED);
+            UpdateTicketRequestDTO request = UpdateTicketRequestDTO.builder()
+                    .transferId(transfer.getId())
+                    .senderId(transfer.getSenderId())
+                    .transferStatus(transfer.getStatus())
+                    .ticketType(transfer.getTicketType())
+                    .address(transfer.getAddress())
+                    .build();
+            applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
+        } else{
             transfer.setStatus(TransferStatus.CANCELED);
-            return;
         }
-
-        transfer.setStatus(TransferStatus.COMPLETED);
-        UpdateTicketRequestDTO request = UpdateTicketRequestDTO.builder()
-                .transferId(transfer.getId())
-                .senderId(transfer.getSenderId())
-                .transferStatus(transfer.getStatus())
-                .ticketType(transfer.getTicketType())
-                .address(transfer.getAddress())
-                .build();
-
-        applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
+        // websocket 전송
+        messagingTemplate.convertAndSend(
+                "/topic/transfer/" + transfer.getReceiverId(),
+                new TicketStatusResponseDTO(ticket.getReservationNumber(), newStatus));
     }
 
     /// UTIL
