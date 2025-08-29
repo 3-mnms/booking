@@ -3,6 +3,7 @@ package com.mnms.booking.service;
 import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
 import com.mnms.booking.dto.response.TicketStatusResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
+import com.mnms.booking.dto.response.TransferStatusResponseDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
@@ -96,9 +97,9 @@ public class TransferCompletionService {
 
         Transfer transfer = transferRepository.findByTicket(ticket);
 
-        ReservationStatus newStatus = paymentStatus ?
-                ReservationStatus.CONFIRMED :
-                ReservationStatus.CANCELED;
+        TransferStatus newStatus = paymentStatus ?
+                TransferStatus.COMPLETED :
+                TransferStatus.APPROVED;
 
         // 결제 kafka 로직 변경 시 수정 예정
         if (paymentStatus) {
@@ -111,13 +112,11 @@ public class TransferCompletionService {
                     .address(transfer.getAddress())
                     .build();
             applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
-        } else{
-            transfer.setStatus(TransferStatus.CANCELED);
         }
         // websocket 전송
         messagingTemplate.convertAndSend(
                 "/topic/transfer/" + transfer.getReceiverId(),
-                new TicketStatusResponseDTO(ticket.getReservationNumber(), newStatus));
+                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus));
     }
 
     /// UTIL
