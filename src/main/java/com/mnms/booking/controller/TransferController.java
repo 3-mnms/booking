@@ -42,6 +42,21 @@ public class TransferController {
     @Operation(summary = "가족 간 양도 진행 인증 시도",
             description = "가족관계증명서 PDF를 첨부하고 양도자 및 양수자의 이름과 주민등록번호로 요청하고, 인증 완료 응답을 보냅니다."
     )
+    public ResponseEntity<SuccessResponse<Void>> extractPersonAuth(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("targetInfo") String targetInfoJson) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> targetInfo = objectMapper.readValue(targetInfoJson, new TypeReference<>() {});
+        String ocrJson = ocrService.callOcr(file);
+        OcrParserService.parseOcrResult(ocrJson, targetInfo);
+
+        return ApiResponseUtil.success(null,"가족관계증명서 인증이 완료되었습니다.");
+    }
+
+    @PostMapping("/extract/result")
+    @Operation(summary = "가족 간 양도 진행 인증 시도",
+            description = "가족관계증명서 PDF를 첨부하고 양도자 및 양수자의 이름과 주민등록번호로 요청하고, 인증 완료 응답과 결과를 보냅니다."
+    )
     public ResponseEntity<SuccessResponse<List<PersonInfoResponseDTO>>> extractPersonInfo(
             @RequestPart("file") MultipartFile file,
             @RequestPart("targetInfo") String targetInfoJson) throws IOException {
@@ -53,6 +68,7 @@ public class TransferController {
 
         return ApiResponseUtil.success(people, "가족관계증명서 인증이 완료되었습니다.");
     }
+
 
     /// 양도 요청
     @PostMapping("/request")
