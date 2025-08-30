@@ -8,7 +8,6 @@ import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -27,7 +27,14 @@ public class TicketController {
     private final TicketService ticketService;
     private final SecurityResponseUtil securityResponseUtil;
 
-
+    @GetMapping
+    @Operation(summary = "예매한 티켓 정보 조회",
+            description = "예매자가 예매 완료한 전체 티켓 리스트를 조회합니다. (status : 완료, 취소한 티켓 조회 가능)"
+    )
+    public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
+        List<TicketResponseDTO> tickets = ticketService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
+        return ApiResponseUtil.success(tickets);
+    }
 
     @GetMapping("/detail")
     @Operation(summary = "예매한 티켓 정보 디테일 조회",
