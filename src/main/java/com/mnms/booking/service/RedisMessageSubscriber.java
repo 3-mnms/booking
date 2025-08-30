@@ -25,9 +25,7 @@ public class RedisMessageSubscriber {
 
         // message는 JSON 문자열 -> DTO로 변환
         try {
-            // 여기에 로그 추가
             log.info("Received message from Redis channel: {}", message);
-
             WaitingNumberResponseDTO dto = new ObjectMapper().readValue(message, WaitingNumberResponseDTO.class);
 
             // userId 기준으로 메시지 전송

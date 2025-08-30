@@ -1,6 +1,7 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
+import com.mnms.booking.dto.response.TicketStatusResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.dto.response.TransferStatusResponseDTO;
 import com.mnms.booking.entity.Festival;
@@ -109,10 +110,13 @@ public class TransferCompletionService {
                     .build();
             applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
         }
-        // websocket 전송
-        messagingTemplate.convertAndSend(
-                "/topic/transfer/" + transfer.getReceiverId(),
-                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus));
+
+        // WebSocket 전송
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(ticket.getUserId()),
+                "/queue/transfer-status",
+                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus)
+        );
     }
 
     /// UTIL

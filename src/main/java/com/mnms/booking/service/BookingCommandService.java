@@ -150,8 +150,9 @@ public class BookingCommandService {
         }
 
         // WebSocket 전송
-        messagingTemplate.convertAndSend(
-                "/topic/ticket-status",
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(bookingTicket.getUserId()),
+                "/queue/ticket-status",
                 new TicketStatusResponseDTO(bookingTicket.getReservationNumber(), newStatus)
         );
     }
