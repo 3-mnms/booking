@@ -86,4 +86,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // 특정 festivalId에 대한 유효한 공연 날짜-시간을 모두 조회
     @Query("SELECT DISTINCT t.performanceDate FROM Ticket t WHERE t.festival.festivalId = :festivalId")
     List<LocalDateTime> findDistinctPerformanceDateByFestivalId(@Param("festivalId") String festivalId);
+
+    @Query("SELECT t.reservationStatus FROM Ticket t WHERE t.reservationNumber = :reservationNumber")
+    ReservationStatus findReservationStatusByReservationNumber(@Param("reservationNumber") String reservationNumber);
 }

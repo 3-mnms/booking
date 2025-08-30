@@ -139,12 +139,15 @@ public class BookingCommandService {
         Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        // 결제 상태 변경
         ReservationStatus newStatus = paymentStatus ?
                 ReservationStatus.CONFIRMED :
                 ReservationStatus.CANCELED;
-        bookingTicket.setReservationStatus(newStatus);
-        ticketRepository.save(bookingTicket);
+        // 결제 상태 변경
+        if(bookingTicket.getReservationStatus() != ReservationStatus.CONFIRMED
+                && bookingTicket.getReservationStatus() != ReservationStatus.CANCELED) {
+            bookingTicket.setReservationStatus(newStatus);
+            ticketRepository.save(bookingTicket);
+        }
 
         // WebSocket 전송
         messagingTemplate.convertAndSend(
@@ -163,10 +166,12 @@ public class BookingCommandService {
                 ? ReservationStatus.CANCELED
                 : ticket.getReservationStatus();
 
-        if (ticket.getReservationStatus() == ReservationStatus.CONFIRMED) {
+        if(ticket.getReservationStatus() == ReservationStatus.CANCELED){
+            throw new BusinessException(ErrorCode.TICKET_ALREADY_CANCELED);
+        }
+        if (ticket.getReservationStatus() != ReservationStatus.CONFIRMED) {
             throw new BusinessException(ErrorCode.TICKET_FAIL_CANCEL);
         }
-
         // qr 삭제 + ticket 상태 변경
         ticket.getQrCodes().clear();
         ticket.setReservationStatus(status);
@@ -273,5 +278,9 @@ public class BookingCommandService {
         QrCode qrCode = QrResponseDTO.create(userId, qrCodeId, festival, ticket).toEntity();
         qrCodeRepository.save(qrCode);
         return qrCode;
+    }
+
+    public ReservationStatus checkStatus(String reservationNumber) {
+        return ticketRepository.findReservationStatusByReservationNumber(reservationNumber);
     }
 }
