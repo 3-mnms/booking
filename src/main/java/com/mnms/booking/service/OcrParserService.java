@@ -5,24 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.response.PersonInfoResponseDTO;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class OcrParserService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static List<PersonInfoResponseDTO> parseOcrResult(
             String ocrJson, Map<String, String> targetInfo) throws IOException {
-
         List<String> ocrTexts = extractOcrTexts(ocrJson);
+
         return targetInfo.entrySet().stream()
                 .map(entry -> matchPersonInfo(entry.getKey(), entry.getValue(), ocrTexts))
                 .collect(Collectors.toList());
@@ -51,12 +48,10 @@ public class OcrParserService {
                 .map(t -> t.replaceAll("\\([^)]*\\)", "")
                         .replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
                 .toList();
-
-        String normalizedName = name.replaceAll("\\s", "").replaceAll("\\\\[bQE]", "");
         String foundName = null, foundRrn = null;
 
         for (String text : cleanedOcrTexts) {
-            if (foundName == null && text.contains(normalizedName)) foundName = text;
+            if (foundName == null && text.contains(name)) foundName = text;
             if (foundRrn == null && text.contains(rrn) && text.matches(".*\\d{6}-[1-4].*")) {
                 foundRrn = text;
             }
