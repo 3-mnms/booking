@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
@@ -108,20 +109,21 @@ public class WaitingController {
 
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
-     * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
+     * 클라이언트가 /app/subscribe/waiting로 메시지를 보냄 (최초 구독 요청)
      */
-    @Hidden
     @MessageMapping("/subscribe/waiting")
     public void subscribeWaitingQueue(
-            @RequestParam String festivalId,
-            @RequestParam LocalDateTime reservationDate,
+            @Header("festivalId") String festivalId,
+            @Header("reservationDate") LocalDateTime reservationDate,
             Authentication authentication) {
         String userId = getUserId(authentication);
         log.info("User {} subscribed to waiting queue updates.", userId);
+
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
         waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
     }
+
 
     public String getUserId(Authentication authentication) {
         return String.valueOf(securityResponseUtil.requireUserId(authentication));
