@@ -21,9 +21,7 @@ public class WaitingQueueSchedulingService {
     private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
-    /**
-     * 스케줄러 시작 (중복 시작 방지)
-     */
+    /// 스케줄러 시작 (중복 시작 방지)
     public synchronized void startScheduler(String waitingQueueKey, String bookingUsersKey, String notificationChannelKey, long availableNOP) {
         if (scheduledTasks.containsKey(waitingQueueKey) && !scheduledTasks.get(waitingQueueKey).isDone()) {
             return;
@@ -48,9 +46,7 @@ public class WaitingQueueSchedulingService {
         }
     }
 
-    /**
-     * 주기적으로 대기열 순번 발행 및 입장 처리
-     */
+    /// 주기적으로 대기열 순번 발행 및 입장 처리
     private void runSchedulerLogic(String waitingQueueKey, String bookingUsersKey, String notificationChannelKey, long availableNOP) {
         Set<String> waitingUsers = waitingQueueRedisService.getAllUsersInQueue(waitingQueueKey);
 
@@ -66,6 +62,7 @@ public class WaitingQueueSchedulingService {
         long currentBookingCount = waitingQueueRedisService.getBookingUserCount(bookingUsersKey);
 
         while (currentBookingCount < availableNOP) {
+            // 대기번호 1 유저
             String nextUser = waitingQueueRedisService.getFirstUserInQueue(waitingQueueKey);
             if (nextUser == null) {
                 break;

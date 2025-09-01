@@ -19,9 +19,7 @@ public class WaitingNotificationService {
     private final ObjectMapper objectMapper;
     private final WaitingQueueRedisService waitingQueueRedisService;
 
-    /**
-     * 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
-     */
+    /// 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
     public long getAndPublishWaitingNumber(String waitingQueueKey, String notificationChannelKey, String loginId) {
         long waitingNumber = waitingQueueRedisService.getWaitingNumber(waitingQueueKey, loginId);
         if (waitingNumber != -1) {
@@ -31,9 +29,7 @@ public class WaitingNotificationService {
         return -1;
     }
 
-    /**
-     * Redis Pub/Sub 채널로 대기 순번 정보 발행
-     */
+    /// Redis Pub/Sub 채널로 대기 순번 정보 발행
     private void publishWaitingNumber(String userId, long waitingNumber, String notificationChannelKey) {
         try {
             WaitingNumberResponseDTO waitingNumberDto = new WaitingNumberResponseDTO(userId, waitingNumber, false, null);
@@ -44,9 +40,7 @@ public class WaitingNotificationService {
         }
     }
 
-    /**
-     * 모든 대기열 사용자에게 순번 업데이트 알림
-     */
+    /// 모든 대기열 사용자에게 순번 업데이트 알림
     public void notifyAllWaitingUsers(String waitingQueueKey, String notificationChannelKey) {
         Set<String> allUsersInQueue = waitingQueueRedisService.getAllUsersInQueue(waitingQueueKey);
 

@@ -59,13 +59,13 @@ public class WaitingController {
         }
     }
 
-    /// 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
+    /// 예매 페이지 퇴장
     @GetMapping("/release")
     @Operation(
-            summary = "예매 페이지 진입 완료 처리",
-            description = "예매 페이지에 있던 사용자가 예매 페이지에서 나가면, " +
-                    "대기열에 있던 사용자가 예매 페이지로 입장 하게 됩니다. " +
-                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다."
+            summary = "예매 페이지에서 사용자 퇴장 처리 (예매 완료 또는 타임아웃)",
+            description = "예매 페이지에 있던 사용자가 퇴장했을 때 실행됩니다. " +
+                    "(대기열에 있던 대기번호 1번 사용자는 스케쥴러에 의해 예매 페이지로 자동 입장 하게 되고, " +
+                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다.)"
     )
     public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,

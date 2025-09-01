@@ -80,6 +80,7 @@ public class WaitingQueueRedisService {
         return (rank != null) ? rank + 1 : -1;
     }
 
+    // 현 예매 페이지에 있는 사용자 수
     public long getBookingUserCount(String bookingUsersKey) {
         Long count = redisTemplate.opsForSet().size(bookingUsersKey);
         return (count != null) ? count : 0L;
