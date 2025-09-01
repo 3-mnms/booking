@@ -52,6 +52,10 @@ public class WaitingQueueSchedulingService {
 
         if (waitingUsers == null || waitingUsers.isEmpty()) {
             stopScheduler(waitingQueueKey);
+
+            //
+
+
             return;
         }
 

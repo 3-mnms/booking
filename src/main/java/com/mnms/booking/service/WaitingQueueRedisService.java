@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
@@ -59,6 +61,7 @@ public class WaitingQueueRedisService {
     public void addUserToQueue(String waitingQueueKey, String loginId) {
         long timestamp = System.currentTimeMillis();
         zSetOperations.add(waitingQueueKey, loginId, timestamp);
+        redisTemplate.expire(waitingQueueKey, Duration.ofDays(2));
     }
 
     public boolean removeUserFromQueue(String waitingQueueKey, String userId) {
@@ -86,12 +89,26 @@ public class WaitingQueueRedisService {
         return (count != null) ? count : 0L;
     }
 
+    public long getWaitingUserCount(String waitingQueueKey) {
+        Long count = redisTemplate.opsForZSet().zCard(waitingQueueKey);
+        return (count != null) ? count : 0L;
+    }
+
+
+
     public void addBookingUser(String bookingUsersKey, String userId) {
         redisTemplate.opsForSet().add(bookingUsersKey, userId);
+
+        // ttl 생성
+        redisTemplate.expire(bookingUsersKey, Duration.ofDays(2));
     }
 
     public boolean removeBookingUser(String bookingUsersKey, String userId) {
         Long removed = redisTemplate.opsForSet().remove(bookingUsersKey, userId);
         return removed != null && removed > 0;
+    }
+
+    public void cleanKey(String key){
+        redisTemplate.delete(key);
     }
 }
