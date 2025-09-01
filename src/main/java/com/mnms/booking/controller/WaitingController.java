@@ -83,8 +83,7 @@ public class WaitingController {
         }
     }
 
-
-    // 대기열에서 퇴장
+    /// 대기열에서 퇴장
     @Operation(
             summary = "대기열 퇴장",
             description = "대기 중인 사용자가 스스로 대기열에서 나갈 때 호출됩니다. " +
@@ -106,7 +105,6 @@ public class WaitingController {
             return ApiResponseUtil.fail("서버 오류로 인해 사용자를 처리하지 못했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트

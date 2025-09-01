@@ -3,8 +3,12 @@ package com.mnms.booking.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
+import com.mnms.booking.exception.BusinessException;
+import com.mnms.booking.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +25,18 @@ public class WaitingNotificationService {
 
     /// 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
     public long getAndPublishWaitingNumber(String waitingQueueKey, String notificationChannelKey, String loginId) {
-        long waitingNumber = waitingQueueRedisService.getWaitingNumber(waitingQueueKey, loginId);
-        if (waitingNumber != -1) {
+        try {
+            long waitingNumber = waitingQueueRedisService.getWaitingNumber(waitingQueueKey, loginId);
+            if (waitingNumber == -1) {
+                throw new BusinessException(ErrorCode.USER_NOT_FOUND_IN_WAITING);
+            }
             publishWaitingNumber(loginId, waitingNumber, notificationChannelKey);
             return waitingNumber;
+        } catch (RedisConnectionFailureException e) {
+            throw new BusinessException(ErrorCode.REDIS_CONNECTION_FAILED);
+        } catch (RedisSystemException e) {
+            throw new BusinessException(ErrorCode.REDIS_PUBLISH_FAILED);
         }
-        return -1;
     }
 
     /// Redis Pub/Sub 채널로 대기 순번 정보 발행
@@ -36,7 +46,9 @@ public class WaitingNotificationService {
             String message = objectMapper.writeValueAsString(waitingNumberDto);
             stringRedisTemplate.convertAndSend(notificationChannelKey, message);
         } catch (JsonProcessingException e) {
-            log.error("Error converting DTO to JSON: {}", e.getMessage());
+            throw new BusinessException(ErrorCode.JSON_SERIALIZATION_FAILED);
+        } catch (RedisConnectionFailureException e) {
+            throw new BusinessException(ErrorCode.REDIS_CONNECTION_FAILED);
         }
     }
 

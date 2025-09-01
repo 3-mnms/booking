@@ -42,6 +42,18 @@ public enum ErrorCode {
     QR_CODE_EXPIRED("Q005", "QR 코드의 만료일이 지났습니다.", HttpStatus.GONE),
     QR_CODE_ALREADY_USED("Q006", "QR 코드가 이미 사용되었습니다.", HttpStatus.CONFLICT),
 
+    // waiting : 대기열 관련 예외
+    USER_NOT_FOUND_IN_BOOKING("W001", "사용자가 예매 페이지에 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    USER_NOT_FOUND_IN_WAITING("W002", "사용자가 대기열에 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    FAILED_TO_ENTER_QUEUE("W003", "대기열 진입에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FAILED_TO_REMOVE_USER("W004", "사용자 제거에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    REDIS_CONNECTION_FAILED("R001", "Redis 연결에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FAILED_TO_EXECUTE_SCRIPT("R002", "대기열 Lua 스크립트 실행에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FAILED_TO_ENTER_BOOKING("W005", "예매 진입 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    REDIS_PUBLISH_FAILED("R003", "Redis Pub/Sub 발행에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    JSON_SERIALIZATION_FAILED("S001", "메시지 직렬화에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    REDIS_OPERATION_FAILED("R004", "Redis 명령 실행 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+
     // Transfer
     TRANSFER_NOT_VALID_FILE_TYPE("TR001","유효하지 않은 파일 확장자입니다.",HttpStatus.NOT_ACCEPTABLE),
     TRANSFER_NOT_FOUND_INFORM("TR002", "검사에 실패하였습니다.", HttpStatus.NOT_FOUND),

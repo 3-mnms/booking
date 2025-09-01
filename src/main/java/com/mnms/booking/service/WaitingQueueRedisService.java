@@ -1,15 +1,17 @@
 package com.mnms.booking.service;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.mnms.booking.exception.BusinessException;
+import com.mnms.booking.exception.ErrorCode;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -41,16 +43,23 @@ public class WaitingQueueRedisService {
      * @return true = 즉시 입장, false = 대기열 필요
      */
     public boolean tryEnterBooking(String bookingUsersKey, long availableNOP, String userId) {
-        Long result = redisTemplate.execute(
-                enterScript,
-                Collections.singletonList(bookingUsersKey),
-                String.valueOf(availableNOP),
-                userId
-        );
-        return result != null && result == 1;
-    }
-    //
+        try {
+            Long result = redisTemplate.execute(
+                    enterScript,
+                    Collections.singletonList(bookingUsersKey),
+                    String.valueOf(availableNOP),
+                    userId
+            );
 
+            return Optional.of(result)
+                    .map(r -> r == 1)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.FAILED_TO_ENTER_BOOKING));
+        } catch (RedisConnectionFailureException e) {
+            throw new BusinessException(ErrorCode.REDIS_CONNECTION_FAILED);
+        } catch (RedisSystemException e) {
+            throw new BusinessException(ErrorCode.FAILED_TO_EXECUTE_SCRIPT);
+        }
+    }
 
 
     public WaitingQueueRedisService(RedisTemplate<String, String> redisTemplate) {
@@ -58,10 +67,11 @@ public class WaitingQueueRedisService {
         this.zSetOperations = redisTemplate.opsForZSet();
     }
 
-    public void addUserToQueue(String waitingQueueKey, String loginId) {
+    public boolean addUserToQueue(String waitingQueueKey, String loginId) {
         long timestamp = System.currentTimeMillis();
-        zSetOperations.add(waitingQueueKey, loginId, timestamp);
+        Boolean result = zSetOperations.add(waitingQueueKey, loginId, timestamp);
         redisTemplate.expire(waitingQueueKey, Duration.ofDays(2));
+        return result != null && result; // null 방어
     }
 
     public boolean removeUserFromQueue(String waitingQueueKey, String userId) {
@@ -93,8 +103,6 @@ public class WaitingQueueRedisService {
         Long count = redisTemplate.opsForZSet().zCard(waitingQueueKey);
         return (count != null) ? count : 0L;
     }
-
-
 
     public void addBookingUser(String bookingUsersKey, String userId) {
         redisTemplate.opsForSet().add(bookingUsersKey, userId);
