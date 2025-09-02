@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class TicketTransferResponseDTO {
 
     ///  TRANSFER
+    private Long transferId;
     private Long senderId;
     private String senderName;
     private TransferType transferType;
@@ -37,6 +38,7 @@ public class TicketTransferResponseDTO {
 
     public static TicketTransferResponseDTO from(Transfer transfer, Ticket ticket, Festival festival) {
         return TicketTransferResponseDTO.builder()
+                .transferId(transfer.getId())
                 .senderId(transfer.getSenderId())
                 .senderName(transfer.getSenderName())
                 .transferType(transfer.getTransferType())
