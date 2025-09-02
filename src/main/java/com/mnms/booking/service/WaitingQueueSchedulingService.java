@@ -94,7 +94,6 @@ public class WaitingQueueSchedulingService {
         }
     }
 
-
     @PreDestroy
     public void cleanup() {
         scheduler.shutdown();

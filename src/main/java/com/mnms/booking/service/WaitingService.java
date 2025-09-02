@@ -73,13 +73,14 @@ public class WaitingService {
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
 
+        Long removedRank = waitingQueueRedisService.getRank(waitingQueueKey, userId);
         boolean removed = waitingQueueRedisService.removeUserFromQueue(waitingQueueKey, userId);
 
         if (!removed) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND_IN_WAITING);
         }
         log.info("User {} removed from waiting queue (manual removal).", userId);
-        waitingNotificationService.notifyAllWaitingUsers(waitingQueueKey, notificationChannelKey);
+        waitingNotificationService.notifyAffectedWaitingUsers(waitingQueueKey, notificationChannelKey, removedRank);
         return true;
     }
 }

@@ -83,6 +83,11 @@ public class WaitingQueueRedisService {
         return zSetOperations.range(waitingQueueKey, 0, -1);
     }
 
+    // 수정 필요
+    public Set<String> getUsersByRange(String waitingQueueKey, long start, long end) {
+        return zSetOperations.range(waitingQueueKey, start, end);
+    }
+
     public String getFirstUserInQueue(String waitingQueueKey) {
         Set<String> users = zSetOperations.range(waitingQueueKey, 0, 0);
         return (users != null && !users.isEmpty()) ? users.iterator().next() : null;
@@ -115,7 +120,9 @@ public class WaitingQueueRedisService {
         Long removed = redisTemplate.opsForSet().remove(bookingUsersKey, userId);
         return removed != null && removed > 0;
     }
-
+    public Long getRank(String waitingQueueKey, String userId){
+        return zSetOperations.rank(waitingQueueKey, userId);
+    }
     public void cleanKey(String key){
         redisTemplate.delete(key);
     }

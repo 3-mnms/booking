@@ -62,4 +62,18 @@ public class WaitingNotificationService {
             }
         }
     }
+
+    public void notifyAffectedWaitingUsers(String waitingQueueKey, String notificationChannelKey, Long removedRank) {
+        if (removedRank == null) {
+            return;
+        }
+
+        // 대기열 퇴장한 사람 뒤에 있는 사용자만 조회
+        Set<String> affectedUsers = waitingQueueRedisService.getUsersByRange(waitingQueueKey, removedRank, -1);
+        if (affectedUsers != null) {
+            for (String userId : affectedUsers) {
+                getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
+            }
+        }
+    }
 }
