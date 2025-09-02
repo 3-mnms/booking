@@ -6,6 +6,7 @@ import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.BookingDetailResponseDTO;
 import com.mnms.booking.dto.response.FestivalDetailResponseDTO;
 import com.mnms.booking.dto.response.UserInfoResponseDTO;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
@@ -88,6 +89,15 @@ public class BookingController {
     ) {
         bookingCommandService.reserveTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
+    }
+
+    ///  Websocket 메시지 누락 방지 api요청
+    @GetMapping("reservation/status")
+    @Operation( summary = "예매 완료/취소 정보 조회",
+            description = "Websocket 메시지 누락 시, " +
+                    "예매 완료 혹은 취소 되었는지 확인합니다. ")
+    public ResponseEntity<SuccessResponse<ReservationStatus>> checkStatus(@RequestParam String reservationNumber){
+        return ApiResponseUtil.success(bookingCommandService.checkStatus(reservationNumber));
     }
 
     ///  GET

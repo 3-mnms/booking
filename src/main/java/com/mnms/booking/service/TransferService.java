@@ -13,13 +13,11 @@ import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.repository.TransferRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TransferService {
@@ -61,7 +59,6 @@ public class TransferService {
             throw new BusinessException(ErrorCode.TRANSFER_NOT_EXIST);
         }
 
-        transfers.forEach(transfer -> log.info("transfer: {}", transfer));
         return transfers.stream()
                 .map(transfer -> {
                     Ticket ticket = transfer.getTicket();
@@ -71,5 +68,9 @@ public class TransferService {
                     return TicketTransferResponseDTO.from(transfer, ticket, festival);
                 })
                 .toList();
+    }
+
+    public Boolean checkStatus(Long transferId) {
+        return transferRepository.findTransferStatusById(transferId).equals(TransferStatus.COMPLETED);
     }
 }

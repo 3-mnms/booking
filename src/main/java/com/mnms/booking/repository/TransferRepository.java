@@ -27,4 +27,7 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
     List<Transfer> findByReceiverIdWithTicketAndFestival(
             @Param("receiverId") Long receiverId,
             @Param("excludedStatuses") List<TransferStatus> excludedStatuses);
+
+    @Query("SELECT t.status FROM Transfer t WHERE t.id = :transferId")
+    TransferStatus findTransferStatusById(Long transferId);
 }

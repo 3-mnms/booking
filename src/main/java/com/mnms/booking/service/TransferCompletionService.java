@@ -8,7 +8,6 @@ import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.Transfer;
-import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
@@ -19,7 +18,6 @@ import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.repository.TransferRepository;
 import com.mnms.booking.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +27,6 @@ import java.util.List;
 
 ///  양도 수락
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class TransferCompletionService {
@@ -102,7 +99,7 @@ public class TransferCompletionService {
                 TransferStatus.APPROVED;
 
         // 결제 kafka 로직 변경 시 수정 예정
-        if (paymentStatus) {
+        if (paymentStatus && transfer.getStatus() != TransferStatus.COMPLETED) {
             transfer.setStatus(TransferStatus.COMPLETED);
             UpdateTicketRequestDTO request = UpdateTicketRequestDTO.builder()
                     .transferId(transfer.getId())
@@ -113,10 +110,13 @@ public class TransferCompletionService {
                     .build();
             applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
         }
-        // websocket 전송
-        messagingTemplate.convertAndSend(
-                "/topic/transfer/" + transfer.getReceiverId(),
-                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus));
+
+        // WebSocket 전송
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(ticket.getUserId()),
+                "/queue/transfer-status",
+                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus)
+        );
     }
 
     /// UTIL

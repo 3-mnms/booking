@@ -7,6 +7,7 @@ import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
 import com.mnms.booking.dto.response.PersonInfoResponseDTO;
 import com.mnms.booking.dto.response.TicketTransferResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.OcrParserService;
 import com.mnms.booking.service.OcrService;
@@ -116,5 +117,14 @@ public class TransferController {
             Authentication authentication) {
             TransferOthersResponseDTO response = transferCompletionService.proceedOthersTicket(request, securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(response);
+    }
+
+    ///  Websocket 메시지 누락 방지 api요청
+    @GetMapping("/reservation/status")
+    @Operation( summary = "양도 결제 완료 조회",
+            description = "Websocket 메시지 누락 시, " +
+                    "양도 결제 완료 혹은 실패를 확인합니다. ")
+    public ResponseEntity<SuccessResponse<Boolean>> checkStatus(@RequestParam Long transferId){
+        return ApiResponseUtil.success(transferService.checkStatus(transferId));
     }
 }

@@ -27,6 +27,7 @@ public class TicketDetailResponseDTO {
     private String festivalId; // festivalId
     private String fname; // 공연명
     private String fcltynm; // 장소
+    private int ticketPrice; // 1매 티켓 가격
 
     public static TicketDetailResponseDTO fromEntity(Ticket ticket, Festival festival) {
         List<String> qrIds = ticket.getQrCodes().stream()
@@ -43,6 +44,7 @@ public class TicketDetailResponseDTO {
                 .festivalId(festival.getFestivalId())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
+                .ticketPrice(festival.getTicketPrice())
                 .posterFile(festival.getPosterFile())
                 .build();
     }

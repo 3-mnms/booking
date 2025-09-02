@@ -6,12 +6,14 @@ import com.mnms.booking.dto.response.PersonInfoResponseDTO;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class OcrParserService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();

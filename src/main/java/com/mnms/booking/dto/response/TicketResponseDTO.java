@@ -28,6 +28,7 @@ public class TicketResponseDTO {
 
     // festival
     private String festivalId; // festivalId
+    private String posterFile;
     private String fname; // 공연명
     private String fcltynm; // 장소
 
@@ -41,6 +42,7 @@ public class TicketResponseDTO {
                 .reservationDate(ticket.getReservationDate())
                 .reservationStatus(ticket.getReservationStatus())
                 .festivalId(festival.getFestivalId())
+                .posterFile(festival.getPosterFile())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
                 .build();

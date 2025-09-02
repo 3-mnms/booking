@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // MessageListener 인터페이스 구현
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class RedisMessageSubscriber {
 
     private final SimpMessagingTemplate messagingTemplate; // WebSocket 메시지 전송
@@ -23,9 +25,7 @@ public class RedisMessageSubscriber {
 
         // message는 JSON 문자열 -> DTO로 변환
         try {
-            // 여기에 로그 추가
             log.info("Received message from Redis channel: {}", message);
-
             WaitingNumberResponseDTO dto = new ObjectMapper().readValue(message, WaitingNumberResponseDTO.class);
 
             // userId 기준으로 메시지 전송

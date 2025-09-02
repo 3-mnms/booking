@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
@@ -59,13 +60,13 @@ public class WaitingController {
         }
     }
 
-    /// 예매 페이지 퇴장 - 대기열 대기자 예매 페이지 진입 (추후 수정 가능)
+    /// 예매 페이지 퇴장
     @GetMapping("/release")
     @Operation(
-            summary = "예매 페이지 진입 완료 처리",
-            description = "예매 페이지에 있던 사용자가 예매 페이지에서 나가면, " +
-                    "대기열에 있던 사용자가 예매 페이지로 입장 하게 됩니다. " +
-                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다."
+            summary = "예매 페이지에서 사용자 퇴장 처리 (예매 완료 또는 타임아웃)",
+            description = "예매 페이지에 있던 사용자가 퇴장했을 때 실행됩니다. " +
+                    "(대기열에 있던 대기번호 1번 사용자는 스케쥴러에 의해 예매 페이지로 자동 입장 하게 되고, " +
+                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다.)"
     )
     public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,
@@ -83,8 +84,7 @@ public class WaitingController {
         }
     }
 
-
-    // 대기열에서 퇴장
+    /// 대기열에서 퇴장
     @Operation(
             summary = "대기열 퇴장",
             description = "대기 중인 사용자가 스스로 대기열에서 나갈 때 호출됩니다. " +
@@ -107,23 +107,23 @@ public class WaitingController {
         }
     }
 
-
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
-     * 클라이언트가 /app/subscribe/waiting/{userId} 로 메시지를 보냄 (최초 구독 요청)
+     * 클라이언트가 /app/subscribe/waiting로 메시지를 보냄 (최초 구독 요청)
      */
-    @Hidden
     @MessageMapping("/subscribe/waiting")
     public void subscribeWaitingQueue(
-            @RequestParam String festivalId,
-            @RequestParam LocalDateTime reservationDate,
+            @Header("festivalId") String festivalId,
+            @Header("reservationDate") LocalDateTime reservationDate,
             Authentication authentication) {
         String userId = getUserId(authentication);
         log.info("User {} subscribed to waiting queue updates.", userId);
+
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
         String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
         waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
     }
+
 
     public String getUserId(Authentication authentication) {
         return String.valueOf(securityResponseUtil.requireUserId(authentication));

@@ -1,13 +1,17 @@
 package com.mnms.booking.service;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.mnms.booking.exception.BusinessException;
+import com.mnms.booking.exception.ErrorCode;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -39,16 +43,23 @@ public class WaitingQueueRedisService {
      * @return true = 즉시 입장, false = 대기열 필요
      */
     public boolean tryEnterBooking(String bookingUsersKey, long availableNOP, String userId) {
-        Long result = redisTemplate.execute(
-                enterScript,
-                Collections.singletonList(bookingUsersKey),
-                String.valueOf(availableNOP),
-                userId
-        );
-        return result != null && result == 1;
-    }
-    //
+        try {
+            Long result = redisTemplate.execute(
+                    enterScript,
+                    Collections.singletonList(bookingUsersKey),
+                    String.valueOf(availableNOP),
+                    userId
+            );
 
+            return Optional.of(result)
+                    .map(r -> r == 1)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.FAILED_TO_ENTER_BOOKING));
+        } catch (RedisConnectionFailureException e) {
+            throw new BusinessException(ErrorCode.REDIS_CONNECTION_FAILED);
+        } catch (RedisSystemException e) {
+            throw new BusinessException(ErrorCode.FAILED_TO_EXECUTE_SCRIPT);
+        }
+    }
 
 
     public WaitingQueueRedisService(RedisTemplate<String, String> redisTemplate) {
@@ -56,9 +67,11 @@ public class WaitingQueueRedisService {
         this.zSetOperations = redisTemplate.opsForZSet();
     }
 
-    public void addUserToQueue(String waitingQueueKey, String loginId) {
+    public boolean addUserToQueue(String waitingQueueKey, String loginId) {
         long timestamp = System.currentTimeMillis();
-        zSetOperations.add(waitingQueueKey, loginId, timestamp);
+        Boolean result = zSetOperations.add(waitingQueueKey, loginId, timestamp);
+        redisTemplate.expire(waitingQueueKey, Duration.ofDays(2));
+        return result != null && result; // null 방어
     }
 
     public boolean removeUserFromQueue(String waitingQueueKey, String userId) {
@@ -68,6 +81,11 @@ public class WaitingQueueRedisService {
 
     public Set<String> getAllUsersInQueue(String waitingQueueKey) {
         return zSetOperations.range(waitingQueueKey, 0, -1);
+    }
+
+    // 수정 필요
+    public Set<String> getUsersByRange(String waitingQueueKey, long start, long end) {
+        return zSetOperations.range(waitingQueueKey, start, end);
     }
 
     public String getFirstUserInQueue(String waitingQueueKey) {
@@ -80,17 +98,32 @@ public class WaitingQueueRedisService {
         return (rank != null) ? rank + 1 : -1;
     }
 
+    // 현 예매 페이지에 있는 사용자 수
     public long getBookingUserCount(String bookingUsersKey) {
         Long count = redisTemplate.opsForSet().size(bookingUsersKey);
         return (count != null) ? count : 0L;
     }
 
+    public long getWaitingUserCount(String waitingQueueKey) {
+        Long count = redisTemplate.opsForZSet().zCard(waitingQueueKey);
+        return (count != null) ? count : 0L;
+    }
+
     public void addBookingUser(String bookingUsersKey, String userId) {
         redisTemplate.opsForSet().add(bookingUsersKey, userId);
+
+        // ttl 생성
+        redisTemplate.expire(bookingUsersKey, Duration.ofDays(2));
     }
 
     public boolean removeBookingUser(String bookingUsersKey, String userId) {
         Long removed = redisTemplate.opsForSet().remove(bookingUsersKey, userId);
         return removed != null && removed > 0;
+    }
+    public Long getRank(String waitingQueueKey, String userId){
+        return zSetOperations.rank(waitingQueueKey, userId);
+    }
+    public void cleanKey(String key){
+        redisTemplate.delete(key);
     }
 }
