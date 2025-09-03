@@ -2,6 +2,7 @@ package com.mnms.booking.util;
 
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import com.mnms.booking.security.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -28,20 +29,17 @@ public class SecurityResponseUtil {
 
     // Authentication에서 name 추출
     public String requireName(Authentication authentication) {
+        String userName = null;
         log.info("authentication : {}", authentication);
-        if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
-            throw new BusinessException(ErrorCode.USER_INVALID);
+        Object details = authentication.getDetails();
+        if (details instanceof AuthDetails d) {
+            userName = d.getUserName();
+            log.info("authentication name : {}", userName);
         }
-
-        Jwt jwt = jwtAuth.getToken();
-        String name = jwt.getClaimAsString("name");
-
-        if (name == null || name.isEmpty()) {
-            throw new BusinessException(ErrorCode.USER_INVALID);
-        }
-
-        return name;
+        return userName;
     }
+
+
 
     // Authentication에서 ROLE 빼오기
     public List<String> requireRole(Authentication authentication) {
