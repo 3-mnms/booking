@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.request.TicketTransferRequestDTO;
 import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
 import com.mnms.booking.dto.response.PersonInfoResponseDTO;
+import com.mnms.booking.dto.response.TicketResponseDTO;
 import com.mnms.booking.dto.response.TicketTransferResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.enums.ReservationStatus;
@@ -36,6 +37,16 @@ public class TransferController {
     private final TransferService transferService;
     private final SecurityResponseUtil securityResponseUtil;
     private final TransferCompletionService transferCompletionService;
+
+    ///  양도할 수 있는 티켓 조회
+    @GetMapping("/transferor")
+    @Operation(summary = "양도 가능한 티켓 정보 조회",
+            description = "사용자가 양도 가능한 티켓을 조회할 수 있습니다. (status : 양도 받은 티켓 양도 불가능)"
+    )
+    public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
+        List<TicketResponseDTO> tickets = transferService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
+        return ApiResponseUtil.success(tickets);
+    }
 
 
     ///  가족관계증명서 인증

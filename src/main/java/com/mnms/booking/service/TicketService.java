@@ -41,13 +41,13 @@ public class TicketService {
     }
 
     // 예매 상세 조회
-    public TicketDetailResponseDTO getTicketDetailByUser(String reservationNumber, Long userId) {
+    public TicketDetailResponseDTO getTicketDetailByUser(String reservationNumber, Long userId, String userName) {
         Ticket ticket = ticketRepository.findByUserIdAndReservationNumber(userId, reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
         if (!ticket.getUserId().equals(userId)) {
             throw new BusinessException(ErrorCode.USER_UNAUTHORIZED_ACCESS);
         }
-        return TicketDetailResponseDTO.fromEntity(ticket, ticket.getFestival());
+        return TicketDetailResponseDTO.fromEntity(ticket, ticket.getFestival(), userName);
     }
 }

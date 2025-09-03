@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    int countByUserIdAndFestivalIdAndPerformanceDate(Long userId, Long festivalId, LocalDateTime performanceDate);
 
     @Query("SELECT COALESCE(SUM(t.selectedTicketCount), 0) " +
             "FROM Ticket t " +
@@ -89,4 +88,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT t.reservationStatus FROM Ticket t WHERE t.reservationNumber = :reservationNumber")
     ReservationStatus findReservationStatusByReservationNumber(@Param("reservationNumber") String reservationNumber);
+
+    List<Ticket> findByUserIdAndReservationStatus(Long userId, ReservationStatus status);
 }
