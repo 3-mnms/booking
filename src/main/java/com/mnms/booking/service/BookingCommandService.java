@@ -14,6 +14,7 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.CommonUtils;
+import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -28,10 +29,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 
@@ -51,6 +49,7 @@ public class BookingCommandService {
     private final ThreadPoolTaskScheduler scheduler;
     private final SimpMessagingTemplate messagingTemplate;
     private final CommonUtils commonUtils;
+    private final UserApiClient userApiClient;
 
     /// 1차: 가예매 - 임시 예약
     @Transactional
@@ -133,7 +132,7 @@ public class BookingCommandService {
         );
     }
 
-    /// 최종 완료 - status 변경
+    /// 최종 완료 - status 변경 (payment에 kafka 메시지 구독)
     @Transactional
     public void confirmTicket(String reservationNumber, boolean paymentStatus) {
         Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
@@ -155,6 +154,9 @@ public class BookingCommandService {
                 "/queue/ticket-status",
                 new TicketStatusResponseDTO(bookingTicket.getReservationNumber(), newStatus)
         );
+
+        //String email;
+        //email = userApiClient.getUsersByIds();
     }
 
     ///  예매 취소

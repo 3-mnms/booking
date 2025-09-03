@@ -104,7 +104,7 @@ public class BookingController {
     @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",
             description = "예매 과정에서 예매자 정보를 조회합니다." +
-                    "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
+                    "예매자 role이 user인 사람만 조회 가능합니다. (email)"
     )
     public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(Authentication authentication) {
         return ApiResponseUtil.success(userApiClient.getUserInfoById(securityResponseUtil.requireUserId(authentication)));

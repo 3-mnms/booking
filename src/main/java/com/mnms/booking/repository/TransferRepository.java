@@ -30,4 +30,6 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
     @Query("SELECT t.status FROM Transfer t WHERE t.id = :transferId")
     TransferStatus findTransferStatusById(Long transferId);
+
+    boolean existsByTicketId(Long ticketId);
 }
