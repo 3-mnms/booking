@@ -43,8 +43,11 @@ public class TicketController {
     )
     public ResponseEntity<SuccessResponse<TicketDetailResponseDTO>> getUserTicketDetail(@RequestParam String reservationNumber,
                                                                                         Authentication authentication) {
-        TicketDetailResponseDTO ticket = ticketService.getTicketDetailByUser(reservationNumber, securityResponseUtil.requireUserId(authentication));
+        TicketDetailResponseDTO ticket = ticketService.getTicketDetailByUser(reservationNumber, securityResponseUtil.requireUserId(authentication), securityResponseUtil.requireName(authentication));
         return ApiResponseUtil.success(ticket);
     }
+
+
+
 
 }

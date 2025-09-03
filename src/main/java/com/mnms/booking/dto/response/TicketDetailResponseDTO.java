@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 @Builder
 public class TicketDetailResponseDTO {
 
+    // authentication name
+    private String userName;
+
     // ticket
     private Long id;
     private String reservationNumber; // 예매 번호
@@ -29,13 +32,14 @@ public class TicketDetailResponseDTO {
     private String fcltynm; // 장소
     private int ticketPrice; // 1매 티켓 가격
 
-    public static TicketDetailResponseDTO fromEntity(Ticket ticket, Festival festival) {
+    public static TicketDetailResponseDTO fromEntity(Ticket ticket, Festival festival, String userName) {
         List<String> qrIds = ticket.getQrCodes().stream()
                 .map(QrCode::getQrCodeId)
                 .toList();
 
         return TicketDetailResponseDTO.builder()
                 .id(ticket.getId())
+                .userName(userName)
                 .reservationNumber(ticket.getReservationNumber())
                 .performanceDate(ticket.getPerformanceDate())
                 .deliveryMethod(ticket.getDeliveryMethod())
