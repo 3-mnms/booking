@@ -1,6 +1,6 @@
 package com.mnms.booking.service;
 
-import com.mnms.booking.dto.request.BookingRequestDTO;
+import  com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.*;
@@ -9,19 +9,19 @@ import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
-import com.mnms.booking.kafka.dto.PaymentSuccessEventDTO;
 import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.CommonUtils;
 import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +35,6 @@ import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional(readOnly = true)
 public class BookingCommandService {
 
@@ -45,7 +44,10 @@ public class BookingCommandService {
     private final TicketRepository ticketRepository;
     private final QrCodeRepository qrCodeRepository;
     private final FestivalRepository festivalRepository;
+
     private final QrCodeService qrCodeService;
+    private final EmailService emailService;
+
     private final ThreadPoolTaskScheduler scheduler;
     private final SimpMessagingTemplate messagingTemplate;
     private final CommonUtils commonUtils;
@@ -116,8 +118,6 @@ public class BookingCommandService {
                 List.of(ReservationStatus.CONFIRMED, ReservationStatus.PAYMENT_IN_PROGRESS)
         );
 
-        log.info("total selected ticket count : {}", totalCount);
-
         if (totalCount + selectedTicketCount > festival.getAvailableNOP()) {
             throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVALIABLE_PEOPLE);
         }
@@ -134,29 +134,56 @@ public class BookingCommandService {
 
     /// 최종 완료 - status 변경 (payment에 kafka 메시지 구독)
     @Transactional
-    public void confirmTicket(String reservationNumber, boolean paymentStatus) {
-        Ticket bookingTicket = ticketRepository.findByReservationNumber(reservationNumber)
+    public void confirmTicket(String reservationNumber, boolean paymentStatus) throws Exception {
+        Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
         ReservationStatus newStatus = paymentStatus ?
                 ReservationStatus.CONFIRMED :
                 ReservationStatus.CANCELED;
         // 결제 상태 변경
-        if(bookingTicket.getReservationStatus() != ReservationStatus.CONFIRMED
-                && bookingTicket.getReservationStatus() != ReservationStatus.CANCELED) {
-            bookingTicket.setReservationStatus(newStatus);
-            ticketRepository.save(bookingTicket);
+        if(ticket.getReservationStatus() != ReservationStatus.CONFIRMED
+                && ticket.getReservationStatus() != ReservationStatus.CANCELED) {
+            ticket.setReservationStatus(newStatus);
+            ticketRepository.save(ticket);
         }
+
+        // 예매 내역 전송
+        BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
+        String subject = String.format("[예매확인] %s 티켓", ticket.getFestival().getFname());
+
+        InputStream is = getClass().getClassLoader()
+                .getResourceAsStream("templates/email/ticket-confirmation.txt");
+        if (is == null) {
+            throw new IllegalStateException("이메일 템플릿을 찾을 수 없습니다.");
+        }
+
+        String template = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일 a h시");
+
+        String content = String.format(
+                template,
+                user.getName(),
+                ticket.getReservationNumber(),
+                ticket.getFestival().getFname(),
+                ticket.getPerformanceDate().format(formatter),
+                ticket.getFestival().getFcltynm(),
+                ticket.getFestival().getTicketPrice() * ticket.getSelectedTicketCount(),
+                ticket.getDeliveryMethod() == TicketType.MOBILE ? "모바일" : "지류"
+        );
+
+        emailService.sendEmail(
+                user.getEmail(),
+                subject,
+                content
+        );
 
         // WebSocket 전송
         messagingTemplate.convertAndSendToUser(
-                String.valueOf(bookingTicket.getUserId()),
+                String.valueOf(ticket.getUserId()),
                 "/queue/ticket-status",
-                new TicketStatusResponseDTO(bookingTicket.getReservationNumber(), newStatus)
+                new TicketStatusResponseDTO(ticket.getReservationNumber(), newStatus)
         );
-
-        //String email;
-        //email = userApiClient.getUsersByIds();
     }
 
     ///  예매 취소
