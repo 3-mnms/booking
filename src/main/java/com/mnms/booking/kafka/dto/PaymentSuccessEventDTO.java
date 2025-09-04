@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentSuccessEventDTO {
-    private String method;
+    private String method; // payment, cancel, transfer
     private String reservationNumber;
     private  boolean success;
 }

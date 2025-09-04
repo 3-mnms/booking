@@ -68,8 +68,10 @@ public enum ErrorCode {
 
     // STATISTICS (통계 관련 에러 코드 추가)
     STATISTICS_ACCESS_DENIED("ST001", "통계 정보에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),
-    STATISTICS_NOT_FOUND("ST002", "해당 페스티벌의 통계 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    STATISTICS_NOT_FOUND("ST002", "해당 페스티벌의 통계 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    // PAYMENT
+    PAYMENT_RESPONSE_ERROR("P001", "결제 응답이 실패하였습니다.", HttpStatus.BAD_REQUEST);
 
     private final String code;        // A001, A002 등
     private final String message;     // 사용자에게 보여줄 메시지
