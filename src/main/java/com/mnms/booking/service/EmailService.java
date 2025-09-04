@@ -52,13 +52,11 @@ public class EmailService {
         }
     }
 
-
     public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);           // 수신자
+        message.setTo("");           // 수신자
         message.setSubject(subject); // 제목
         message.setText(text);       // 내용
-        message.setFrom("Tekcit"); // 발신자
 
         mailSender.send(message);
     }
