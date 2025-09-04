@@ -134,56 +134,18 @@ public class BookingCommandService {
 
     /// 최종 완료 - status 변경 (payment에 kafka 메시지 구독)
     @Transactional
-    public void confirmTicket(String reservationNumber, boolean paymentStatus) throws Exception {
-        Ticket ticket = ticketRepository.findByReservationNumber(reservationNumber)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
+    public void confirmTicket(String reservationNumber, boolean paymentStatus) {
+        Ticket ticket = getTicketByReservationNumberOrThrow(reservationNumber);
+        ReservationStatus newStatus = determineReservationStatus(paymentStatus);
 
-        ReservationStatus newStatus = paymentStatus ?
-                ReservationStatus.CONFIRMED :
-                ReservationStatus.CANCELED;
         // 결제 상태 변경
-        if(ticket.getReservationStatus() != ReservationStatus.CONFIRMED
-                && ticket.getReservationStatus() != ReservationStatus.CANCELED) {
-            ticket.setReservationStatus(newStatus);
-            ticketRepository.save(ticket);
-        }
+        updateTicketStatusIfNecessary(ticket, newStatus);
 
-        // 예매 내역 전송
         BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
-        String subject = String.format("[예매확인] %s 티켓", ticket.getFestival().getFname());
+        emailService.sendTicketConfirmationEmail(ticket, user);
 
-        InputStream is = getClass().getClassLoader()
-                .getResourceAsStream("templates/email/ticket-confirmation.txt");
-        if (is == null) {
-            throw new BusinessException(ErrorCode.TICKET_EMAIL_TEMPLATE_NOT_FOUND);
-        }
-
-        String template = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일 a h시");
-
-        String content = String.format(
-                template,
-                user.getName(),
-                ticket.getReservationNumber(),
-                ticket.getFestival().getFname(),
-                ticket.getPerformanceDate().format(formatter),
-                ticket.getFestival().getFcltynm(),
-                ticket.getFestival().getTicketPrice() * ticket.getSelectedTicketCount(),
-                ticket.getDeliveryMethod() == TicketType.MOBILE ? "모바일" : "지류"
-        );
-
-        emailService.sendEmail(
-                user.getEmail(),
-                subject,
-                content
-        );
-
-        // WebSocket 전송
-        messagingTemplate.convertAndSendToUser(
-                String.valueOf(ticket.getUserId()),
-                "/queue/ticket-status",
-                new TicketStatusResponseDTO(ticket.getReservationNumber(), newStatus)
-        );
+        // websocket
+        notifyTicketStatus(ticket, newStatus);
     }
 
     ///  예매 취소
@@ -260,6 +222,27 @@ public class BookingCommandService {
     }
 
     /// 기타
+    private ReservationStatus determineReservationStatus(boolean paymentStatus) {
+        return paymentStatus ? ReservationStatus.CONFIRMED : ReservationStatus.CANCELED;
+    }
+
+    private void updateTicketStatusIfNecessary(Ticket ticket, ReservationStatus newStatus) {
+        if (ticket.getReservationStatus() != ReservationStatus.CONFIRMED
+                && ticket.getReservationStatus() != ReservationStatus.CANCELED) {
+            ticket.setReservationStatus(newStatus);
+            ticketRepository.save(ticket);
+        }
+    }
+
+    // websocket
+    private void notifyTicketStatus(Ticket ticket, ReservationStatus status) {
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(ticket.getUserId()),
+                "/queue/ticket-status",
+                new TicketStatusResponseDTO(ticket.getReservationNumber(), status)
+        );
+    }
+
     private Festival getFestivalOrThrow(String festivalId) {
         return festivalRepository.findByFestivalId(festivalId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
