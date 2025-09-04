@@ -155,7 +155,7 @@ public class BookingCommandService {
         InputStream is = getClass().getClassLoader()
                 .getResourceAsStream("templates/email/ticket-confirmation.txt");
         if (is == null) {
-            throw new IllegalStateException("이메일 템플릿을 찾을 수 없습니다.");
+            throw new BusinessException(ErrorCode.TICKET_EMAIL_TEMPLATE_NOT_FOUND);
         }
 
         String template = new String(is.readAllBytes(), StandardCharsets.UTF_8);

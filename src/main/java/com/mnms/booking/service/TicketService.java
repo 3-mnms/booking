@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -36,6 +37,7 @@ public class TicketService {
             throw new BusinessException(ErrorCode.TICKET_NOT_FOUND);
         }
         return tickets.stream()
+                .sorted(Comparator.comparing(Ticket::getReservationDate).reversed())
                 .map(ticket -> TicketResponseDTO.fromEntity(ticket, ticket.getFestival()))
                 .toList();
     }

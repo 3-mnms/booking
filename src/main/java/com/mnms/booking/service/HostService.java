@@ -32,7 +32,12 @@ public class HostService {
     private final UserApiClient userApiClient;
 
     public List<Long> getBookingsByOrganizer(HostRequestDTO request) {
-        return ticketRepository.findDistinctUserIdsByFestivalIdAndPerformanceDate(request.getFestivalId(), request.getPerformanceDate());
+        return ticketRepository
+                .findDistinctUserIdsByFestivalIdAndPerformanceDateAndReservationStatus(
+                        request.getFestivalId(),
+                        request.getPerformanceDate(),
+                        ReservationStatus.CONFIRMED
+                );
     }
 
     @Transactional

@@ -33,6 +33,7 @@ public enum ErrorCode {
     TICKET_ALREADY_CANCELED("T007", "티켓이 이미 예매 취소되었습니다.", HttpStatus.CONFLICT),
     TICKET_EXPIRED("T008", "티켓의 유효기간이 만료되었습니다.", HttpStatus.CONFLICT),
     TICKET_CANCELED("T009", "취소된 티켓입니다.", HttpStatus.CONFLICT),
+    TICKET_EMAIL_TEMPLATE_NOT_FOUND("T010", "이메일 템플릿 오류로 이메일 전송에 실패하였습니다.", HttpStatus.NOT_FOUND),
 
     // QR
     QR_CODE_SAVE_FAILED("Q001", "QR 코드 생성 또는 저장을 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
