@@ -21,7 +21,7 @@ public class PaymentListener {
     private final TransferCompletionService transferCompletionService;
 
     @KafkaListener(topics = "${app.kafka.topic.payment-event}", groupId = "booking-service-group")
-    public void consumePaymentSuccess(String message) throws JsonProcessingException {
+    public void consumePaymentSuccess(String message) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
         objectMapper.registerModule(new JavaTimeModule());
