@@ -2,6 +2,7 @@ package com.mnms.booking.service;
 
 import com.mnms.booking.dto.response.StatisticsBookingDTO;
 import com.mnms.booking.entity.Ticket;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.FestivalRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,29 +52,15 @@ public class StatisticsQueryService {
                 .map(festival -> festival.getAvailableNOP())
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
 
-        List<Ticket> allTickets = ticketRepository.findByFestivalId(festivalId);
+        // 유효한 티켓을 가져오는 올바른 방법
+        List<StatisticsBookingDTO> bookingSummary = ticketRepository.findBookedSummary(festivalId, ReservationStatus.CONFIRMED);
 
-        if (allTickets.isEmpty()) {
-            throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
+        if (bookingSummary.isEmpty()) {
+            return new ArrayList<>();
         }
 
-        Map<LocalDateTime, Long> bookedCounts = allTickets.stream()
-                .collect(Collectors.groupingBy(
-                        ticket -> ticket.getPerformanceDate(),
-                        Collectors.summingLong(Ticket::getSelectedTicketCount)
-                ));
+        bookingSummary.forEach(dto -> dto.setAvailableNOP(availableCapacity));
 
-        List<LocalDateTime> performanceDates = allTickets.stream()
-                .map(Ticket::getPerformanceDate)
-                .distinct()
-                .collect(Collectors.toList());
-
-        return performanceDates.stream()
-                .map(date -> new StatisticsBookingDTO(
-                        date,
-                        bookedCounts.getOrDefault(date, 0L).intValue(),
-                        availableCapacity
-                ))
-                .collect(Collectors.toList());
+        return bookingSummary;
     }
 }

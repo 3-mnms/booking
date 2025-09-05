@@ -17,7 +17,7 @@ public class StatisticsBookingDTO {
     private LocalDateTime performanceDate;
 
     @Schema(description = "해당 공연의 총 예매자 수", example = "150")
-    private int bookingCount;
+    private Long bookingCount;
 
     @Schema(description = "해당 페스티벌의 총 수용 인원", example = "500")
     private int availableNOP;
