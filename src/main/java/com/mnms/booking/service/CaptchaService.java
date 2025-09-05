@@ -8,14 +8,16 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CaptchaService {
 
     private final DefaultKaptcha captchaProducer;
@@ -40,10 +42,10 @@ public class CaptchaService {
         }
     }
 
+    @Transactional
     private BufferedImage generateCaptchaImage(HttpSession session) {
         String captchaText = captchaProducer.createText();
         session.setAttribute(CAPTCHA_SESSION_KEY, new CaptchaRequestDTO(captchaText));
-        log.info("Generated Kaptcha Text: {}", captchaText);
         return captchaProducer.createImage(captchaText);
     }
 

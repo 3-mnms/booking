@@ -10,6 +10,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-@Slf4j
+@Transactional
 public class OcrService {
 
     @Value("${ocr.key}")
@@ -52,9 +53,7 @@ public class OcrService {
             // 5. 헤더 구성
             HttpHeaders headers = getApiHeaders();
 
-
-            String response = postApi(headers, multipartBody);
-            return response;
+            return postApi(headers, multipartBody);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,13 +61,12 @@ public class OcrService {
 
     private String postApi(HttpHeaders headers, MultiValueMap<String, Object> multipartBody) {
         RestClient restClient=RestClient.create();
-        String response = restClient.post()
+        return restClient.post()
                 .uri(ocrInvokeUrl)
                 .headers(h -> h.addAll(headers))
                 .body(multipartBody)
                 .retrieve()
                 .body(String.class);
-        return response;
     }
 
     private HttpHeaders getApiHeaders() {

@@ -1,12 +1,11 @@
 package com.mnms.booking.dto.response;
 
-import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
+import lombok.Getter;
 
 @Data
-@Builder
-public class UserInfoResponseDTO {
+@Getter
+public class BookingUserResponseDTO {
+    private String name;
     private String email;
 }

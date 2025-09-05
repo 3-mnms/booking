@@ -1,67 +1,99 @@
 package com.mnms.booking.service;
 
-import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
-import com.mnms.booking.entity.QrCode;
+import com.mnms.booking.dto.request.TicketTransferRequestDTO;
+import com.mnms.booking.dto.response.TicketResponseDTO;
+import com.mnms.booking.dto.response.TicketTransferResponseDTO;
+import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
-import com.mnms.booking.enums.TicketType;
+import com.mnms.booking.entity.Transfer;
+import com.mnms.booking.enums.ReservationStatus;
+import com.mnms.booking.enums.TransferStatus;
+import com.mnms.booking.enums.TransferType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
-import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
-import com.mnms.booking.util.CommonUtils;
-import com.mnms.booking.util.UserApiClient;
+import com.mnms.booking.repository.TransferRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Slf4j
+@Transactional(readOnly = true)
 public class TransferService {
 
-    private final UserApiClient userApiClient;
     private final TicketRepository ticketRepository;
-    private final QrCodeRepository qrCodeRepository;
-    private final CommonUtils commonUtils;
-    private final QrCodeService qrCodeService;
+    private final TransferRepository transferRepository;
 
-    // 가족간 양도
-    public void updateFamilyTicket(Long ticketId, UpdateTicketRequestDTO request) {
-        Ticket ticket = ticketRepository.findById(ticketId)
+    ///  양도 가능한 티켓 조회
+    public List<TicketResponseDTO> getTicketsByUser(Long userId) {
+
+        List<Ticket> tickets = ticketRepository.findByUserIdAndReservationStatus(userId, ReservationStatus.CONFIRMED);
+        if(tickets.isEmpty()){
+            throw new BusinessException(ErrorCode.TICKET_NOT_FOUND);
+        }
+        log.info("tickets : {}", tickets);
+
+        return tickets.stream()
+                .filter(ticket -> ticket.getPerformanceDate().isAfter(LocalDateTime.now()))
+                .filter(ticket -> !transferRepository.existsByTicketId(ticket.getId()))
+                .map(ticket -> TicketResponseDTO.fromEntity(ticket, ticket.getFestival()))
+                .toList();
+    }
+
+
+    ///  양도 요청
+    @Transactional
+    public void requestTransfer(@Valid TicketTransferRequestDTO dto, Long userId) {
+        Ticket ticket = ticketRepository.findByReservationNumber(dto.getReservationNumber())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
-        // 예외 처리 하다가 멈춤
-//        if (ticket.isUsed() || ticket.isExpired() || ticket.isCanceled()) {
-//            throw new BusinessException(ErrorCode.INVALID_TICKET_STATUS);
-//        }
+        if(transferRepository.existsByTicket_Id(ticket.getId())){
+            throw new BusinessException(ErrorCode.TRANSFER_ALREADY_EXIST_REQUEST);
+        }
 
-        TicketType deliveryMethod = TicketType.valueOf(request.getDeliveryMethod());
+        if(!ticket.getUserId().equals(userId)){
+            throw new BusinessException(ErrorCode.TICKET_USER_NOT_SAME);
+        }
 
-        List<QrCode> existingQrs = qrCodeRepository.findByTicketId(ticket.getId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.QR_CODE_NOT_FOUND));
+        Transfer transfer = Transfer.builder()
+                .ticket(ticket)
+                .senderId(userId)
+                .senderName(dto.getSenderName())
+                .receiverId(dto.getRecipientId())
+                .transferType("OTHERS".equals(dto.getTransferType()) ? TransferType.OTHERS : TransferType.FAMILY)
+                .status(TransferStatus.REQUESTED)
+                .build();
+        transferRepository.save(transfer);
+    }
 
-        // ticket 업데이트
-        ticket.updateTicketInfo(
-                commonUtils.generateReservationNumber(),
-                deliveryMethod,
-                request.getTransfereeId(),
-                LocalDate.now(),
-                request.getAddress()
-        );
+    ///  양도 요청 조회
+    public List<TicketTransferResponseDTO> watchTransfer(Long userId) {
+        List<Transfer> transfers = transferRepository.findByReceiverIdWithTicketAndFestival(
+                userId, List.of(TransferStatus.COMPLETED, TransferStatus.CANCELED));
 
-        // qr code 업데이트
-        existingQrs.forEach(qr -> {
-            qr.setQrCodeId(qrCodeService.generateQrCodeId());
-            qr.setUserId(request.getTransfereeId());
-            qr.setTicket(ticket);
-        });
+        if (transfers.isEmpty()) {
+            throw new BusinessException(ErrorCode.TRANSFER_NOT_EXIST);
+        }
 
-        ticket.getQrCodes().clear();
-        ticket.getQrCodes().addAll(existingQrs);
+        return transfers.stream()
+                .map(transfer -> {
+                    Ticket ticket = transfer.getTicket();
+                    if(ticket==null) throw new BusinessException(ErrorCode.TICKET_NOT_FOUND);
+                    Festival festival = ticket.getFestival();
+                    if(festival==null) throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
+                    return TicketTransferResponseDTO.from(transfer, ticket, festival);
+                })
+                .toList();
+    }
+
+    public Boolean checkStatus(Long transferId) {
+        return transferRepository.findTransferStatusById(transferId).equals(TransferStatus.COMPLETED);
     }
 }

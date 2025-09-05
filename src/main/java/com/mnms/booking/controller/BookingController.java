@@ -4,8 +4,9 @@ import com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.BookingDetailResponseDTO;
+import com.mnms.booking.dto.response.BookingUserResponseDTO;
 import com.mnms.booking.dto.response.FestivalDetailResponseDTO;
-import com.mnms.booking.dto.response.UserInfoResponseDTO;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
@@ -16,11 +17,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -90,13 +90,36 @@ public class BookingController {
         return ApiResponseUtil.success(null, "예매 티켓 생성 완료");
     }
 
+    ///  Websocket 메시지 누락 방지 api요청
+    @GetMapping("reservation/status")
+    @Operation( summary = "예매 완료/취소 정보 조회",
+            description = "Websocket 메시지 누락 시, " +
+                    "예매 완료 혹은 취소 되었는지 확인합니다. ")
+    public ResponseEntity<SuccessResponse<ReservationStatus>> checkStatus(@RequestParam String reservationNumber){
+        return ApiResponseUtil.success(bookingCommandService.checkStatus(reservationNumber));
+    }
+
     ///  GET
     @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",
             description = "예매 과정에서 예매자 정보를 조회합니다." +
-                    "예매자 role이 user인 사람만 조회 가능합니다. (phone, email, address, birth)"
+                    "예매자 role이 user인 사람만 조회 가능합니다. (email)"
     )
-    public ResponseEntity<SuccessResponse<UserInfoResponseDTO>> getUserInfo(Authentication authentication) {
+    public ResponseEntity<SuccessResponse<BookingUserResponseDTO>> getUserInfo(Authentication authentication) {
         return ApiResponseUtil.success(userApiClient.getUserInfoById(securityResponseUtil.requireUserId(authentication)));
+    }
+
+    ///  이메일 임시 테스트
+    @PostMapping("/email/test")
+    public ResponseEntity<String> confirmTicket(
+            @RequestParam String reservationNumber,
+            @RequestParam boolean paymentStatus) {
+        try {
+            bookingCommandService.confirmTicket(reservationNumber, paymentStatus);
+            return ResponseEntity.ok("예매 상태가 성공적으로 업데이트되고 이메일이 전송되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("에러 발생: " + e.getMessage());
+        }
     }
 }

@@ -5,24 +5,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnms.booking.dto.response.PersonInfoResponseDTO;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@Transactional
 public class OcrParserService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static List<PersonInfoResponseDTO> parseOcrResult(
             String ocrJson, Map<String, String> targetInfo) throws IOException {
-
         List<String> ocrTexts = extractOcrTexts(ocrJson);
+
         return targetInfo.entrySet().stream()
                 .map(entry -> matchPersonInfo(entry.getKey(), entry.getValue(), ocrTexts))
                 .collect(Collectors.toList());
@@ -47,23 +46,26 @@ public class OcrParserService {
     private static PersonInfoResponseDTO matchPersonInfo(
             String name, String rrn, List<String> ocrTexts) {
 
-        String normalizedNamePattern = "\\b" + Pattern.quote(name.replaceAll("\\s", "")) + "\\b";
+        List<String> cleanedOcrTexts = ocrTexts.stream()
+                .map(t -> t.replaceAll("\\([^)]*\\)", "")
+                        .replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
+                .toList();
+        String foundName = null, foundRrn = null;
 
-        String matchedName = ocrTexts.stream()
-                .map(t -> t.replaceAll("[\\s\\(\\)\\[\\]{}]", ""))
-                .filter(t -> t.matches(".*" + normalizedNamePattern + ".*"))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME));
-
-        String matchedRrn = ocrTexts.stream()
-                .filter(t -> t.contains(rrn) && t.matches(".*\\d{6}-[1-4].*"))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN));
-
-        if (!name.equals(matchedName)) {
-            throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
+        for (String text : cleanedOcrTexts) {
+            if (foundName == null && text.contains(name)) foundName = text;
+            if (foundRrn == null && text.contains(rrn) && text.matches(".*\\d{6}-[1-4].*")) {
+                foundRrn = text;
+            }
+            if (foundName != null && foundRrn != null) break;
         }
 
-        return new PersonInfoResponseDTO(matchedName, matchedRrn);
+        if (foundName == null) {
+            throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_NAME);
+        }
+        if (foundRrn == null) {
+            throw new BusinessException(ErrorCode.TRANSFER_NOT_FOUND_RRN);
+        }
+        return new PersonInfoResponseDTO(foundName, foundRrn);
     }
 }

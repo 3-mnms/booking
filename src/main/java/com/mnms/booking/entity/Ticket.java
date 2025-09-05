@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "ticket")
+@ToString
 public class Ticket {
 
     @Id
@@ -75,4 +76,11 @@ public class Ticket {
         this.address = address;
     }
 
+    public boolean isCanceled() {
+        return reservationStatus.equals(ReservationStatus.CANCELED);
+    }
+
+    public boolean isExpired() {
+        return performanceDate.isBefore(LocalDateTime.now());
+    }
 }

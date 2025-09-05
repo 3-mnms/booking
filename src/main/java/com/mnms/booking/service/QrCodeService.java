@@ -11,16 +11,17 @@ import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.QrCodeRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class QrCodeService {
 
     private final ObjectMapper objectMapper;
@@ -40,10 +41,7 @@ public class QrCodeService {
         return sb.toString();
     }
 
-    /**
-     * QR IMG 조회
-     * @param qrCodeText = qrCodeId
-     */
+    /// QR IMG 조회
     public byte[] generateQrCodeImage(String qrCodeText, int width, int height) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeText, BarcodeFormat.QR_CODE, width, height);
