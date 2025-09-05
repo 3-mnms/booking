@@ -54,7 +54,7 @@ public class EmailService {
 
     public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("");           // 수신자
+        message.setTo(to);           // 수신자
         message.setSubject(subject); // 제목
         message.setText(text);       // 내용
 
