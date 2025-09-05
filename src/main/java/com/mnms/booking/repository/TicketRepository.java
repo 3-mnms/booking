@@ -1,5 +1,6 @@
 package com.mnms.booking.repository;
 
+import com.mnms.booking.dto.response.StatisticsBookingDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.ReservationStatus;
@@ -94,4 +95,15 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     ReservationStatus findReservationStatusByReservationNumber(@Param("reservationNumber") String reservationNumber);
 
     List<Ticket> findByUserIdAndReservationStatus(Long userId, ReservationStatus status);
+
+    @Query("SELECT new com.mnms.booking.dto.response.StatisticsBookingDTO(" +
+            "t.performanceDate, " +
+            "SUM(t.selectedTicketCount), " +   // 1. 총 예매 '티켓 수' (Query 1의 장점)
+            "t.festival.availableNOP) " +      // 2. '총 수용 인원' (Query 2의 장점)
+            "FROM Ticket t " +
+            "WHERE t.festival.festivalId = :festivalId AND t.reservationStatus = :status " +
+            "GROUP BY t.performanceDate, t.festival.availableNOP")
+    List<StatisticsBookingDTO> findBookedSummary(@Param("festivalId") String festivalId, @Param("status") ReservationStatus status);
+
 }
+

@@ -1,6 +1,7 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.response.StatisticsUserResponseDTO;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.StatisticsRepository;
@@ -36,7 +37,11 @@ public class StatisticsUserService {
     }
 
     public StatisticsUserResponseDTO getFestivalUserStatistics(String festivalId) {
-        List<String> userIds = statisticsRepository.findUserIdsByFestivalId(festivalId);
+        //List<String> userIds = statisticsRepository.findUserIdsByFestivalId(festivalId);
+        List<String> userIds = statisticsRepository.findUserIdsByFestivalIdAndReservationStatus(
+                festivalId,
+                ReservationStatus.CONFIRMED
+        );
 
         if (userIds.isEmpty()) {
             logger.warn("페스티벌 ID: {}에 대한 예매 내역이 없습니다. 통계 수치를 0으로 반환합니다.", festivalId);
