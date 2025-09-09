@@ -24,6 +24,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable) // gateway CORS 중복 방지
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/host/booking/list").hasRole("HOST") // HOST ROLE 설정
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
