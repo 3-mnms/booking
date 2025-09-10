@@ -1,6 +1,7 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.response.StatisticsBookingDTO;
+import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.BusinessException;
@@ -49,7 +50,7 @@ public class StatisticsQueryService {
 
     public List<StatisticsBookingDTO> getBookingSummary(String festivalId) {
         int availableCapacity = festivalRepository.findByFestivalId(festivalId)
-                .map(festival -> festival.getAvailableNOP())
+                .map(Festival::getAvailableNOP)
                 .orElseThrow(() -> new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND));
 
         // 유효한 티켓을 가져오는 올바른 방법

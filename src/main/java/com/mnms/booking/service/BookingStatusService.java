@@ -64,7 +64,7 @@ public class BookingStatusService {
         );
 
         if (totalCount + selectedTicketCount > festival.getAvailableNOP()) {
-            throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVALIABLE_PEOPLE);
+            throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVAILABLE_PEOPLE);
         }
     }
 

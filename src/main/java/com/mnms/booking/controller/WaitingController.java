@@ -5,12 +5,10 @@ import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.FestivalService;
 import com.mnms.booking.service.WaitingNotificationService;
 import com.mnms.booking.service.WaitingQueueKeyGenerator;
+import com.mnms.booking.specification.WaitingSpecification;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/booking")
-@Tag(name = "대기열 API", description = "대기열 입장, 예매 화면 입장, 대기번호 조회(websocket), 대기열 퇴장")
-public class WaitingController {
+public class WaitingController implements WaitingSpecification {
 
     private final WaitingService waitingService;
     private final FestivalService festivalService;
@@ -42,7 +39,7 @@ public class WaitingController {
     private SimpMessagingTemplate messagingTemplate;
 
     /// 예매하기 버튼(front) 클릭 시 호출되는 API
-    @GetMapping("/enter")
+    @Override
     public ResponseEntity<SuccessResponse<WaitingNumberResponseDTO>> enterBookingPage(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
@@ -61,13 +58,7 @@ public class WaitingController {
     }
 
     /// 예매 페이지 퇴장
-    @GetMapping("/release")
-    @Operation(
-            summary = "예매 페이지에서 사용자 퇴장 처리 (예매 완료 또는 타임아웃)",
-            description = "예매 페이지에 있던 사용자가 퇴장했을 때 실행됩니다. " +
-                    "(대기열에 있던 대기번호 1번 사용자는 스케쥴러에 의해 예매 페이지로 자동 입장 하게 되고, " +
-                    "대기열에 있던 모든 대기자의 대기번호가 변경됩니다.)"
-    )
+    @Override
     public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
@@ -85,12 +76,7 @@ public class WaitingController {
     }
 
     /// 대기열에서 퇴장
-    @Operation(
-            summary = "대기열 퇴장",
-            description = "대기 중인 사용자가 스스로 대기열에서 나갈 때 호출됩니다. " +
-                    "호출 시 해당 사용자는 대기열에서 제거됩니다."
-    )
-    @GetMapping("/exit")
+    @Override
     public ResponseEntity<SuccessResponse<String>> exitWaitingUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
@@ -106,6 +92,7 @@ public class WaitingController {
             return ApiResponseUtil.fail("서버 오류로 인해 사용자를 처리하지 못했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     /**
      * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트

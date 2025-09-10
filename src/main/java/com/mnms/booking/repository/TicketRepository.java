@@ -61,7 +61,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t.selectedTicketCount " +
             "FROM Ticket t " +
             "WHERE t.reservationNumber = :reservationNumber")
-    Long findSelectedTicketCountByReservationNumber(@Param("reservationNumber") String reservationNumber);
+    Long findTicketCountByReservationNumber(@Param("reservationNumber") String reservationNumber);
 
     @Query("SELECT COALESCE(SUM(t.selectedTicketCount), 0) " +
             "FROM Ticket t " +

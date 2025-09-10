@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {
-    private boolean success;
-    private String errorCode;
-    private String errorMessage;
+    private boolean success = false;
+    private Object data = null;
+    private String message;
 }

@@ -74,7 +74,7 @@ public class BookingCommandService {
     @Transactional
     public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = bookingStatusService.getFestivalOrThrow(request.getFestivalId());
-        Long selectedTicketCount = ticketRepository.findSelectedTicketCountByReservationNumber(request.getReservationNumber());
+        Long selectedTicketCount = ticketRepository.findTicketCountByReservationNumber(request.getReservationNumber());
 
         bookingStatusService.validateCapacity(festival, request, selectedTicketCount);
 

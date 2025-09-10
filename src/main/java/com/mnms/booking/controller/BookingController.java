@@ -10,11 +10,10 @@ import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.BookingQueryService;
 import com.mnms.booking.service.BookingCommandService;
+import com.mnms.booking.specification.BookingSpecification;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
 import com.mnms.booking.util.UserApiClient;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/booking")
-@Tag(name = "예매 API", description = "예매 티켓 조회, 티켓 선택, 생성")
-public class BookingController {
+public class BookingController implements BookingSpecification {
 
     private final BookingCommandService bookingCommandService;
     private final BookingQueryService bookingQueryService;
@@ -34,17 +32,12 @@ public class BookingController {
     private final SecurityResponseUtil securityResponseUtil;
 
     /// GET : 페스티벌 예매 정보 조회
-    @PostMapping("/detail/phases/1")
-    @Operation(summary = "1차 : 예매 단계에서 선택한 예매 상세 조회",
-            description = "festivalId와 performanceDate(사용자가 선택한 날짜, 시간)으로 공연 상세 정보를 조회합니다." +
-                    "selectedTicketCount는 0으로 넣을 것!")
+    @Override
     public ResponseEntity<SuccessResponse<FestivalDetailResponseDTO>> getFestivalDetail(@Valid @RequestBody BookingSelectRequestDTO request) {
         return ApiResponseUtil.success(bookingQueryService.getFestivalDetail(request));
     }
 
-    @PostMapping("/detail/phases/2")
-    @Operation(summary = "2차 : 예매 단계에서 선택한 예매 상세 조회",
-            description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
+    @Override
     public ResponseEntity<SuccessResponse<BookingDetailResponseDTO>> getFestivalBookingDetail(
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
@@ -54,10 +47,7 @@ public class BookingController {
     }
 
     /// POST
-    @PostMapping("/selectDate")
-    @Operation(summary = "페스티벌 특정 페스티벌 날짜, 시간, 매수 선택",
-            description = "festivalId, performanceDate(선택한날짜,시간), selectedTicketCount(매수)를 입력하고 reservationNumber를 반환합니다."
-    )
+    @Override
     public ResponseEntity<SuccessResponse<String>> selectFestivalDate(
             @Valid @RequestBody BookingSelectRequestDTO request,
             Authentication authentication
@@ -65,10 +55,7 @@ public class BookingController {
         return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, securityResponseUtil.requireUserId(authentication)));
     }
 
-    @PostMapping("/selectDeliveryMethod")
-    @Operation(summary = "페스티벌 특정 페스티벌 티켓 수령 방법, 주소 선택",
-            description = "festivalId, performanceDate(선택한날짜,시간), deliveryMethod(MOBILE or PAPER), address(String)"
-    )
+    @Override
     public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
             Authentication authentication
@@ -78,10 +65,7 @@ public class BookingController {
     }
 
     /// POST : 3차 예매 완료 (결제 직전)
-    @PostMapping("/qr")
-    @Operation(summary = "페스티벌 예매 티켓 생성",
-            description = "사용자가 특정 페스티벌 티켓을 예약하기 위한 마지막 가예매 상태입니다."
-    )
+    @Override
     public ResponseEntity<SuccessResponse<Void>> reserveTicket(
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
@@ -91,26 +75,19 @@ public class BookingController {
     }
 
     ///  Websocket 메시지 누락 방지 api요청
-    @GetMapping("reservation/status")
-    @Operation( summary = "예매 완료/취소 정보 조회",
-            description = "Websocket 메시지 누락 시, " +
-                    "예매 완료 혹은 취소 되었는지 확인합니다. ")
+    @Override
     public ResponseEntity<SuccessResponse<ReservationStatus>> checkStatus(@RequestParam String reservationNumber){
         return ApiResponseUtil.success(bookingCommandService.checkStatus(reservationNumber));
     }
 
     ///  GET
-    @GetMapping("/user/info")
-    @Operation(summary = "예매자 정보 조회",
-            description = "예매 과정에서 예매자 정보를 조회합니다." +
-                    "예매자 role이 user인 사람만 조회 가능합니다. (email)"
-    )
+    @Override
     public ResponseEntity<SuccessResponse<BookingUserResponseDTO>> getUserInfo(Authentication authentication) {
         return ApiResponseUtil.success(userApiClient.getUserInfoById(securityResponseUtil.requireUserId(authentication)));
     }
 
     ///  이메일 임시 테스트
-    @PostMapping("/email/test")
+    @Override
     public ResponseEntity<String> confirmTicket(
             @RequestParam String reservationNumber,
             @RequestParam boolean paymentStatus) {

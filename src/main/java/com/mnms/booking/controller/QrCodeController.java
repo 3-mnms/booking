@@ -3,10 +3,10 @@ package com.mnms.booking.controller;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.QrCodeService;
+import com.mnms.booking.specification.QrCodeSpecification;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,16 +21,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/qr")
-@Tag(name = "QR API", description = "QR 이미지 조회, 스캔, ")
-public class QrCodeController {
+public class QrCodeController implements QrCodeSpecification {
 
     private final QrCodeService qrCodeService;
     private final SecurityResponseUtil securityResponseUtil;
 
     /// Qrcode 이미지 조회
-    @GetMapping(value = "/image/{qrCodeId}", produces = MediaType.IMAGE_PNG_VALUE)
-    @Operation(summary = "QR 코드 이미지 조회",
-            description = "qrCodeId로 QR 코드 이미지를 PNG 형식으로 반환합니다.")
+    @Override
     public ResponseEntity<byte[]> getQrCodeImage(@PathVariable String qrCodeId) {
         QrCode qrCode = qrCodeService.getQrCodeByCode(qrCodeId);
         String qrCodeText = qrCode.getQrCodeId();
@@ -67,9 +64,7 @@ public class QrCodeController {
 
 
     /// 페스티벌 주최자 QR 스캔
-    @PostMapping(value = "/validate/{qrCodeId}")
-    @Operation(summary = "QR 코드 스캔 및 유효성 검사",
-            description = "qrCodeId와 사용자 ID로 QR 코드 유효성 검사 후 QR 사용 처리합니다.")
+    @Override
     public ResponseEntity<SuccessResponse<Void>> validateAndUseQrCode(
             @PathVariable String qrCodeId,
             Authentication authentication) {
