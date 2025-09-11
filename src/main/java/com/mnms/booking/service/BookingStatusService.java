@@ -15,6 +15,7 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Service
@@ -45,15 +48,41 @@ public class BookingStatusService {
     private final QrCodeService qrCodeService;
     private final ThreadPoolTaskScheduler scheduler;
     private final SimpMessagingTemplate messagingTemplate;
+//
+//    /// schedule 점검
+//    public void scheduleTempReservationExpiration(String reservationNumber) {
+//        scheduler.schedule(() -> {
+//            ticketRepository.findByReservationNumber(reservationNumber)
+//                    .filter(t -> t.getReservationStatus() == ReservationStatus.TEMP_RESERVED)
+//                    .ifPresent(ticketRepository::delete);
+//        }, Instant.now().plus(TEMP_RESERVATION_TTL_MINUTES, ChronoUnit.MINUTES));
+//    }
+//
+//    /// redis를 통해 schedule 점검
+//    private final RedisTemplate<String, Object> redisTemplate;
+//    private static final String PREFIX = "TEMP_RESERVATION:"; // Key prefix
+//    private static final long TTL_MINUTES = 5;
+//
+//    public void createTempReservation(Ticket ticket) {
+//        String key = PREFIX + ticket.getReservationNumber();
+//        redisTemplate.opsForValue().set(
+//                key,
+//                ticket,
+//                TTL_MINUTES,
+//                TimeUnit.MINUTES
+//        );
+//    }
+//
+//    public Optional<Ticket> getTempReservation(String reservationNumber) {
+//        String key = PREFIX + reservationNumber;
+//        Ticket ticket = (Ticket) redisTemplate.opsForValue().get(key);
+//        return Optional.ofNullable(ticket);
+//    }
+//
+//    public void deleteTempReservation(String reservationNumber) {
+//        redisTemplate.delete(PREFIX + reservationNumber);
+//    }
 
-    /// schedule 점검
-    public void scheduleTempReservationExpiration(String reservationNumber) {
-        scheduler.schedule(() -> {
-            ticketRepository.findByReservationNumber(reservationNumber)
-                    .filter(t -> t.getReservationStatus() == ReservationStatus.TEMP_RESERVED)
-                    .ifPresent(ticketRepository::delete);
-        }, Instant.now().plus(TEMP_RESERVATION_TTL_MINUTES, ChronoUnit.MINUTES));
-    }
 
     /// 검증
     public void validateCapacity(Festival festival, BookingRequestDTO request, Long selectedTicketCount) {

@@ -72,6 +72,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+	// 역직렬화
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
 	// QR 생성
 	implementation 'com.google.zxing:core:3.5.2'
 	implementation 'com.google.zxing:javase:3.5.2'
