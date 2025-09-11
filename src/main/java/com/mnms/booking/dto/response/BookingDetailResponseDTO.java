@@ -18,6 +18,7 @@ public class BookingDetailResponseDTO {
     private LocalDateTime performanceDate;
     private int ticketCount;
     private Long sellerId;
+    private int ticketPick;
 
     public static BookingDetailResponseDTO fromEntities(Festival festival, Ticket ticket) {
         return BookingDetailResponseDTO.builder()
@@ -27,6 +28,7 @@ public class BookingDetailResponseDTO {
                 .ticketPrice(festival.getTicketPrice())
                 .performanceDate(ticket.getPerformanceDate())
                 .ticketCount(ticket.getSelectedTicketCount())
+                .ticketPick(festival.getTicketPick())
                 .build();
     }
 }

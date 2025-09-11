@@ -43,7 +43,7 @@ public class Festival {
     private String fcltynm; // 공연장 장소
 
     @Column(name = "ticket_pick")
-    private int ticketPick; // 티켓 배송 방법 (1=배송만, 2=qr만, 3=둘다)
+    private int ticketPick; // 티켓 배송 방법 (1=둘다, 2=qr만)
 
     @Column(name = "max_purchase")
     private int maxPurchase; // 1회 최대 구매 가능 수량 (1~4)
