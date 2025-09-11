@@ -136,7 +136,7 @@ public class TransferCompletionService {
 
     private boolean handleCancel(Transfer transfer, UpdateTicketRequestDTO request) {
         if (request.getTransferStatus() == TransferStatus.CANCELED) {
-            transfer.setStatus(TransferStatus.CANCELED);
+            transferRepository.delete(transfer);
             return true;
         }
         return false;
