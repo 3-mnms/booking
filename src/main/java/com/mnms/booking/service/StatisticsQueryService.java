@@ -41,7 +41,7 @@ public class StatisticsQueryService {
     }
 
     public List<LocalDateTime> getPerformanceDatesByFestivalId(String festivalId) {
-        List<LocalDateTime> performanceDates = ticketRepository.findDistinctPerformanceDateByFestivalId(festivalId);
+        List<LocalDateTime> performanceDates = ticketRepository.findDistinctPerformanceDate(festivalId);
         if (performanceDates.isEmpty()) {
             throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
         }

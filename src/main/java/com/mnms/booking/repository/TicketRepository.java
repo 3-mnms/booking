@@ -33,7 +33,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t " +
             "FROM Ticket t " +
             "WHERE t.festival.festivalId = :festivalId AND t.userId = :userId AND t.reservationNumber = :reservationNumber")
-    Optional<Ticket> findByFestivalIdAndUserIdAndReservationNumber(
+    Optional<Ticket> findByIdAndReservationNumber(
             @Param("festivalId") String festivalId,
             @Param("userId") Long userId,
             @Param("reservationNumber") String reservationNumber
@@ -47,7 +47,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             "WHERE t.festival.festivalId = :festivalId " +
             "AND t.performanceDate = :performanceDate " +
             "AND t.reservationStatus = :reservationStatus")
-    List<Long> findDistinctUserIdsByFestivalIdAndPerformanceDateAndReservationStatus(
+    List<Long> findDistinctUserIds(
             @Param("festivalId") String festivalId,
             @Param("performanceDate") LocalDateTime performanceDate,
             @Param("reservationStatus") ReservationStatus reservationStatus);
@@ -78,7 +78,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t FROM Ticket t " +
             "WHERE t.festival.festivalId = :festivalId " +
             "AND t.reservationStatus = :status")
-    List<Ticket> findByFestivalIdAndReservationStatus(@Param("festivalId") String festivalId,
+    List<Ticket> findByIdAndReservationStatus(@Param("festivalId") String festivalId,
                                                       @Param("status") ReservationStatus status);
 
     Optional<List<Ticket>> findByUserId(Long userId);
@@ -89,10 +89,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     // 특정 festivalId에 대한 유효한 공연 날짜-시간을 모두 조회
     @Query("SELECT DISTINCT t.performanceDate FROM Ticket t WHERE t.festival.festivalId = :festivalId")
-    List<LocalDateTime> findDistinctPerformanceDateByFestivalId(@Param("festivalId") String festivalId);
+    List<LocalDateTime> findDistinctPerformanceDate(@Param("festivalId") String festivalId);
 
     @Query("SELECT t.reservationStatus FROM Ticket t WHERE t.reservationNumber = :reservationNumber")
-    ReservationStatus findReservationStatusByReservationNumber(@Param("reservationNumber") String reservationNumber);
+    ReservationStatus findReservationStatusByRN(@Param("reservationNumber") String reservationNumber);
 
     List<Ticket> findByUserIdAndReservationStatus(Long userId, ReservationStatus status);
 
@@ -105,5 +105,21 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             "GROUP BY t.performanceDate, t.festival.availableNOP")
     List<StatisticsBookingDTO> findBookedSummary(@Param("festivalId") String festivalId, @Param("status") ReservationStatus status);
 
+
+    @Query("""
+        SELECT t
+        FROM Ticket t
+        JOIN t.festival f
+        WHERE f.id = :festivalId
+          AND t.performanceDate = :performanceDate
+          AND t.userId = :userId
+          AND t.reservationStatus = :reservationStatus
+    """)
+    List<Ticket> findTempReservedTickets(
+            @Param("festivalId") Long festivalId,
+            @Param("performanceDate") LocalDateTime performanceDate,
+            @Param("userId") Long userId,
+            @Param("reservationStatus") ReservationStatus reservationStatus
+    );
 }
 

@@ -149,11 +149,12 @@ public interface HostSpecification {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
                                     value = """
-                                    {
-                                               "success": false,
-                                               "data": "ACCESS_DENIED",
-                                               "message": "접근 권한이 없습니다."
-                                    }
+                                            {
+                                                "timestamp": "2025-09-11T02:22:47.684+00:00",
+                                                "status": 403,
+                                                "error": "Forbidden",
+                                                "path": "/api/host/booking/list"
+                                            }
                                     """
                             )
                     )

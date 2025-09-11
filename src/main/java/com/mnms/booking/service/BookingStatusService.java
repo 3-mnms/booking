@@ -146,7 +146,7 @@ public class BookingStatusService {
     }
 
     public Ticket getTicketOrThrow(String festivalId, Long userId, String reservationNumber) {
-        return ticketRepository.findByFestivalIdAndUserIdAndReservationNumber(festivalId, userId, reservationNumber)
+        return ticketRepository.findByIdAndReservationNumber(festivalId, userId, reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
     }
 
@@ -188,5 +188,11 @@ public class BookingStatusService {
         QrCode qrCode = QrResponseDTO.create(userId, qrCodeId, festival, ticket).toEntity();
         qrCodeRepository.save(qrCode);
         return qrCode;
+    }
+
+    ///  예매 시도 시, 가예매 상태 모두 지우기
+    public void recreateHold(Festival festival, LocalDateTime performanceDate, Long userId) {
+        List<Ticket> tempReservedTickets = ticketRepository.findTempReservedTickets(festival.getId(), performanceDate, userId, ReservationStatus.TEMP_RESERVED);
+        ticketRepository.deleteAllInBatch(tempReservedTickets);
     }
 }

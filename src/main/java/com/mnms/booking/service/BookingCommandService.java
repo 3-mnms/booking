@@ -37,6 +37,7 @@ public class BookingCommandService {
 
         bookingStatusService.validatePerformanceDate(festival, performanceDate);
         bookingStatusService.validateScheduleExists(festival, performanceDate);
+        bookingStatusService.recreateHold(festival, performanceDate, userId); // 가예매 상태인 티켓 모두 삭제
         bookingStatusService.validateUserReservationLimit(userId, request, festival);
 
         Ticket ticket = Ticket.builder()
@@ -127,6 +128,6 @@ public class BookingCommandService {
 
     // websocket 손실 방지 확인
     public ReservationStatus checkStatus(String reservationNumber) {
-        return ticketRepository.findReservationStatusByReservationNumber(reservationNumber);
+        return ticketRepository.findReservationStatusByRN(reservationNumber);
     }
 }
