@@ -35,6 +35,7 @@ public class WaitingService {
                 throw new BusinessException(ErrorCode.FAILED_TO_ENTER_QUEUE);
             }
             log.info("User {} added to waiting queue {}.", userId, waitingQueueKey);
+
             waitingQueueSchedulingService.startScheduler(waitingQueueKey, bookingUsersKey, notificationChannelKey, availableNOP);
             return waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
         }

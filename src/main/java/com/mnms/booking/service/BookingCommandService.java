@@ -71,7 +71,6 @@ public class BookingCommandService {
 
         // redis ttl
         tempReservationService.refreshTempReservation(ticket.getReservationNumber());
-
     }
 
     /// 3차: 가예매 - 예약 - QR생성

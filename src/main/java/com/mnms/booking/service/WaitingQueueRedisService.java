@@ -2,6 +2,7 @@ package com.mnms.booking.service;
 
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class WaitingQueueRedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -120,6 +122,8 @@ public class WaitingQueueRedisService {
         Long removed = redisTemplate.opsForSet().remove(bookingUsersKey, userId);
         return removed != null && removed > 0;
     }
+
+
     public Long getRank(String waitingQueueKey, String userId){
         return zSetOperations.rank(waitingQueueKey, userId);
     }

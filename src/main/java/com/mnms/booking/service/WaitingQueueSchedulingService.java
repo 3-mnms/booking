@@ -33,14 +33,12 @@ public class WaitingQueueSchedulingService {
         log.info("Starting scheduler for queue: {}", waitingQueueKey);
         ScheduledFuture<?> task = scheduler.scheduleWithFixedDelay(
                 () -> runSchedulerLogic(waitingQueueKey, bookingUsersKey, notificationChannelKey, availableNOP),
-                Duration.ofSeconds(5)
+                Duration.ofSeconds(10)
         );
         scheduledTasks.put(waitingQueueKey, task);
     }
 
-    /**
-     * 스케줄러 중지
-     */
+    /// 스케줄러 중지
     public synchronized void stopScheduler(String waitingQueueKey) {
         ScheduledFuture<?> task = scheduledTasks.get(waitingQueueKey);
         if (task != null && !task.isCancelled()) {

@@ -121,5 +121,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("userId") Long userId,
             @Param("reservationStatus") ReservationStatus reservationStatus
     );
+
+    @Query("SELECT t FROM Ticket t JOIN FETCH t.festival WHERE t.reservationNumber = :reservationNumber")
+    Optional<Ticket> findByReservationNumberWithFestival(@Param("reservationNumber") String reservationNumber);
 }
 
