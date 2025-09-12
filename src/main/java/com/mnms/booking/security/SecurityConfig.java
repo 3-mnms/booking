@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/host/booking/list").hasRole("HOST") // HOST ROLE 설정
                         .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/v3/api-docs","/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(
                                 "/public/**",
                                 "/h2-console/**",
