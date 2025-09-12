@@ -15,6 +15,7 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Service
@@ -46,15 +49,6 @@ public class BookingStatusService {
     private final ThreadPoolTaskScheduler scheduler;
     private final SimpMessagingTemplate messagingTemplate;
 
-    /// schedule 점검
-    public void scheduleTempReservationExpiration(String reservationNumber) {
-        scheduler.schedule(() -> {
-            ticketRepository.findByReservationNumber(reservationNumber)
-                    .filter(t -> t.getReservationStatus() == ReservationStatus.TEMP_RESERVED)
-                    .ifPresent(ticketRepository::delete);
-        }, Instant.now().plus(TEMP_RESERVATION_TTL_MINUTES, ChronoUnit.MINUTES));
-    }
-
     /// 검증
     public void validateCapacity(Festival festival, BookingRequestDTO request, Long selectedTicketCount) {
         int totalCount = ticketRepository.getTotalSelectedTicketCount(
@@ -64,7 +58,7 @@ public class BookingStatusService {
         );
 
         if (totalCount + selectedTicketCount > festival.getAvailableNOP()) {
-            throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVALIABLE_PEOPLE);
+            throw new BusinessException(ErrorCode.FESTIVAL_LIMIT_AVAILABLE_PEOPLE);
         }
     }
 
@@ -146,7 +140,7 @@ public class BookingStatusService {
     }
 
     public Ticket getTicketOrThrow(String festivalId, Long userId, String reservationNumber) {
-        return ticketRepository.findByFestivalIdAndUserIdAndReservationNumber(festivalId, userId, reservationNumber)
+        return ticketRepository.findByIdAndReservationNumber(festivalId, userId, reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
     }
 
@@ -188,5 +182,11 @@ public class BookingStatusService {
         QrCode qrCode = QrResponseDTO.create(userId, qrCodeId, festival, ticket).toEntity();
         qrCodeRepository.save(qrCode);
         return qrCode;
+    }
+
+    ///  예매 시도 시, 가예매 상태 모두 지우기
+    public void recreateHold(Festival festival, LocalDateTime performanceDate, Long userId) {
+        List<Ticket> tempReservedTickets = ticketRepository.findTempReservedTickets(festival.getId(), performanceDate, userId, ReservationStatus.TEMP_RESERVED);
+        ticketRepository.deleteAllInBatch(tempReservedTickets);
     }
 }

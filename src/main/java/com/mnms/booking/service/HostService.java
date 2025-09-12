@@ -33,7 +33,7 @@ public class HostService {
 
     public List<Long> getBookingsByOrganizer(HostRequestDTO request) {
         return ticketRepository
-                .findDistinctUserIdsByFestivalIdAndPerformanceDateAndReservationStatus(
+                .findDistinctUserIds(
                         request.getFestivalId(),
                         request.getPerformanceDate(),
                         ReservationStatus.CONFIRMED
@@ -55,7 +55,7 @@ public class HostService {
             throw new BusinessException(ErrorCode.FESTIVAL_NOT_FOUND);
         }
 
-        List<Ticket> tickets = new ArrayList<>(ticketRepository.findByFestivalIdAndReservationStatus(festival.getFestivalId(), ReservationStatus.CONFIRMED));
+        List<Ticket> tickets = new ArrayList<>(ticketRepository.findByIdAndReservationStatus(festival.getFestivalId(), ReservationStatus.CONFIRMED));
 
         if (tickets.isEmpty()) {
             return Collections.emptyList();

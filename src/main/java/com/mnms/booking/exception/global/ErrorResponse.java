@@ -1,20 +1,17 @@
 package com.mnms.booking.exception.global;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.mnms.booking.exception.BusinessException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ErrorResponse {
     private boolean success;
-    private String errorCode;
-    private String errorMessage;
+    private Object data;
+    private String message;
 }

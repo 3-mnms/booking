@@ -35,6 +35,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -70,6 +71,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	// 역직렬화
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
 	// QR 생성
 	implementation 'com.google.zxing:core:3.5.2'

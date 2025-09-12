@@ -1,5 +1,6 @@
 package com.mnms.booking.config;
 
+import com.mnms.booking.service.KeyExpirationListener;
 import com.mnms.booking.service.RedisMessageSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.core.StringRedisTemplate;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @Configuration
 @Slf4j
@@ -28,16 +31,20 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter listenerAdapter
+            MessageListenerAdapter waitingNotificationListenerAdapter,
+            KeyExpirationListener keyExpirationListener
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
 
-        PatternTopic patternTopic = new PatternTopic("waiting_notification:*");
-        container.addMessageListener(listenerAdapter, patternTopic);
+        // waiting_notification:* 구독
+        container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification:*"));
+        log.info("Subscribed to Redis channels with pattern: waiting_notification:*");
 
-        // 구독 시작 시 로그 출력
-        log.info("Subscribed to Redis channels with pattern: {}", patternTopic.getTopic());
+        // Keyspace Notification 구독 (예매 완료 이벤트)
+        container.addMessageListener(keyExpirationListener, new PatternTopic("__keyevent@0__:expired"));
+        log.info("Subscribed to Redis key expiration events");
+
         return container;
     }
 
@@ -48,26 +55,25 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 
-    // Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
+    /// Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
     @Bean
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
 
-    // ZSet, Hash 등 일반적인 Redis 데이터 구조 관리에 사용될 RedisTemplate 설정 추가
+    /// ZSet, Hash 등 일반적인 Redis 데이터 구조 관리에 사용될 RedisTemplate 설정 추가
     @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // 직렬화 설정
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new StringRedisSerializer());
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        // 초기화 메서드 호출 (설정 적용)
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
         template.afterPropertiesSet();
         return template;
     }
+
 }

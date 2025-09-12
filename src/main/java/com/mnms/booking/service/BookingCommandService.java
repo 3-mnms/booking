@@ -1,6 +1,6 @@
 package com.mnms.booking.service;
 
-import  com.mnms.booking.dto.request.BookingRequestDTO;
+import com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
 import com.mnms.booking.dto.response.*;
@@ -28,6 +28,7 @@ public class BookingCommandService {
     private final CommonUtils commonUtils;
     private final UserApiClient userApiClient;
     private final BookingStatusService bookingStatusService;
+    private final TempReservationService tempReservationService;
 
     /// 1차: 가예매 - 임시 예약
     @Transactional
@@ -37,6 +38,7 @@ public class BookingCommandService {
 
         bookingStatusService.validatePerformanceDate(festival, performanceDate);
         bookingStatusService.validateScheduleExists(festival, performanceDate);
+        bookingStatusService.recreateHold(festival, performanceDate, userId); // 가예매 상태인 티켓 모두 삭제
         bookingStatusService.validateUserReservationLimit(userId, request, festival);
 
         Ticket ticket = Ticket.builder()
@@ -50,10 +52,8 @@ public class BookingCommandService {
                 .build();
 
         ticketRepository.save(ticket);
-
-        // TTL 스케줄링: 일정 시간 지나면 자동 삭제
-        bookingStatusService.scheduleTempReservationExpiration(ticket.getReservationNumber());
-
+        // redis ttl
+        tempReservationService.createTempReservation(ticket);
         return ticket.getReservationNumber();
     }
 
@@ -68,13 +68,17 @@ public class BookingCommandService {
             ticket.setDeliveryDate(bookingStatusService.calculateDeliveryDate(ticket, type));
         }
         ticketRepository.save(ticket);
+
+        // redis ttl
+        tempReservationService.refreshTempReservation(ticket.getReservationNumber());
+
     }
 
     /// 3차: 가예매 - 예약 - QR생성
     @Transactional
     public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = bookingStatusService.getFestivalOrThrow(request.getFestivalId());
-        Long selectedTicketCount = ticketRepository.findSelectedTicketCountByReservationNumber(request.getReservationNumber());
+        Long selectedTicketCount = ticketRepository.findTicketCountByReservationNumber(request.getReservationNumber());
 
         bookingStatusService.validateCapacity(festival, request, selectedTicketCount);
 
@@ -85,7 +89,11 @@ public class BookingCommandService {
         bookingStatusService.regenerateQrCodes(ticket, userId, festival);
 
         ticketRepository.save(ticket);
+
+        // redis ttl
+        tempReservationService.refreshTempReservation(ticket.getReservationNumber());
     }
+
 
     /// 최종 완료 - status 변경 (payment에 kafka 메시지 구독)
     @Transactional
@@ -98,6 +106,9 @@ public class BookingCommandService {
 
         BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
         emailService.sendTicketConfirmationEmail(ticket, user);
+
+        // redis ttl
+        tempReservationService.deleteTempReservation(ticket.getReservationNumber());
 
         // websocket
         bookingStatusService.notifyTicketStatus(ticket, newStatus);
@@ -127,6 +138,6 @@ public class BookingCommandService {
 
     // websocket 손실 방지 확인
     public ReservationStatus checkStatus(String reservationNumber) {
-        return ticketRepository.findReservationStatusByReservationNumber(reservationNumber);
+        return ticketRepository.findReservationStatusByRN(reservationNumber);
     }
 }

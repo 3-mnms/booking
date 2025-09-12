@@ -1,5 +1,6 @@
 package com.mnms.booking.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import jakarta.persistence.*;
@@ -37,10 +38,12 @@ public class Ticket {
     private Long userId; // 예매자 id
 
     @Column(name = "reservation_date")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate reservationDate; // 예매를 수행한 날짜
 
     @Setter
     @Column(name = "delivery_date")
+
     private LocalDateTime deliveryDate; // 택배 날짜
 
     @Column(name = "performance_date")
