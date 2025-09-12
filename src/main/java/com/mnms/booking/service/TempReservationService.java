@@ -15,7 +15,7 @@ public class TempReservationService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String PREFIX = "TEMP_RESERVATION:";
-    private static final long TTL_MINUTES = 1;
+    private static final long TTL_MINUTES = 100;
 
     public void createTempReservation(Ticket ticket) {
         String key = PREFIX + ticket.getReservationNumber();

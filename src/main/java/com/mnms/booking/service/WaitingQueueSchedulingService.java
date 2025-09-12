@@ -22,7 +22,7 @@ import java.util.concurrent.ScheduledFuture;
 public class WaitingQueueSchedulingService {
     private final WaitingQueueRedisService waitingQueueRedisService;
     private final WaitingNotificationService waitingNotificationService;
-    private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    private final ThreadPoolTaskScheduler scheduler;
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
     /// 스케줄러 시작 (중복 시작 방지)
@@ -33,14 +33,12 @@ public class WaitingQueueSchedulingService {
         log.info("Starting scheduler for queue: {}", waitingQueueKey);
         ScheduledFuture<?> task = scheduler.scheduleWithFixedDelay(
                 () -> runSchedulerLogic(waitingQueueKey, bookingUsersKey, notificationChannelKey, availableNOP),
-                Duration.ofSeconds(5)
+                Duration.ofSeconds(10)
         );
         scheduledTasks.put(waitingQueueKey, task);
     }
 
-    /**
-     * 스케줄러 중지
-     */
+    /// 스케줄러 중지
     public synchronized void stopScheduler(String waitingQueueKey) {
         ScheduledFuture<?> task = scheduledTasks.get(waitingQueueKey);
         if (task != null && !task.isCancelled()) {
