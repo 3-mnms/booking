@@ -55,7 +55,8 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
                         || uri.startsWith("/swagger-ui")
                         || uri.equals("/swagger-ui.html")
                         || uri.startsWith("/actuator")
-                        || uri.startsWith("/ws")) {
+                        || uri.startsWith("/ws")
+                        || uri.startsWith("/api/host/list")) {
                     chain.doFilter(request, response);
                     return;
                 }

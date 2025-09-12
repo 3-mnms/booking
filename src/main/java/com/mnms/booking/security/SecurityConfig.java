@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable) // gateway CORS 중복 방지
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/host/booking/list").hasRole("HOST") // HOST ROLE 설정
+                        .requestMatchers("/api/host/list").permitAll()
+                        .requestMatchers("/api/host/booking/list").hasAnyRole("HOST", "ADMIN")
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs","/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(
@@ -35,7 +36,6 @@ public class SecurityConfig {
                                 "/api/captcha/**",
                                 "/api/qr/**",
                                 "/api/booking/detail/phases/1",
-                                "/api/host/**",
                                 "/api/booking/confirm",
                                 "/api/transfer/**",
                                 "/api/transfer/**",
