@@ -54,12 +54,14 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
                 if (uri.startsWith("/v3/api-docs")
                         || uri.startsWith("/swagger-ui")
                         || uri.equals("/swagger-ui.html")
-                        || uri.startsWith("/actuator")) {
+                        || uri.startsWith("/actuator")
+                        || uri.equals("/ws/info")) {
                     chain.doFilter(request, response);
                 }
                 sendUnauthorized(response, "X-User-Id 또는 X-User-Role 헤더가 없습니다.");
                 return;
             }
+
 
             // userId 파싱
             final Long userId;
