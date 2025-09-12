@@ -3,8 +3,6 @@ package com.mnms.booking.controller;
 import com.mnms.booking.dto.response.WaitingNumberResponseDTO;
 import com.mnms.booking.exception.global.SuccessResponse;
 import com.mnms.booking.service.FestivalService;
-import com.mnms.booking.service.WaitingNotificationService;
-import com.mnms.booking.service.WaitingQueueKeyGenerator;
 import com.mnms.booking.specification.WaitingSpecification;
 import com.mnms.booking.util.ApiResponseUtil;
 import com.mnms.booking.util.SecurityResponseUtil;
@@ -14,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +27,6 @@ public class WaitingController implements WaitingSpecification {
 
     private final WaitingService waitingService;
     private final FestivalService festivalService;
-    private final WaitingQueueKeyGenerator waitingQueueKeyGenerator;
-    private final WaitingNotificationService waitingNotificationService;
     private final SecurityResponseUtil securityResponseUtil;
 
     @Autowired
@@ -92,25 +86,6 @@ public class WaitingController implements WaitingSpecification {
             return ApiResponseUtil.fail("서버 오류로 인해 사용자를 처리하지 못했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-    /**
-     * WebSocket: 특정 사용자의 대기 순번 구독 엔드포인트
-     * 클라이언트가 /app/subscribe/waiting로 메시지를 보냄 (최초 구독 요청)
-     */
-    @MessageMapping("/subscribe/waiting")
-    public void subscribeWaitingQueue(
-            @Header("festivalId") String festivalId,
-            @Header("reservationDate") LocalDateTime reservationDate,
-            Authentication authentication) {
-        String userId = getUserId(authentication);
-        log.info("User {} subscribed to waiting queue updates.", userId);
-
-        String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
-        String notificationChannelKey = waitingQueueKeyGenerator.getNotificationChannelKey(festivalId, reservationDate);
-        waitingNotificationService.getAndPublishWaitingNumber(waitingQueueKey, notificationChannelKey, userId);
-    }
-
 
     public String getUserId(Authentication authentication) {
         return String.valueOf(securityResponseUtil.requireUserId(authentication));
