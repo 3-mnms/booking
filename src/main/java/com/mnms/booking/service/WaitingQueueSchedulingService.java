@@ -22,7 +22,6 @@ import java.util.concurrent.ScheduledFuture;
 public class WaitingQueueSchedulingService {
     private final WaitingQueueRedisService waitingQueueRedisService;
     private final WaitingNotificationService waitingNotificationService;
-    //private final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
     private final ThreadPoolTaskScheduler scheduler;
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
