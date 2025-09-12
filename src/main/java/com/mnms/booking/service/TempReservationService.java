@@ -25,7 +25,10 @@ public class TempReservationService {
     // 갱신
     public void refreshTempReservation(String reservationNumber) {
         String key = PREFIX + reservationNumber;
+
+        System.out.println("갱신하려는 key: " + key);
         Boolean exists = redisTemplate.hasKey(key);
+        System.out.println("exists? " + exists);
 
         if (Boolean.TRUE.equals(exists)) {
             redisTemplate.expire(key, TTL_MINUTES, TimeUnit.MINUTES);

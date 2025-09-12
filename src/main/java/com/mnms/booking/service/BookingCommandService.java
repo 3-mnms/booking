@@ -52,7 +52,7 @@ public class BookingCommandService {
                 .build();
 
         ticketRepository.save(ticket);
-        // ttl
+        // redis ttl
         tempReservationService.createTempReservation(ticket);
         return ticket.getReservationNumber();
     }
@@ -69,8 +69,9 @@ public class BookingCommandService {
         }
         ticketRepository.save(ticket);
 
-        // ttl
+        // redis ttl
         tempReservationService.refreshTempReservation(ticket.getReservationNumber());
+
     }
 
     /// 3차: 가예매 - 예약 - QR생성
@@ -89,9 +90,10 @@ public class BookingCommandService {
 
         ticketRepository.save(ticket);
 
-        // ttl
+        // redis ttl
         tempReservationService.refreshTempReservation(ticket.getReservationNumber());
     }
+
 
     /// 최종 완료 - status 변경 (payment에 kafka 메시지 구독)
     @Transactional
@@ -105,7 +107,7 @@ public class BookingCommandService {
         BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
         emailService.sendTicketConfirmationEmail(ticket, user);
 
-        // redis
+        // redis ttl
         tempReservationService.deleteTempReservation(ticket.getReservationNumber());
 
         // websocket

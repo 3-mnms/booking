@@ -28,25 +28,6 @@ public class RedisConfig {
     }
 
     /// Redis Pub/Sub 메시지를 구독하고 처리할 컨테이너
-/*
-    @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(
-            RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter listenerAdapter
-    ) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-
-        PatternTopic patternTopic = new PatternTopic("waiting_notification:*");
-        container.addMessageListener(listenerAdapter, patternTopic);
-
-        // 구독 시작 시 로그 출력
-        log.info("Subscribed to Redis channels with pattern: {}", patternTopic.getTopic());
-
-        return container;
-    }
- */
-
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
@@ -56,18 +37,16 @@ public class RedisConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
 
-        // 기존 waiting_notification:* 구독
+        // waiting_notification:* 구독
         container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification:*"));
         log.info("Subscribed to Redis channels with pattern: waiting_notification:*");
 
-        // Keyspace Notification (만료 이벤트) 구독
+        // Keyspace Notification 구독 (예매 완료 이벤트)
         container.addMessageListener(keyExpirationListener, new PatternTopic("__keyevent@0__:expired"));
         log.info("Subscribed to Redis key expiration events");
 
         return container;
     }
-
-
 
     /// Redis 메시지를 받아 처리할 리스너 어댑터 (RedisMessageSubscriber와 연결)
     @Bean
@@ -76,26 +55,23 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 
-    // Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
+    /// Redis Pub/Sub 메시지를 발행하는 데 사용될 템플릿
     @Bean
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
 
-    // ZSet, Hash 등 일반적인 Redis 데이터 구조 관리에 사용될 RedisTemplate 설정 추가
+    /// ZSet, Hash 등 일반적인 Redis 데이터 구조 관리에 사용될 RedisTemplate 설정 추가
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // ObjectMapper에 JavaTimeModule 등록
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        // Key와 Value Serializer 설정
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
-
         template.afterPropertiesSet();
         return template;
     }
