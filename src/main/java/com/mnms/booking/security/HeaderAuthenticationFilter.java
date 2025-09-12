@@ -51,6 +51,12 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
         if (canSetAuth) {
             // 헤더가 없으면 401
             if (userIdHeader == null || rolesHdr == null) {
+                if (uri.startsWith("/v3/api-docs")
+                        || uri.startsWith("/swagger-ui")
+                        || uri.equals("/swagger-ui.html")
+                        || uri.startsWith("/actuator")) {
+                    chain.doFilter(request, response);
+                }
                 sendUnauthorized(response, "X-User-Id 또는 X-User-Role 헤더가 없습니다.");
                 return;
             }
