@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Tag(name = "QR API", description = "QR 이미지 조회, 스캔")
 public interface QrCodeSpecification {
 
-    @GetMapping(value = "/image/{qrCodeId}", produces = "image/png")
+
     @Operation(summary = "QR 코드 이미지 조회", description = "qrCodeId로 QR 코드 이미지를 PNG 형식으로 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(
@@ -50,7 +50,8 @@ public interface QrCodeSpecification {
             @PathVariable String qrCodeId
     );
 
-    @PostMapping(value = "/validate/{qrCodeId}")
+
+
     @Operation(summary = "QR 코드 스캔 및 유효성 검사", description = "qrCodeId와 사용자 ID로 QR 코드 유효성 검사 후 QR 사용 처리합니다.")
     @ApiResponses(value = {
             @ApiResponse(

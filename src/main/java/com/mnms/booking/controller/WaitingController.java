@@ -39,7 +39,7 @@ public class WaitingController implements WaitingSpecification {
     private SimpMessagingTemplate messagingTemplate;
 
     /// 예매하기 버튼(front) 클릭 시 호출되는 API
-    @Override
+    @GetMapping("/enter")
     public ResponseEntity<SuccessResponse<WaitingNumberResponseDTO>> enterBookingPage(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
@@ -58,7 +58,7 @@ public class WaitingController implements WaitingSpecification {
     }
 
     /// 예매 페이지 퇴장
-    @Override
+    @GetMapping("/release")
     public ResponseEntity<SuccessResponse<String>> releaseUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,
@@ -76,7 +76,7 @@ public class WaitingController implements WaitingSpecification {
     }
 
     /// 대기열에서 퇴장
-    @Override
+    @GetMapping("/exit")
     public ResponseEntity<SuccessResponse<String>> exitWaitingUser(
             @RequestParam String festivalId,
             @RequestParam LocalDateTime reservationDate,

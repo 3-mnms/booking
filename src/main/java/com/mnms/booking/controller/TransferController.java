@@ -35,8 +35,8 @@ public class TransferController implements TransferSpecification {
     private final SecurityResponseUtil securityResponseUtil;
     private final TransferCompletionService transferCompletionService;
 
-    ///  양도할 수 있는 티켓 조회
-    @Override
+
+    @GetMapping("/transferor")
     public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
         List<TicketResponseDTO> tickets = transferService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(tickets);
@@ -44,7 +44,7 @@ public class TransferController implements TransferSpecification {
 
 
     ///  가족관계증명서 인증
-    @Override
+    @PostMapping("/extract")
     public ResponseEntity<SuccessResponse<Void>> extractPersonAuth(
             @RequestPart("file") MultipartFile file,
             @RequestPart("targetInfo") String targetInfoJson) throws IOException {
@@ -56,7 +56,8 @@ public class TransferController implements TransferSpecification {
         return ApiResponseUtil.success(null,"가족관계증명서 인증이 완료되었습니다.");
     }
 
-    @Override
+
+    @PostMapping("/extract/result")
     public ResponseEntity<SuccessResponse<List<PersonInfoResponseDTO>>> extractPersonInfo(
             @RequestPart("file") MultipartFile file,
             @RequestPart("targetInfo") String targetInfoJson) throws IOException {
@@ -71,7 +72,7 @@ public class TransferController implements TransferSpecification {
 
 
     /// 양도 요청
-    @Override
+    @PostMapping("/request")
     public ResponseEntity<SuccessResponse<Void>> requestTransfer(
             @RequestBody @Valid TicketTransferRequestDTO dto,
             Authentication authentication
@@ -81,14 +82,14 @@ public class TransferController implements TransferSpecification {
     }
 
     /// 양도 요청 받기 (조회)
-    @Override
+    @GetMapping("/watch")
     public ResponseEntity<SuccessResponse<List<TicketTransferResponseDTO>>> watchTransfer(Authentication authentication){
         List<TicketTransferResponseDTO> response = transferService.watchTransfer(securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(response);
     }
 
     /// 가족 간 양도 요청 승인
-    @Override
+    @PutMapping("/acceptance/family")
     public ResponseEntity<SuccessResponse<Void>> responseTicketFamily(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
@@ -97,7 +98,7 @@ public class TransferController implements TransferSpecification {
     }
 
     /// 지인간 양도 요청 승인
-    @Override
+    @PutMapping("/acceptance/others")
     public ResponseEntity<SuccessResponse<TransferOthersResponseDTO>> responseTicketOthers(
             @RequestBody UpdateTicketRequestDTO request,
             Authentication authentication) {
@@ -105,8 +106,9 @@ public class TransferController implements TransferSpecification {
         return ApiResponseUtil.success(response);
     }
 
+
     ///  Websocket 메시지 누락 방지 api요청
-    @Override
+    @GetMapping("/reservation/status")
     public ResponseEntity<SuccessResponse<Boolean>> checkStatus(@RequestParam Long transferId){
         return ApiResponseUtil.success(transferService.checkStatus(transferId));
     }

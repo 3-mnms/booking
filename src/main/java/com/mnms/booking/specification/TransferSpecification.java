@@ -26,7 +26,7 @@ import java.util.List;
 @Tag(name = "양도 API", description = "양도 및 OCR, Ticket 재생성")
 public interface TransferSpecification {
 
-    @GetMapping("/transferor")
+    ///  양도할 수 있는 티켓 조회
     @Operation(summary = "양도 가능한 티켓 정보 조회",
             description = "사용자가 양도 가능한 티켓을 조회할 수 있습니다. (status : 양도 받은 티켓 양도 불가능)"
     )
@@ -75,24 +75,25 @@ public interface TransferSpecification {
     ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication);
 
 
+
+    ///  가족관계증명서 인증
+    @Operation(summary = "가족 간 양도 인증 시도",
+            description = "가족관계증명서 PDF와 양도자/양수자 정보로 인증을 시도합니다."
+    )
     @ApiResponse(responseCode = "406", description = "유효하지 않은 파일 첨부",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(
+                            value = """
                                     {
                                       "success": false,
                                       "data": "TRANSFER_NOT_VALID_FILE_TYPE",
                                       "message": "유효하지 않은 파일 확장자입니다."
                                     }
                                     """
-                            )
                     )
-    )
-    @PostMapping("/extract")
-    @Operation(summary = "가족 간 양도 인증 시도",
-            description = "가족관계증명서 PDF와 양도자/양수자 정보로 인증을 시도합니다."
+            )
     )
     ResponseEntity<SuccessResponse<Void>> extractPersonAuth(
             @RequestPart("file") MultipartFile file,
@@ -101,7 +102,6 @@ public interface TransferSpecification {
 
 
 
-    @PostMapping("/extract/result")
     @Operation(summary = "가족 간 양도 인증 결과 조회",
             description = "인증 완료 후 양도 대상 정보와 함께 반환합니다."
     )
@@ -127,7 +127,6 @@ public interface TransferSpecification {
 
 
 
-    @PostMapping("/request")
     @Operation(summary = "양도 요청",
             description = "양도자가 양도 요청을 보냅니다."
     )
@@ -205,7 +204,7 @@ public interface TransferSpecification {
     );
 
 
-    @GetMapping("/watch")
+
     @Operation(summary = "양도 요청 조회",
             description = "양수자가 자신에게 온 양도 요청을 조회합니다."
     )
@@ -281,7 +280,7 @@ public interface TransferSpecification {
 
 
 
-    @PutMapping("/acceptance/family")
+    /// 가족 간 양도 요청 승인
     @Operation(
             summary = "가족 간 양도 요청 수락",
             description = "양수자가 요청을 수락하면 티켓과 QR 정보가 업데이트 됩니다."
@@ -393,8 +392,7 @@ public interface TransferSpecification {
     );
 
 
-
-    @PutMapping("/acceptance/others")
+    /// 지인간 양도 요청 승인
     @Operation(summary = "타인 간 양도 요청 완료",
             description = "양수자가 요청을 수락하면 결제 진행 후 양도 완료됩니다."
     )
@@ -479,7 +477,7 @@ public interface TransferSpecification {
     );
 
 
-    @GetMapping("/reservation/status")
+    ///  Websocket 메시지 누락 방지 api요청
     @Operation(summary = "양도 결제 완료 조회",
             description = "Websocket 메시지 누락 시 양도 완료 여부 확인"
     )

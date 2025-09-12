@@ -24,7 +24,7 @@ import java.io.IOException;
 @Tag(name = "보안문자 API", description = "보안문자 생성 및 인증")
 public interface CaptchaSpecification {
 
-    @GetMapping("/image")
+
     @Operation(
             summary = "보안문자 이미지 요청",
             description = "새로운 보안문자 이미지를 생성하여 반환합니다."
@@ -55,8 +55,6 @@ public interface CaptchaSpecification {
     ) throws IOException;
 
 
-
-    @PostMapping("/verify")
     @Operation(
             summary = "보안문자 검증",
             description = "사용자가 입력한 보안문자 값이 올바른지 검증합니다. " +

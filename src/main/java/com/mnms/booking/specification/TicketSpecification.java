@@ -20,7 +20,6 @@ import java.util.List;
 @Tag(name = "예매 내역 API", description = "예매 내역 조회")
 public interface TicketSpecification {
 
-    @GetMapping
     @Operation(summary = "예매한 티켓 정보 조회",
             description = "예매자가 예매 완료한 전체 티켓 리스트를 조회합니다. (status : 완료, 취소한 티켓 조회 가능)"
     )
@@ -68,7 +67,7 @@ public interface TicketSpecification {
     })
     ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication);
 
-    @GetMapping("/detail")
+
     @Operation(summary = "예매한 티켓 정보 디테일 조회",
             description = "예매자가 예매 완료한 티켓 정보를 조회합니다. ex : /api/ticket/detail?reservationNumber=T24CBD629 조회"
     )
