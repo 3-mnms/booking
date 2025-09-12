@@ -44,7 +44,7 @@ public class WaitingNotificationService {
         try {
             WaitingNumberResponseDTO waitingNumberDto = new WaitingNumberResponseDTO(userId, waitingNumber, false, null);
             String message = objectMapper.writeValueAsString(waitingNumberDto);
-            stringRedisTemplate.convertAndSend(notificationChannelKey, message);
+            stringRedisTemplate.convertAndSend(notificationChannelKey + "/" + userId, message);
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_SERIALIZATION_FAILED);
         } catch (RedisConnectionFailureException e) {
