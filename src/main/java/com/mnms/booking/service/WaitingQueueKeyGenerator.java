@@ -24,6 +24,6 @@ public class WaitingQueueKeyGenerator {
 
     public String getNotificationChannelKey(String festivalId, LocalDateTime reservationDate) {
         String dateStr = reservationDate.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-        return NOTIFICATION_CHANNEL + ":" + festivalId + ":" + dateStr;
+        return NOTIFICATION_CHANNEL + "/" + festivalId + "/" + dateStr;
     }
 }
