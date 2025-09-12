@@ -55,8 +55,9 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
                         || uri.startsWith("/swagger-ui")
                         || uri.equals("/swagger-ui.html")
                         || uri.startsWith("/actuator")
-                        || uri.equals("/ws/info")) {
+                        || uri.startsWith("/ws")) {
                     chain.doFilter(request, response);
+                    return;
                 }
                 sendUnauthorized(response, "X-User-Id 또는 X-User-Role 헤더가 없습니다.");
                 return;
