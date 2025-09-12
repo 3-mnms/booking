@@ -38,8 +38,8 @@ public class RedisConfig {
         container.setConnectionFactory(connectionFactory);
 
         // waiting_notification:* 구독
-        container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification:*"));
-        log.info("Subscribed to Redis channels with pattern: waiting_notification:*");
+//        container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification:*"));
+//        log.info("Subscribed to Redis channels with pattern: waiting_notification:*");
 
         // Keyspace Notification 구독 (예매 완료 이벤트)
         container.addMessageListener(keyExpirationListener, new PatternTopic("__keyevent@0__:expired"));

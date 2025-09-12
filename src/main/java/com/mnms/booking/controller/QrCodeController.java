@@ -27,7 +27,7 @@ public class QrCodeController implements QrCodeSpecification {
     private final SecurityResponseUtil securityResponseUtil;
 
     /// Qrcode 이미지 조회
-    @Override
+    @GetMapping(value = "/image/{qrCodeId}", produces = "image/png")
     public ResponseEntity<byte[]> getQrCodeImage(@PathVariable String qrCodeId) {
         QrCode qrCode = qrCodeService.getQrCodeByCode(qrCodeId);
         String qrCodeText = qrCode.getQrCodeId();
@@ -64,7 +64,7 @@ public class QrCodeController implements QrCodeSpecification {
 
 
     /// 페스티벌 주최자 QR 스캔
-    @Override
+    @PostMapping(value = "/validate/{qrCodeId}")
     public ResponseEntity<SuccessResponse<Void>> validateAndUseQrCode(
             @PathVariable String qrCodeId,
             Authentication authentication) {

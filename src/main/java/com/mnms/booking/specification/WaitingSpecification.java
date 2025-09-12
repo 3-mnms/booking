@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Tag(name = "대기열 API", description = "대기열 입장, 예매 화면 입장, 대기번호 조회")
 public interface WaitingSpecification {
 
-        @GetMapping("/enter")
+
         @Operation(
                 summary = "예매 페이지 입장 요청",
                 description = "사용자가 예매 페이지에 입장하거나 대기열에 등록됩니다. " +
@@ -136,7 +136,6 @@ public interface WaitingSpecification {
 
 
 
-        @GetMapping("/release")
         @Operation(
                 summary = "예매 페이지에서 사용자 퇴장 처리 (예매 완료 또는 타임아웃)",
                 description = "예매 페이지에 있던 사용자가 퇴장했을 때 실행됩니다. " +
@@ -262,7 +261,6 @@ public interface WaitingSpecification {
                     )
             )
     })
-    @GetMapping("/exit")
     ResponseEntity<SuccessResponse<String>> exitWaitingUser(
             @Parameter(description = "페스티벌 ID", required = true, example = "festival-001")
             @RequestParam String festivalId,

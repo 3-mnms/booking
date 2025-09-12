@@ -23,13 +23,13 @@ public class CaptchaController implements CaptchaSpecification{
 
     private final CaptchaService kaptchaService;
 
-    @Override
+    @GetMapping("/image")
     public ResponseEntity<SuccessResponse<Void>> getCaptchaImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         kaptchaService.writeCaptchaImage(request.getSession(), response);
         return ApiResponseUtil.success(null, "보안문자 이미지가 생성 완료");
     }
 
-    @Override
+    @PostMapping("/verify")
     public ResponseEntity<SuccessResponse<CaptchaResponseDTO>> verifyCaptcha(
             @RequestParam("captcha") String captcha,
             HttpSession session) {

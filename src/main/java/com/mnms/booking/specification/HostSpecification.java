@@ -25,7 +25,6 @@ import java.util.List;
 @Tag(name = "주최자 관련 API", description = "주최자 예매자 명단 조회, 주최자 도메인 데이터 제공 API")
 public interface HostSpecification {
 
-    @PostMapping("/list")
     @Operation(
             summary = "주최자 도메인에 예매자 리스트 제공",
             description = "주최자가 FestivalId와 PerformanceDate를 제공하면 해당하는 예매자 userId 리스트를 반환합니다. (프론트와 직접 관련 없음)"
@@ -88,7 +87,8 @@ public interface HostSpecification {
             @RequestBody HostRequestDTO hostRequestDTO
     );
 
-    @PostMapping("/booking/list")
+
+
     @Operation(
             summary = "예매자 정보 조회",
             description = "예매자 정보를 조회합니다. HOST 또는 ADMIN 권한이 필요합니다.",

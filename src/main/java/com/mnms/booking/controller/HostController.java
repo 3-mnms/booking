@@ -23,13 +23,13 @@ public class HostController implements HostSpecification{
     private final SecurityResponseUtil securityResponseUtil;
     private final HostService hostService;
 
-    @Override
+    @PostMapping("/list")
     public ResponseEntity<SuccessResponse<List<Long>>> getBookingsByOrganizer(@RequestBody HostRequestDTO hostRequestDTO) {
         return ApiResponseUtil.success(hostService.getBookingsByOrganizer(hostRequestDTO));
     }
 
     /// 주최자 측 예매자 조회
-    @Override
+    @PostMapping("/booking/list")
     @PreAuthorize("hasAnyRole('HOST', 'ADMIN')")
     public ResponseEntity<SuccessResponse<List<HostResponseDTO>>> getBookingInfo(@RequestParam String festivalId,
                                                                                  Authentication authentication) {

@@ -29,13 +29,14 @@ public class StatisticsController implements StatisticsSpecification {
     private final StatisticsQrCodeService statisticsQrCodeService;
     private final StatisticsQueryService statisticsQueryService;
 
-    @Override
+    @GetMapping("/users/{festivalId}")
     public ResponseEntity<SuccessResponse<StatisticsUserResponseDTO>> getFestivalUserStatistics(@PathVariable String festivalId) {
         StatisticsUserResponseDTO statistics = statisticsUserService.getFestivalUserStatistics(festivalId);
         return ApiResponseUtil.success(statistics, "예매자 통계 정보가 성공적으로 조회되었습니다.");
     }
 
-    @Override
+
+    @GetMapping("/schedules/{festivalId}")
     public ResponseEntity<SuccessResponse<List<LocalDateTime>>> getPerformanceDatesForFestival(
             @PathVariable String festivalId,
             Authentication authentication) {
@@ -47,7 +48,8 @@ public class StatisticsController implements StatisticsSpecification {
         return ApiResponseUtil.success(performanceDates, "공연 날짜 목록이 성공적으로 조회되었습니다.");
     }
 
-    @Override
+
+    @GetMapping("/enter/{festivalId}")
     public ResponseEntity<SuccessResponse<StatisticsQrCodeResponseDTO>> getPerformanceEnterStatistics(
             @PathVariable String festivalId,
             @RequestParam("performanceDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime performanceDate,
@@ -63,7 +65,7 @@ public class StatisticsController implements StatisticsSpecification {
         return ApiResponseUtil.success(statistics, "공연 입장 통계 정보가 성공적으로 조회되었습니다.");
     }
 
-    @Override
+    @GetMapping("/booking/{festivalId}")
     public ResponseEntity<SuccessResponse<List<StatisticsBookingDTO>>> getBookingSummary(
             @PathVariable String festivalId,
             Authentication authentication) {

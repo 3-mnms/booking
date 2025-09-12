@@ -22,13 +22,13 @@ public class TicketController implements TicketSpecification {
     private final TicketService ticketService;
     private final SecurityResponseUtil securityResponseUtil;
 
-    @Override
+    @GetMapping
     public ResponseEntity<SuccessResponse<List<TicketResponseDTO>>> getUserTickets(Authentication authentication) {
         List<TicketResponseDTO> tickets = ticketService.getTicketsByUser(securityResponseUtil.requireUserId(authentication));
         return ApiResponseUtil.success(tickets);
     }
 
-    @Override
+    @GetMapping("/detail")
     public ResponseEntity<SuccessResponse<TicketDetailResponseDTO>> getUserTicketDetail(@RequestParam String reservationNumber,
                                                                                         Authentication authentication) {
         TicketDetailResponseDTO ticket = ticketService.getTicketDetailByUser(reservationNumber, securityResponseUtil.requireUserId(authentication), securityResponseUtil.requireName(authentication));

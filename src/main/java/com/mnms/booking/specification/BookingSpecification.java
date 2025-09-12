@@ -69,7 +69,6 @@ public interface BookingSpecification {
             @Valid @RequestBody BookingSelectRequestDTO request);
 
     /// POST : 2차 예매 상세 조회
-    @PostMapping("/detail/phases/2")
     @Operation(summary = "2차 : 예매 단계에서 선택한 예매 상세 조회",
             description = "festivalId, reservationNumber로 공연 및 예매자 상세 정보를 조회합니다.")
     @ApiResponses({
@@ -123,7 +122,6 @@ public interface BookingSpecification {
     );
 
     /// POST : 날짜 선택
-    @PostMapping("/selectDate")
     @Operation(summary = "페스티벌 날짜, 시간, 매수 선택",
             description = "festivalId, performanceDate, selectedTicketCount를 입력하고 reservationNumber 반환")
     @ApiResponses({
@@ -203,7 +201,6 @@ public interface BookingSpecification {
     );
 
     /// POST : 배송 선택
-    @PostMapping("/selectDeliveryMethod")
     @Operation(summary = "페스티벌 티켓 수령 방법, 주소 선택",
             description = "festivalId, performanceDate, deliveryMethod(MOBILE or PAPER), address 선택")
     @ApiResponses({
@@ -296,7 +293,6 @@ public interface BookingSpecification {
     );
 
     /// POST : 3차 예매 완료 (QR 생성)
-    @PostMapping("/qr")
     @Operation(summary = "페스티벌 예매 티켓 생성",
             description = "사용자가 특정 페스티벌 티켓을 예약하기 위한 마지막 가예매 상태")
     @ApiResponses({
@@ -363,7 +359,6 @@ public interface BookingSpecification {
     );
 
     /// GET : WebSocket 메시지 누락 방지
-    @GetMapping("reservation/status")
     @Operation(summary = "예매 완료/취소 정보 조회",
             description = "WebSocket 메시지 누락 시 상태 확인")
     @ApiResponses({
@@ -388,7 +383,6 @@ public interface BookingSpecification {
     ResponseEntity<SuccessResponse<ReservationStatus>> checkStatus(@RequestParam String reservationNumber);
 
     /// GET : 예매자 정보 조회
-    @GetMapping("/user/info")
     @Operation(summary = "예매자 정보 조회",
             description = "예매자 role이 user인 사람만 조회 가능")
     @ApiResponses({
@@ -414,7 +408,6 @@ public interface BookingSpecification {
 
 
     /// POST : 이메일 임시 테스트
-    @PostMapping("/email/test")
     @Operation(summary = "[테스트 진행X] 이메일 임시 테스트",
             description = "예매 완료 후 이메일 전송 임시 테스트")
     @ApiResponses({

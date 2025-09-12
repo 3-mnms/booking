@@ -22,7 +22,6 @@ import java.util.List;
 @Tag(name = "통계 API", description = "공연 별 예매자의 정보를 통해 성별/나이, 입장 인원 상황을 확인 가능")
 public interface StatisticsSpecification {
 
-    @GetMapping("/users/{festivalId}")
     @Operation(summary = "festivalId별 예매자 성별/나이 통계 조회",
             description = "특정 페스티벌의 예매자 통계를 조회합니다.")
     @ApiResponses(value = {
@@ -46,7 +45,6 @@ public interface StatisticsSpecification {
 
 
 
-    @GetMapping("/schedules/{festivalId}")
     @Operation(summary = "공연 날짜/시간 목록 조회",
             description = "주최자가 입장 통계를 조회하기 전, 해당 페스티벌의 유효 공연 날짜/시간 목록 조회")
     @ApiResponses(value = {
@@ -73,7 +71,6 @@ public interface StatisticsSpecification {
 
 
 
-    @GetMapping("/enter/{festivalId}")
     @Operation(summary = "공연 날짜별 입장 통계",
             description = "예매자 및 주최자가 공연 날짜별 현장 QR 입장 통계를 조회합니다.")
     @ApiResponses(value = {
@@ -127,7 +124,6 @@ public interface StatisticsSpecification {
 
 
 
-    @GetMapping("/booking/{festivalId}")
     @Operation(summary = "공연별 예매자 수 / 수용 인원 요약 조회",
             description = "주최자가 자신의 페스티벌 공연별 예매 현황과 총 수용 인원을 요약 조회")
     @ApiResponses(value = {

@@ -32,12 +32,13 @@ public class BookingController implements BookingSpecification {
     private final SecurityResponseUtil securityResponseUtil;
 
     /// GET : 페스티벌 예매 정보 조회
-    @Override
+    @PostMapping("/detail/phases/1")
     public ResponseEntity<SuccessResponse<FestivalDetailResponseDTO>> getFestivalDetail(@Valid @RequestBody BookingSelectRequestDTO request) {
         return ApiResponseUtil.success(bookingQueryService.getFestivalDetail(request));
     }
 
-    @Override
+    /// POST : 2차 예매 상세 조회
+    @PostMapping("/detail/phases/2")
     public ResponseEntity<SuccessResponse<BookingDetailResponseDTO>> getFestivalBookingDetail(
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
@@ -47,7 +48,7 @@ public class BookingController implements BookingSpecification {
     }
 
     /// POST
-    @Override
+    @PostMapping("/selectDate")
     public ResponseEntity<SuccessResponse<String>> selectFestivalDate(
             @Valid @RequestBody BookingSelectRequestDTO request,
             Authentication authentication
@@ -55,7 +56,8 @@ public class BookingController implements BookingSpecification {
         return ApiResponseUtil.success(bookingCommandService.selectFestivalDate(request, securityResponseUtil.requireUserId(authentication)));
     }
 
-    @Override
+    /// POST : 배송 선택
+    @PostMapping("/selectDeliveryMethod")
     public ResponseEntity<SuccessResponse<Void>> selectFestivalDelivery(
             @Valid @RequestBody BookingSelectDeliveryRequestDTO request,
             Authentication authentication
@@ -65,7 +67,7 @@ public class BookingController implements BookingSpecification {
     }
 
     /// POST : 3차 예매 완료 (결제 직전)
-    @Override
+    @PostMapping("/qr")
     public ResponseEntity<SuccessResponse<Void>> reserveTicket(
             @Valid @RequestBody BookingRequestDTO request,
             Authentication authentication
@@ -75,19 +77,20 @@ public class BookingController implements BookingSpecification {
     }
 
     ///  Websocket 메시지 누락 방지 api요청
-    @Override
+    @GetMapping("reservation/status")
     public ResponseEntity<SuccessResponse<ReservationStatus>> checkStatus(@RequestParam String reservationNumber){
         return ApiResponseUtil.success(bookingCommandService.checkStatus(reservationNumber));
     }
 
-    ///  GET
+    /// GET : 예매자 정보 조회
+    @GetMapping("/user/info")
     @Override
     public ResponseEntity<SuccessResponse<BookingUserResponseDTO>> getUserInfo(Authentication authentication) {
         return ApiResponseUtil.success(userApiClient.getUserInfoById(securityResponseUtil.requireUserId(authentication)));
     }
 
-    ///  이메일 임시 테스트
-    @Override
+    /// POST : 이메일 임시 테스트
+    @PostMapping("/email/test")
     public ResponseEntity<String> confirmTicket(
             @RequestParam String reservationNumber,
             @RequestParam boolean paymentStatus) {
