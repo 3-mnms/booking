@@ -11,6 +11,7 @@ import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.repository.TransferRepository;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,19 +32,20 @@ public class TransferService {
 
     private final TicketRepository ticketRepository;
     private final TransferRepository transferRepository;
+    private final QrCodeRepository qrCodeRepository;
 
     ///  양도 가능한 티켓 조회
     public List<TicketResponseDTO> getTicketsByUser(Long userId) {
 
         List<Ticket> tickets = ticketRepository.findByUserIdAndReservationStatus(userId, ReservationStatus.CONFIRMED);
         if(tickets.isEmpty()){
-            throw new BusinessException(ErrorCode.TICKET_NOT_FOUND);
+            return Collections.emptyList();
         }
-        log.info("tickets : {}", tickets);
 
         return tickets.stream()
                 .filter(ticket -> ticket.getPerformanceDate().isAfter(LocalDateTime.now()))
                 .filter(ticket -> !transferRepository.existsByTicketId(ticket.getId()))
+                .filter(ticket -> !qrCodeRepository.existsByTicketIdAndUsedTrue(ticket.getId()))
                 .map(ticket -> TicketResponseDTO.fromEntity(ticket, ticket.getFestival()))
                 .toList();
     }
