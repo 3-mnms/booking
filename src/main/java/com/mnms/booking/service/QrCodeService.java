@@ -66,13 +66,8 @@ public class QrCodeService {
         QrCode qrCode = qrCodeRepository.findByQrCodeId(qrCodeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.QR_CODE_NOT_FOUND));
 
-        // QR 코드에 연결된 티켓과 페스티벌 확인
-        Ticket ticket = qrCode.getTicket();
-        if (ticket == null || ticket.getFestival() == null) {
-            throw new BusinessException(ErrorCode.QR_CODE_INVALID);
-        }
-
         // 주최자 확인
+        Ticket ticket = qrCode.getTicket();
         if (!ticket.getFestival().getOrganizer().equals(userId)) {
             throw new BusinessException(ErrorCode.FESTIVAL_MISMATCH);
         }
@@ -85,6 +80,11 @@ public class QrCodeService {
         // 이미 사용된 QR 코드인지 확인
         if (Boolean.TRUE.equals(qrCode.getUsed())) {
             throw new BusinessException(ErrorCode.QR_CODE_ALREADY_USED);
+        }
+
+        // QR 코드에 연결된 티켓과 페스티벌 확인
+        if (ticket == null || ticket.getFestival() == null) {
+            throw new BusinessException(ErrorCode.QR_CODE_INVALID);
         }
 
         // QR 코드 사용 처리
