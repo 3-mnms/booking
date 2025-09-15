@@ -38,16 +38,17 @@ public class RedisConfig {
         container.setConnectionFactory(connectionFactory);
 
         // waiting_notification:* 구독
-//        container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification:*"));
-//        log.info("Subscribed to Redis channels with pattern: waiting_notification:*");
+        container.addMessageListener(waitingNotificationListenerAdapter, new PatternTopic("waiting_notification/*"));
+        log.info("Subscribed to Redis channels with pattern: waiting_notification/*");
 
-        // Keyspace Notification 구독 (예매 완료 이벤트)
+        // Keyspace 구독 (예매 완료 이벤트)
         container.addMessageListener(keyExpirationListener, new PatternTopic("__keyevent@0__:expired"));
-        container.addMessageListener(keyExpirationListener, new PatternTopic("waiting_notification:*"));
+        //container.addMessageListener(keyExpirationListener, new PatternTopic("waiting_notification:*"));
         log.info("Subscribed to Redis key expiration events");
 
         return container;
     }
+
 
     /// Redis 메시지를 받아 처리할 리스너 어댑터 (RedisMessageSubscriber와 연결)
     @Bean
