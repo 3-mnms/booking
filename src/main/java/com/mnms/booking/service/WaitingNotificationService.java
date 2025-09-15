@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.Set;
 
 @Service
@@ -22,6 +22,7 @@ public class WaitingNotificationService {
     private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
     private final WaitingQueueRedisService waitingQueueRedisService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /// 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
     public long getAndPublishWaitingNumber(String waitingQueueKey, String notificationChannelKey, String loginId) {
@@ -47,6 +48,7 @@ public class WaitingNotificationService {
 
             // message 발행
             stringRedisTemplate.convertAndSend(notificationChannelKey, message);
+
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_SERIALIZATION_FAILED);
         } catch (RedisConnectionFailureException e) {

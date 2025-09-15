@@ -30,6 +30,7 @@ public class TicketTransferResponseDTO {
     private String posterFile;
     private String fcltynm;
     private int ticketPrice;
+    private int ticketPick;
 
     ///  TICKET
     private LocalDateTime performanceDate;
@@ -45,6 +46,7 @@ public class TicketTransferResponseDTO {
                 .createdAt(transfer.getCreatedAt())
                 .status(String.valueOf(transfer.getStatus()))
                 .fname(festival.getFname())
+                .ticketPick(festival.getTicketPick())
                 .posterFile(festival.getPosterFile())
                 .fcltynm(festival.getFcltynm())
                 .ticketPrice(festival.getTicketPrice())
