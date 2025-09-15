@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class TicketService {
         List<Ticket> tickets = ticketRepository.findByUserIdAndReservationStatusIn(userId, statuses);
 
         if(tickets.isEmpty()){
-            throw new BusinessException(ErrorCode.TICKET_NOT_FOUND);
+            return Collections.emptyList();
         }
         return tickets.stream()
                 .sorted(Comparator.comparing(Ticket::getReservationDate).reversed())
