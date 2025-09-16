@@ -39,24 +39,19 @@ public class RedisMessageSubscriber {
 
         try {
             WaitingNumberResponseDTO dto = objectMapper.readValue(message, WaitingNumberResponseDTO.class);
-            log.info("Received message from Redis: {}", dto);
 
             // 연결된 유저인지 확인
             if (isUserConnected(dto.getUserId())) {
-                messagingTemplate.convertAndSendToUser(String.valueOf(dto.getUserId()), "/queue/waitingNumbr", dto);
-                log.info("Sent immediately to user {}", dto.getUserId());
+                messagingTemplate.convertAndSendToUser(dto.getUserId(), "/queue/waitingNumber", dto);
             } else {
-                log.info("User {} not connected, store for retry", dto.getUserId());
                 pendingMessages.computeIfAbsent(dto.getUserId(), k -> new ConcurrentLinkedQueue<>()).add(dto);
             }
-
         } catch (Exception e) {
             log.error("예외 발생: {}", e.getMessage(), e);
         }
     }
 
     private boolean isUserConnected(String userId) {
-        log.info("Sent immediately to simpUserRegistry user {}", simpUserRegistry.getUser(userId));
         return simpUserRegistry.getUser(userId) != null;
     }
 

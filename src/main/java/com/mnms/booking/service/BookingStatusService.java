@@ -40,7 +40,7 @@ import java.util.stream.IntStream;
 public class BookingStatusService {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    private static final int TEMP_RESERVATION_TTL_MINUTES = 20; // 가예매 유지 시간
+    private static final int TEMP_RESERVATION_TTL_MINUTES = 1; // 가예매 유지 시간
 
     private final TicketRepository ticketRepository;
     private final QrCodeRepository qrCodeRepository;
