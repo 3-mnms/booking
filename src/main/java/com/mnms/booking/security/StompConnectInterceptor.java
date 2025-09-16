@@ -48,7 +48,4 @@ public class StompConnectInterceptor implements ChannelInterceptor {
 
         return message;
     }
-
-
-
 }

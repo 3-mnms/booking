@@ -16,7 +16,7 @@ public class TempReservationService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final String PREFIX = "TEMP_RESERVATION:";
-    private static final long ttlMinutes = 2;
+    private static final long ttlMinutes = 1;
 
 //    @Value("${temp-reservation.ttl-minutes:3}")
 //    private long ttlMinutes;
