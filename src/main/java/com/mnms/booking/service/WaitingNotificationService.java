@@ -22,7 +22,6 @@ public class WaitingNotificationService {
     private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
     private final WaitingQueueRedisService waitingQueueRedisService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     /// 사용자 대기 순번 조회 및 Redis Pub/Sub으로 발행
     public long getAndPublishWaitingNumber(String waitingQueueKey, String notificationChannelKey, String loginId) {

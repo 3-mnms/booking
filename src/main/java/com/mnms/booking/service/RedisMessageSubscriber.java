@@ -43,7 +43,7 @@ public class RedisMessageSubscriber {
 
             // 연결된 유저인지 확인
             if (isUserConnected(dto.getUserId())) {
-                messagingTemplate.convertAndSendToUser(dto.getUserId(), "/queue/waitingNumber", dto);
+                messagingTemplate.convertAndSendToUser(String.valueOf(dto.getUserId()), "/queue/waitingNumbr", dto);
                 log.info("Sent immediately to user {}", dto.getUserId());
             } else {
                 log.info("User {} not connected, store for retry", dto.getUserId());
