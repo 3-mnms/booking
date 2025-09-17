@@ -43,7 +43,6 @@ public class RedisConfig {
 
         // Keyspace 구독 (예매 완료 이벤트)
         container.addMessageListener(keyExpirationListener, new PatternTopic("__keyevent@0__:expired"));
-        //container.addMessageListener(keyExpirationListener, new PatternTopic("waiting_notification:*"));
         log.info("Subscribed to Redis key expiration events");
 
         return container;

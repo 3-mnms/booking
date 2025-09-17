@@ -8,6 +8,7 @@ import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.Transfer;
+import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
@@ -110,12 +111,14 @@ public class TransferCompletionService {
                     .build();
             applyTicketAndQrUpdate(transfer, request, transfer.getReceiverId(), false);
         }
+    }
 
-        // WebSocket 전송
+    // WebSocket 전송 -> 사용X (기존 결제에서 kafka 구독 메시지 받았을 때 사용)
+    private void notifyTicketStatus(Ticket ticket, TransferStatus status) {
         messagingTemplate.convertAndSendToUser(
                 String.valueOf(ticket.getUserId()),
                 "/queue/transfer-status",
-                new TransferStatusResponseDTO(ticket.getReservationNumber(), newStatus)
+                new TransferStatusResponseDTO(ticket.getReservationNumber(), status)
         );
     }
 
@@ -194,8 +197,11 @@ public class TransferCompletionService {
 
     /// qr 정보 업데이트
     private void updateQrCodes(Ticket ticket, UpdateTicketRequestDTO request,  Long receiverId) {
-        List<QrCode> existingQrs = qrCodeRepository.findByTicketId(ticket.getId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.QR_CODE_NOT_FOUND));
+        List<QrCode> existingQrs = qrCodeRepository.findByTicketId(ticket.getId());
+
+        if (existingQrs.isEmpty()) {
+                throw new BusinessException(ErrorCode.QR_CODE_NOT_FOUND);
+        }
 
         existingQrs.forEach(qr -> {
             qr.setQrCodeId(qrCodeService.generateQrCodeId());

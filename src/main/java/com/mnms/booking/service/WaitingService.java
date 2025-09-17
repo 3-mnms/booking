@@ -41,14 +41,10 @@ public class WaitingService {
     }
 
     /// 예매 페이지에서 사용자 퇴장 처리 (예매 완료 또는 타임아웃)
-    public boolean userExitBookingPage(String festivalId, LocalDateTime reservationDate, String userId){
+    public boolean userExitBookingPage(String festivalId, LocalDateTime reservationDate, String userId) {
         String bookingUsersKey = waitingQueueKeyGenerator.getBookingUsersKey(festivalId, reservationDate);
         String waitingQueueKey = waitingQueueKeyGenerator.getWaitingQueueKey(festivalId, reservationDate);
-        boolean removed = waitingQueueRedisService.removeBookingUser(bookingUsersKey, userId);
-
-        if(!removed){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND_IN_BOOKING);
-        }
+        waitingQueueRedisService.removeBookingUser(bookingUsersKey, userId);
 
         log.info("User {} exited booking page and removed from booking user set.", userId);
 

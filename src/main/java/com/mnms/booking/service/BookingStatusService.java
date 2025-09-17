@@ -15,23 +15,18 @@ import com.mnms.booking.repository.FestivalRepository;
 import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Service
@@ -125,7 +120,7 @@ public class BookingStatusService {
         }
     }
 
-    // websocket
+    // websocket -> 사용x
     public void notifyTicketStatus(Ticket ticket, ReservationStatus status) {
         messagingTemplate.convertAndSendToUser(
                 String.valueOf(ticket.getUserId()),

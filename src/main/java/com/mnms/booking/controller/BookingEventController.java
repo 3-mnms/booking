@@ -2,10 +2,8 @@ package com.mnms.booking.controller;
 
 import com.mnms.booking.dto.request.LeaveQueueRequestDTO;
 import com.mnms.booking.service.WaitingService;
-import com.mnms.booking.util.ApiResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -39,9 +37,10 @@ public class BookingEventController {
 
     // 예매 페이지에서 퇴장
     @MessageMapping("/queue/reservation/leave")
-    public void leaveReservationQueue(LeaveQueueRequestDTO request) {
+    public void leaveReservationQueue(LeaveQueueRequestDTO request, Principal principal) {
         try {
-            boolean removed = waitingService.userExitBookingPage(request.getFestivalId(), request.getReservationDate(), request.getUserId());
+            String userId = principal.getName();
+            boolean removed = waitingService.userExitBookingPage(request.getFestivalId(), request.getReservationDate(), userId);
             if (removed) {
                 log.info("사용자가 예매 페이지를 나갔고, 다음 대기자가 입장했습니다.");
             } else {

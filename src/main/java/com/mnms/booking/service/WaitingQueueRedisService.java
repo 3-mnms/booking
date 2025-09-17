@@ -118,9 +118,8 @@ public class WaitingQueueRedisService {
         redisTemplate.expire(bookingUsersKey, Duration.ofDays(2));
     }
 
-    public boolean removeBookingUser(String bookingUsersKey, String userId) {
-        Long removed = redisTemplate.opsForSet().remove(bookingUsersKey, userId);
-        return removed != null && removed > 0;
+    public void removeBookingUser(String bookingUsersKey, String userId) {
+        redisTemplate.opsForSet().remove(bookingUsersKey, userId);
     }
 
 
