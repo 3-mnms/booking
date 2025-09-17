@@ -34,7 +34,6 @@ public class RedisMessageSubscriber {
 
     // Redis로 메시지 수신할 때 호출됨
     public void onMessage(String message, String channel) {
-
         printConnectedUsers();
 
         try {

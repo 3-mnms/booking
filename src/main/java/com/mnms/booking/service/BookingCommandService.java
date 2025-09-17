@@ -109,9 +109,6 @@ public class BookingCommandService {
 
         // redis ttl
         tempReservationService.deleteTempReservation(ticket.getReservationNumber());
-
-        // websocket
-        bookingStatusService.notifyTicketStatus(ticket, newStatus);
     }
 
     ///  예매 취소
@@ -136,7 +133,7 @@ public class BookingCommandService {
         ticketRepository.save(ticket);
     }
 
-    // websocket 손실 방지 확인
+    // 예매 완료 확인
     public ReservationStatus checkStatus(String reservationNumber) {
         return ticketRepository.findReservationStatusByRN(reservationNumber);
     }

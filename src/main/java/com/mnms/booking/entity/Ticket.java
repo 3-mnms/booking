@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "ticket")
-@ToString
 public class Ticket {
 
     @Id
@@ -85,5 +84,14 @@ public class Ticket {
 
     public boolean isExpired() {
         return performanceDate.isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", reservationNumber='" + reservationNumber + '\'' +
+                ", festival=" + (festival != null ? festival : "null") +
+                '}';
     }
 }
