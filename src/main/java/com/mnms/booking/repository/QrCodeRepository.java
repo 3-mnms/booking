@@ -23,6 +23,7 @@ public interface QrCodeRepository extends JpaRepository<QrCode, Long> {
     int countAdmittedAttendees(@Param("festivalId") String festivalId, @Param("performanceDate") LocalDateTime performanceDate);;
 
     boolean existsByTicketIdAndUsedTrue(Long ticketId);
+    boolean existsByTicket_IdAndUsedTrue(Long ticketId);
 }
 
 

@@ -6,6 +6,7 @@ import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
+import com.mnms.booking.repository.QrCodeRepository;
 import com.mnms.booking.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.List;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final QrCodeRepository qrCodeRepository;
 
     // 예매 리스트 기본 조회
     public List<TicketResponseDTO> getTicketsByUser(Long userId) {
@@ -48,9 +50,14 @@ public class TicketService {
         Ticket ticket = ticketRepository.findByUserIdAndReservationNumber(userId, reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
+        log.info("ticket id : {}", ticket.getId());
+        boolean qrUsed = qrCodeRepository.existsByTicket_IdAndUsedTrue(ticket.getId());
+
+        log.info("qr used : {}", qrUsed);
+
         if (!ticket.getUserId().equals(userId)) {
             throw new BusinessException(ErrorCode.USER_UNAUTHORIZED_ACCESS);
         }
-        return TicketDetailResponseDTO.fromEntity(ticket, ticket.getFestival(), userName);
+        return TicketDetailResponseDTO.fromEntity(ticket, ticket.getFestival(), userName, qrUsed);
     }
 }

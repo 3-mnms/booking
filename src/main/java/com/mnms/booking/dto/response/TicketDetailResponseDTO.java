@@ -32,7 +32,10 @@ public class TicketDetailResponseDTO {
     private String fcltynm; // 장소
     private int ticketPrice; // 1매 티켓 가격
 
-    public static TicketDetailResponseDTO fromEntity(Ticket ticket, Festival festival, String userName) {
+    // qr
+    private boolean qrUsed;
+
+    public static TicketDetailResponseDTO fromEntity(Ticket ticket, Festival festival, String userName, boolean qrUsed) {
         List<String> qrIds = ticket.getQrCodes().stream()
                 .map(QrCode::getQrCodeId)
                 .toList();
@@ -45,6 +48,7 @@ public class TicketDetailResponseDTO {
                 .deliveryMethod(ticket.getDeliveryMethod())
                 .address(ticket.getAddress())
                 .qrId(qrIds)
+                .qrUsed(qrUsed)
                 .festivalId(festival.getFestivalId())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
