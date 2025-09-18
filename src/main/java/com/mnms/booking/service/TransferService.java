@@ -56,6 +56,11 @@ public class TransferService {
         Ticket ticket = ticketRepository.findByReservationNumber(dto.getReservationNumber())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
 
+        // 예매 15분 확인 후 지인간 양도 불가능
+        if(dto.getTransferType().equals("OTHERS") && Duration.between(ticket.getReservationDate(), LocalDateTime.now()).toMinutes() > 15){
+            throw new BusinessException(ErrorCode.TRANSFER_OTHERS_NOT_ALLOWED);
+        }
+
         if(transferRepository.existsByTicket_Id(ticket.getId())){
             throw new BusinessException(ErrorCode.TRANSFER_ALREADY_EXIST_REQUEST);
         }
