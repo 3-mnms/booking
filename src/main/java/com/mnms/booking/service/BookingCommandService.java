@@ -46,7 +46,6 @@ public class BookingCommandService {
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .performanceDate(performanceDate)
                 .reservationStatus(ReservationStatus.TEMP_RESERVED)
-                .reservationDate(LocalDateTime.now())
                 .build();
 
         ticketRepository.save(ticket);

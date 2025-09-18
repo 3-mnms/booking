@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,19 @@ public class OcrService {
 
     public String callOcr(MultipartFile image){
         try {
-            String extension = getExtension(image.getOriginalFilename());
+            String imageName = image.getOriginalFilename();
+
+            if (imageName == null || imageName.isBlank()) {
+                throw new BusinessException(ErrorCode.TRANSFER_NOT_HAVE_FILE_NAME);
+            }
+
+            // Path Traversal 공격 성공
+            String filename = StringUtils.cleanPath(imageName);
+            if (filename.contains("..")) {
+                throw new BusinessException(ErrorCode.TRANSFER_DETECT_FILE_PATH_SECURITY);
+            }
+
+            String extension = getExtension(imageName);
             if (!"pdf".equalsIgnoreCase(extension)) {
                 throw new BusinessException(ErrorCode.TRANSFER_NOT_VALID_FILE_TYPE);
             }

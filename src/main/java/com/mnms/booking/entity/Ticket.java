@@ -34,8 +34,8 @@ public class Ticket {
     @Column(name = "user_id")
     private Long userId; // 예매자 id
 
+    @Setter
     @Column(name = "reservation_date")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime reservationDate; // 예매를 수행한 날짜
 
     @Setter

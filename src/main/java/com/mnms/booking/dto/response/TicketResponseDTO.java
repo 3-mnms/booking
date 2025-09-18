@@ -26,6 +26,9 @@ public class TicketResponseDTO {
     private LocalDateTime reservationDate; // 예매를 수행한 날짜
     private ReservationStatus reservationStatus; // 예매상태
 
+    // 추가
+    private boolean othersTransferAvailable; // 지인 양도 가능 유무
+
     // festival
     private String festivalId; // festivalId
     private String posterFile;
@@ -45,6 +48,7 @@ public class TicketResponseDTO {
                 .posterFile(festival.getPosterFile())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
+                .othersTransferAvailable(LocalDateTime.now().isBefore(ticket.getReservationDate().plusMinutes(15)))
                 .build();
     }
 }
