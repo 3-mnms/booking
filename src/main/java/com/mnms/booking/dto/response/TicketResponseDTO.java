@@ -6,10 +6,7 @@ import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 
 // 예매 내역 기본 조회
@@ -26,7 +23,7 @@ public class TicketResponseDTO {
     private LocalDateTime reservationDate; // 예매를 수행한 날짜
     private ReservationStatus reservationStatus; // 예매상태
 
-    // 추가
+    // 추가적 요소
     private boolean othersTransferAvailable; // 지인 양도 가능 유무
 
     // festival
