@@ -6,7 +6,6 @@ import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.TicketType;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ public class BookingResponseDTO {
     private TicketType deliveryMethod;
     private LocalDateTime deliveryDate;
     private Long userId;
-    private LocalDate reservationDate;
+    private LocalDateTime reservationDate;
     private List<QrResponseDTO> qrCodes;
     private Festival festival;
 

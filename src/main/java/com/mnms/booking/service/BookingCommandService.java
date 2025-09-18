@@ -13,11 +13,8 @@ import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.CommonUtils;
 import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -49,7 +46,7 @@ public class BookingCommandService {
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .performanceDate(performanceDate)
                 .reservationStatus(ReservationStatus.TEMP_RESERVED)
-                .reservationDate(LocalDate.now())
+                .reservationDate(LocalDateTime.now())
                 .build();
 
         ticketRepository.save(ticket);

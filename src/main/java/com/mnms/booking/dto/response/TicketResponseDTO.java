@@ -23,7 +23,7 @@ public class TicketResponseDTO {
     private LocalDateTime performanceDate; // 공연 일시
     private int selectedTicketCount; // 매수
     private TicketType deliveryMethod; // 티켓 수령 방법
-    private LocalDate reservationDate; // 예매를 수행한 날짜
+    private LocalDateTime reservationDate; // 예매를 수행한 날짜
     private ReservationStatus reservationStatus; // 예매상태
 
     // festival

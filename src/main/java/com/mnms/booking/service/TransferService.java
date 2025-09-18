@@ -16,7 +16,6 @@ import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.repository.TransferRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional(readOnly = true)
 public class TransferService {
 
@@ -45,7 +43,7 @@ public class TransferService {
         return tickets.stream()
                 .filter(ticket -> ticket.getPerformanceDate().isAfter(LocalDateTime.now()))
                 .filter(ticket -> !transferRepository.existsByTicketId(ticket.getId()))
-                .filter(ticket -> !qrCodeRepository.existsByTicketIdAndUsedTrue(ticket.getId()))
+                .filter(ticket -> !qrCodeRepository.existsByTicket_IdAndUsedTrue(ticket.getId()))
                 .map(ticket -> TicketResponseDTO.fromEntity(ticket, ticket.getFestival()))
                 .toList();
     }

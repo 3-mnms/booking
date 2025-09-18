@@ -1,12 +1,10 @@
 package com.mnms.booking.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +36,7 @@ public class Ticket {
 
     @Column(name = "reservation_date")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate reservationDate; // 예매를 수행한 날짜
+    private LocalDateTime reservationDate; // 예매를 수행한 날짜
 
     @Setter
     @Column(name = "delivery_date")
@@ -68,7 +66,7 @@ public class Ticket {
     public void updateTicketInfo(String reservationNumber,
                                  TicketType deliveryMethod,
                                  Long userId,
-                                 LocalDate reservationDate,
+                                 LocalDateTime reservationDate,
                                  String address) {
 
         this.reservationNumber = reservationNumber;

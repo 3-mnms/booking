@@ -1,14 +1,12 @@
 package com.mnms.booking.service;
 
 import com.mnms.booking.dto.request.UpdateTicketRequestDTO;
-import com.mnms.booking.dto.response.TicketStatusResponseDTO;
 import com.mnms.booking.dto.response.TransferOthersResponseDTO;
 import com.mnms.booking.dto.response.TransferStatusResponseDTO;
 import com.mnms.booking.entity.Festival;
 import com.mnms.booking.entity.QrCode;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.entity.Transfer;
-import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.enums.TransferStatus;
 import com.mnms.booking.enums.TransferType;
@@ -23,7 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 ///  양도 수락
@@ -190,7 +188,7 @@ public class TransferCompletionService {
                 commonUtils.generateReservationNumber(),
                 deliveryMethod,
                 receiverId,
-                LocalDate.now(),
+                LocalDateTime.now(),
                 request.getAddress()
         );
     }
