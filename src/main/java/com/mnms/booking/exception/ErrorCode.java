@@ -64,6 +64,9 @@ public enum ErrorCode {
     TRANSFER_NOT_MATCH_TYPE("TR006", "양도 타입이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     TRANSFER_NOT_MATCH_SENDER("TR007", "양도자의 티켓과 매칭되지 않습니다.", HttpStatus.CONFLICT),
     TRANSFER_ALREADY_EXIST_REQUEST("T008", "진행되고 있는 양도 거래가 존재하거나, 양도 1회 진행한 티켓입니다. 양도는 1회로 제한됩니다.", HttpStatus.CONFLICT),
+    TRANSFER_NOT_HAVE_FILE_NAME("T009", "파일 이름이 없습니다.", HttpStatus.NOT_FOUND),
+    TRANSFER_DETECT_FILE_PATH_SECURITY("T010", "잘못된 파일 경로 또는 서버 파일 경로를 조작 공격이 감지되었습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
+    TRANSFER_OTHERS_NOT_ALLOWED("T011", "예매 완료 후 15분이 초과되어 지인 양도가 불가능합니다.", HttpStatus.CONFLICT),
 
     // STATISTICS (통계 관련 에러 코드 추가)
     STATISTICS_ACCESS_DENIED("ST001", "통계 정보에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),

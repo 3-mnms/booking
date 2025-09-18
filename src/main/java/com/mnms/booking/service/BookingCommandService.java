@@ -13,11 +13,8 @@ import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.CommonUtils;
 import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -31,7 +28,7 @@ public class BookingCommandService {
     private final BookingStatusService bookingStatusService;
     private final TempReservationService tempReservationService;
 
-    /// 1차: 가예매 - 임시 예약
+    /// 1차: 가예매 - 임시 예약 (2차 예매하기 누르면 실행)
     @Transactional
     public String selectFestivalDate(BookingSelectRequestDTO request, Long userId) {
         Festival festival = bookingStatusService.getFestivalOrThrow(request.getFestivalId());
@@ -49,16 +46,15 @@ public class BookingCommandService {
                 .selectedTicketCount(request.getSelectedTicketCount())
                 .performanceDate(performanceDate)
                 .reservationStatus(ReservationStatus.TEMP_RESERVED)
-                .reservationDate(LocalDate.now())
                 .build();
 
         ticketRepository.save(ticket);
-        // redis ttl
+        // redis ttl : 1분 설정
         tempReservationService.createTempReservation(ticket);
         return ticket.getReservationNumber();
     }
 
-    /// 2차: 가예매 - 배송 방법 선택
+    /// 2차: 가예매 - 배송 방법 선택 (결제하기 누르면 실행)
     @Transactional
     public void selectFestivalDelivery(BookingSelectDeliveryRequestDTO request, Long userId) {
         Ticket ticket = bookingStatusService.getTicketOrThrow(request.getFestivalId(), userId, request.getReservationNumber());
@@ -70,11 +66,11 @@ public class BookingCommandService {
         }
         ticketRepository.save(ticket);
 
-        // redis ttl
-        tempReservationService.refreshTempReservation(ticket.getReservationNumber());
+        // redis ttl : 5분 설정
+        tempReservationService.refreshTempReservation(ticket.getReservationNumber(), 5);
     }
 
-    /// 3차: 가예매 - 예약 - QR생성
+    /// 3차: 가예매 - 예약 - QR생성 (마지막 결제하기 눌렀을 때 실행)
     @Transactional
     public void reserveTicket(BookingRequestDTO request, Long userId) {
         Festival festival = bookingStatusService.getFestivalOrThrow(request.getFestivalId());
@@ -90,8 +86,8 @@ public class BookingCommandService {
 
         ticketRepository.save(ticket);
 
-        // redis ttl
-        tempReservationService.refreshTempReservation(ticket.getReservationNumber());
+        // redis ttl : 3분 설정 (예매 완료하면 ttl 바로 완료됨)
+        tempReservationService.refreshTempReservation(ticket.getReservationNumber(), 3);
     }
 
 
@@ -107,7 +103,7 @@ public class BookingCommandService {
         BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
         emailService.sendTicketConfirmationEmail(ticket, user);
 
-        // redis ttl
+        // redis ttl : ttl 삭제
         tempReservationService.deleteTempReservation(ticket.getReservationNumber());
     }
 

@@ -116,6 +116,7 @@ public class BookingStatusService {
         if (ticket.getReservationStatus() != ReservationStatus.CONFIRMED
                 && ticket.getReservationStatus() != ReservationStatus.CANCELED) {
             ticket.setReservationStatus(newStatus);
+            ticket.setReservationDate(LocalDateTime.now());
             ticketRepository.save(ticket);
         }
     }

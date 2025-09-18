@@ -49,11 +49,7 @@ public class TicketService {
     public TicketDetailResponseDTO getTicketDetailByUser(String reservationNumber, Long userId, String userName) {
         Ticket ticket = ticketRepository.findByUserIdAndReservationNumber(userId, reservationNumber)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TICKET_NOT_FOUND));
-
-        log.info("ticket id : {}", ticket.getId());
         boolean qrUsed = qrCodeRepository.existsByTicket_IdAndUsedTrue(ticket.getId());
-
-        log.info("qr used : {}", qrUsed);
 
         if (!ticket.getUserId().equals(userId)) {
             throw new BusinessException(ErrorCode.USER_UNAUTHORIZED_ACCESS);

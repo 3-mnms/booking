@@ -2,7 +2,6 @@ package com.mnms.booking.service;
 
 import com.mnms.booking.entity.Ticket;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +20,14 @@ public class TempReservationService {
 //    @Value("${temp-reservation.ttl-minutes:3}")
 //    private long ttlMinutes;
 
+    // 2차 예매하기 누르면 실행
     public void createTempReservation(Ticket ticket) {
         String key = PREFIX + ticket.getReservationNumber();
         redisTemplate.opsForValue().set(key, ticket, ttlMinutes, TimeUnit.MINUTES);
     }
 
-    // 갱신
-    public void refreshTempReservation(String reservationNumber) {
+    // 갱신 - refresh ttl 각자 설정
+    public void refreshTempReservation(String reservationNumber, long ttlMinutes) {
         String key = PREFIX + reservationNumber;
         Boolean exists = redisTemplate.hasKey(key);
         if (Boolean.TRUE.equals(exists)) {

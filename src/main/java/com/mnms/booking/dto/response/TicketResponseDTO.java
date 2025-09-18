@@ -6,10 +6,7 @@ import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 
 // 예매 내역 기본 조회
@@ -23,8 +20,11 @@ public class TicketResponseDTO {
     private LocalDateTime performanceDate; // 공연 일시
     private int selectedTicketCount; // 매수
     private TicketType deliveryMethod; // 티켓 수령 방법
-    private LocalDate reservationDate; // 예매를 수행한 날짜
+    private LocalDateTime reservationDate; // 예매를 수행한 날짜
     private ReservationStatus reservationStatus; // 예매상태
+
+    // 추가적 요소
+    private boolean othersTransferAvailable; // 지인 양도 가능 유무
 
     // festival
     private String festivalId; // festivalId
@@ -45,6 +45,7 @@ public class TicketResponseDTO {
                 .posterFile(festival.getPosterFile())
                 .fname(festival.getFname())
                 .fcltynm(festival.getFcltynm())
+                .othersTransferAvailable(LocalDateTime.now().isBefore(ticket.getReservationDate().plusMinutes(15)))
                 .build();
     }
 }

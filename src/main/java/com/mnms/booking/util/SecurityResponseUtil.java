@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class SecurityResponseUtil {
-    // Authentication에서 userId 추출
+    // Authentication 에서 userId 추출
     public Long requireUserId(Authentication authentication) {
         try {
             return Long.parseLong(authentication.getName());
@@ -25,7 +25,7 @@ public class SecurityResponseUtil {
         }
     }
 
-    // Authentication에서 name 추출
+    // Authentication 에서 name 추출
     public String requireName(Authentication authentication) {
         String userName = null;
         log.info("authentication : {}", authentication);
