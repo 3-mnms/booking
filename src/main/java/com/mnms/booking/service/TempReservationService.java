@@ -2,6 +2,7 @@ package com.mnms.booking.service;
 
 import com.mnms.booking.entity.Ticket;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,10 @@ import java.util.concurrent.TimeUnit;
 public class TempReservationService {
 
     private final RedisTemplate<String, Object> redisTemplate;
-
     private static final String PREFIX = "TEMP_RESERVATION:";
-    private static final long ttlMinutes = 1;
 
-//    @Value("${temp-reservation.ttl-minutes:3}")
-//    private long ttlMinutes;
+    @Value("${temp-reservation.ttl-minutes:1}")
+    private long ttlMinutes;
 
     // 2차 예매하기 누르면 실행
     public void createTempReservation(Ticket ticket) {
