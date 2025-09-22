@@ -1,0 +1,51 @@
+package com.mnms.booking.dto.response;
+
+import com.mnms.booking.entity.Festival;
+import com.mnms.booking.entity.Ticket;
+import com.mnms.booking.enums.ReservationStatus;
+import com.mnms.booking.enums.TicketType;
+import lombok.Builder;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+
+// 예매 내역 기본 조회
+@Data
+@Builder
+public class TicketResponseDTO {
+
+    // ticket
+    private Long id;
+    private String reservationNumber; // 예매 번호
+    private LocalDateTime performanceDate; // 공연 일시
+    private int selectedTicketCount; // 매수
+    private TicketType deliveryMethod; // 티켓 수령 방법
+    private LocalDateTime reservationDate; // 예매를 수행한 날짜
+    private ReservationStatus reservationStatus; // 예매상태
+
+    // 추가적 요소
+    private boolean othersTransferAvailable; // 지인 양도 가능 유무
+
+    // festival
+    private String festivalId; // festivalId
+    private String posterFile;
+    private String fname; // 공연명
+    private String fcltynm; // 장소
+
+    public static TicketResponseDTO fromEntity(Ticket ticket, Festival festival) {
+        return TicketResponseDTO.builder()
+                .id(ticket.getId())
+                .reservationNumber(ticket.getReservationNumber())
+                .performanceDate(ticket.getPerformanceDate())
+                .selectedTicketCount(ticket.getSelectedTicketCount())
+                .deliveryMethod(ticket.getDeliveryMethod())
+                .reservationDate(ticket.getReservationDate())
+                .reservationStatus(ticket.getReservationStatus())
+                .festivalId(festival.getFestivalId())
+                .posterFile(festival.getPosterFile())
+                .fname(festival.getFname())
+                .fcltynm(festival.getFcltynm())
+                .othersTransferAvailable(LocalDateTime.now().isBefore(ticket.getReservationDate().plusMinutes(15)))
+                .build();
+    }
+}

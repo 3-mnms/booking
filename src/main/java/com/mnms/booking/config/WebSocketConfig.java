@@ -1,0 +1,38 @@
+package com.mnms.booking.config;
+
+import com.mnms.booking.security.StompConnectInterceptor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+@RequiredArgsConstructor
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final StompConnectInterceptor  interceptors;
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        // 구독경로
+        config.enableSimpleBroker("/topic", "/queue");
+        // 클라이언트 → 서버 메시지 경로
+        config.setApplicationDestinationPrefixes("/app");
+        config.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(interceptors);
+    }
+}

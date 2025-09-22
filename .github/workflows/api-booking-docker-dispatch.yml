@@ -1,0 +1,99 @@
+name: "💰 api-booking – Docker Build & GitOps Dispatch"
+
+on:
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-booking-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  SERVICE: booking
+  IMAGE:   ${{ secrets.DOCKER_USERNAME }}/api-booking
+  DEVOPS_REPO: 3-mnms/gitops-repo
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - run: chmod +x ./gradlew
+      - run: ./gradlew bootJar --no-daemon
+
+      - name: ⏱️ Tag
+        run: echo "TAG=v$(date -u +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            # 1) 타임스탬프 태그 (기본)
+            type=raw,value=${{ env.TAG }}
+            # 2) git sha 태그
+            type=sha
+            # 3) 고정 별칭
+            type=raw,value=v0.1
+            # 4) latest (main, develop 모두에서 발행)
+            type=raw,value=latest
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # develop → 한번만 디스패치 (두 타깃 동시)
+      - name: Dispatch to GitOps (develop-gke + develop-aws)
+        if: ${{ github.ref_name == 'develop' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "targets": "develop-gke,develop-aws"
+            }
+
+      # main → prod
+      - name: Dispatch to GitOps (prod)
+        if: ${{ github.ref_name == 'main' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token:  ${{ secrets.GH_PAT }}
+          repository: ${{ env.DEVOPS_REPO }}
+          event-type: image-updated
+          client-payload: |
+            {
+              "service": "${{ env.SERVICE }}",
+              "image":   "${{ env.IMAGE }}",
+              "tag":     "${{ env.TAG }}",
+              "env":     "prod"
+            }
