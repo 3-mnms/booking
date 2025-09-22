@@ -3,16 +3,18 @@ package com.mnms.booking.service;
 import com.mnms.booking.dto.request.BookingRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectDeliveryRequestDTO;
 import com.mnms.booking.dto.request.BookingSelectRequestDTO;
-import com.mnms.booking.dto.response.*;
+import com.mnms.booking.dto.request.TicketRequestDTO;
 import com.mnms.booking.entity.*;
 import com.mnms.booking.enums.ReservationStatus;
 import com.mnms.booking.enums.TicketType;
+import com.mnms.booking.event.TicketConfirmedEvent;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import com.mnms.booking.repository.TicketRepository;
 import com.mnms.booking.util.CommonUtils;
 import com.mnms.booking.util.UserApiClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ public class BookingCommandService {
     private final UserApiClient userApiClient;
     private final BookingStatusService bookingStatusService;
     private final TempReservationService tempReservationService;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     /// 1차: 가예매 - 임시 예약 (2차 예매하기 누르면 실행)
     @Transactional
@@ -99,12 +103,7 @@ public class BookingCommandService {
 
         // 결제 상태 변경
         bookingStatusService.updateTicketStatusIfNecessary(ticket, newStatus);
-
-        BookingUserResponseDTO user = userApiClient.getUserInfoById(ticket.getUserId());
-        emailService.sendTicketConfirmationEmail(ticket, user);
-
-        // redis ttl : ttl 삭제
-        tempReservationService.deleteTempReservation(ticket.getReservationNumber());
+        eventPublisher.publishEvent(new TicketConfirmedEvent(TicketRequestDTO.fromEntity(ticket)));
     }
 
     ///  예매 취소

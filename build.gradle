@@ -94,6 +94,10 @@ dependencies {
 	// prometheus
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
   	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// email retry
+	implementation 'org.springframework.retry:spring-retry'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {

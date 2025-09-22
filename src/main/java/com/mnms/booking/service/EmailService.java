@@ -1,13 +1,18 @@
 package com.mnms.booking.service;
 
+import com.mnms.booking.dto.request.TicketRequestDTO;
 import com.mnms.booking.dto.response.BookingUserResponseDTO;
 import com.mnms.booking.entity.Ticket;
 import com.mnms.booking.enums.TicketType;
 import com.mnms.booking.exception.BusinessException;
 import com.mnms.booking.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,11 +23,13 @@ import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender mailSender;
 
-    public void sendTicketConfirmationEmail(Ticket ticket, BookingUserResponseDTO user) {
+    @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000, multiplier = 2))
+    public void sendTicketConfirmationEmail(TicketRequestDTO ticket, BookingUserResponseDTO user) {
         try (InputStream is = getClass().getClassLoader()
                 .getResourceAsStream("templates/email/ticket-confirmation.txt")) {
 
@@ -37,10 +44,10 @@ public class EmailService {
                     template,
                     user.getName(),
                     ticket.getReservationNumber(),
-                    ticket.getFestival().getFname(),
+                    ticket.getFname(),
                     ticket.getPerformanceDate().format(formatter),
-                    ticket.getFestival().getFcltynm(),
-                    ticket.getFestival().getTicketPrice() * ticket.getSelectedTicketCount(),
+                    ticket.getFestivalFacility(),
+                    ticket.getTicketPrice() * ticket.getSelectedTicketCount(),
                     ticket.getDeliveryMethod() == TicketType.MOBILE ? "모바일" : "지류"
             );
 
@@ -50,6 +57,12 @@ public class EmailService {
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.TICKET_EMAIL_TEMPLATE_NOT_FOUND);
         }
+    }
+
+    @Recover
+    public void recover(Exception e, TicketRequestDTO ticketDto, BookingUserResponseDTO user) {
+        log.error("이메일 재시도 실패: 예약 번호 = {}, 사용자 이메일={}",
+                ticketDto.getReservationNumber(), user.getEmail(), e);
     }
 
     public void sendEmail(String to, String subject, String text) {
